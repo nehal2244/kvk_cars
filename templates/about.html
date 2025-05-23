@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - KVK Cars{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/styles/about.css" />
+{% endblock %}
+
+{% block content %}
+<!-- about -->
+ <!-- Banner Area -->
+<div id="kvk-banner-area" class="kvk-banner">
+  <div class="kvk-container">
+    <div class="kvk-row">
+      <div class="kvk-col-full">
+        <div class="kvk-banner-content">
+          <h1 class="kvk-banner-title">About Us</h1>
+          <ol class="kvk-breadcrumb">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li>Learn More About Us</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="about-page-area">
+    <div class="container">
+        <div class="row d-flex-">
+            <div class="col-lg-6">
+                <div class="about-page-left" style="background-color: #007BFF; color: white; padding: 20px; border-radius: 8px;">
+                    <h4>About Us</h4>
+                    <h3>KVK CARS is a leading self-drive car rental service committed to making travel affordable, flexible, and hassle-free across India.</h3>
+                    <p>
+                        We offer a diverse fleet of well-maintained vehicles—including hatchbacks, sedans, SUVs, MUVs, and luxury cars—tailored to meet your every travel need.
+                        Whether you're planning a weekend escape, a business trip, or need a car for everyday commuting, KVK CARS has you covered.
+                    </p>
+                    <p>
+                        At the heart of our service is a dedicated KVK team that ensures you receive the best-in-class experience—with attention to detail, timely assistance, and full support throughout your journey.
+                    </p>
+                    <h5>Why Choose KVK CARS?</h5>
+                    <ul>
+                        <li>Flexible Rental Options: Daily, weekly, and monthly plans to match your schedule.</li>
+                        <li>Unlimited Kilometers: Drive without limits—no extra mileage charges.</li>
+                        <li>Transparent Pricing: Insurance, taxes, and pollution fees included—no hidden costs.</li>
+                        <li>Doorstep Delivery: Convenient delivery to your home, office, or airport.</li>
+                        <li>Diverse Fleet: From economy to luxury—choose the vehicle that suits your style.</li>
+                        <li>User-Friendly Booking: Fast online booking and easy modifications or cancellations.</li>
+                        <li>Customer Service First: Your satisfaction is our top priority, and our team is always ready to assist.</li>
+                    </ul>
+                    <p><strong>KVK CARS – Kahin Bhi, Kabhi Bhi!!</strong></p>
+                    <div class="about-page-call">
+                        <div class="page-call-icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="call-info">
+                            <p>Helpline:</p>
+                            <h4><a href="tel:+918077125139" style="color: white;">+91-8077125139</a></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-page-right">
+                    <img src="/static/img/logo.png" alt="about page" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

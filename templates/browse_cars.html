@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browse Cars - KVK Cars</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'styles/browse_cars.css' %}">
+</head>
+<body>
+
+<header>Browse Cars</header>
+
+<div class="container">
+
+  <!-- Filter Bar -->
+  <form method="get" class="filter-bar">
+    <input type="text" name="search" placeholder="Search by model..." value="{{ search_query|default:'' }}">
+    
+    <select name="car_type">
+      <option value="">Car Type</option>
+      <option value="SUV" {% if car_type == 'SUV' %}selected{% endif %}>SUV</option>
+      <option value="Sedan" {% if car_type == 'Sedan' %}selected{% endif %}>Sedan</option>
+      <option value="Hatchback" {% if car_type == 'Hatchback' %}selected{% endif %}>Hatchback</option>
+    </select>
+    
+    <select name="transmission">
+      <option value="">Transmission</option>
+      <option value="Auto" {% if transmission == 'Auto' %}selected{% endif %}>Automatic</option>
+      <option value="Manual" {% if transmission == 'Manual' %}selected{% endif %}>Manual</option>
+    </select>
+    
+    <select name="sort">
+      <option value="">Sort By</option>
+      <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+      <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+    </select>
+    
+    <button type="submit" class="btn">Filter</button>
+  </form>
+
+  <!-- Car Listings -->
+  <div class="car-grid">
+    {% for car in cars %}
+    <div class="car-card">
+      <img src="{{ car.image_url }}" alt="{{ car.name }}">
+      <div class="car-card-content">
+        <h3>{{ car.name }}</h3>
+        <p>{{ car.car_type }} • {{ car.seating_capacity }}-Seater • {{ car.transmission }}</p>
+        
+        <!-- Pricing Options -->
+        <div class="price-option">
+          <p><strong>₹{{ car.free_km_price }}</strong></p>
+          <p>{{ car.free_kms }} Free KMs</p>
+          <p>Extra kms charged at ₹{{ car.extra_km_charge }}/km</p>
+        </div>
+
+        <div class="price-option">
+          <p><strong>₹{{ car.unlimited_km_price }}</strong></p>
+          <p>Unlimited KMs</p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+          <a href="{% url 'car_detail' car.id %}" class="btn btn-view-details">View Details</a>
+          <a href="{% url 'car_book' car.id %}" class="btn btn-book-now">Book Now</a>
+        </div>
+
+      </div>
+    </div>
+    {% empty %}
+    <p>No cars available at the moment.</p>
+    {% endfor %}
+  </div>
+
+</div>
+
+</body>
+</html>

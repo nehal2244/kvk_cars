@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ car.name }} - KVK Cars{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ car.name }}</h1>
+    <p><strong>Type:</strong> {{ car.car_type }}</p>
+    <p><strong>Seats:</strong> {{ car.seating_capacity }}</p>
+    <p><strong>Transmission:</strong> {{ car.transmission }}</p>
+    <!-- Add more details as needed -->
+</div>
+{% endblock %}

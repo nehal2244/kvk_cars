@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <title>KVK Cars</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
+
+    <link rel="stylesheet" href="/static/styles/index.css">
+       
+</head>
+<body>
+
+<header class="rn-header">
+    <div class="rn-menubar py-1 shadow-sm">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto pr-0">
+                    <a class="brand-logo" href="{% url 'index' %}">
+                        <img src="/static/img/logo.png" alt="KVK Car Logo">
+                    </a>
+                </div>
+                <div class="col-auto tagline">KVK CARS !! Kahin bhi kabhi bhi !!</div>
+                <div class="col menu-links">
+
+                    <a href="{% url 'index' %}">Home</a>
+
+                    <a href="/about">About Us</a>
+                    <a href="https://forms.gle/ooEVzYV2BceAtkVw6">Bookings Open</a>
+                    
+                    <a href="/pay-online">Pay Online</a>
+                    <a class="btn-call" href="tel:+918077125139">Call</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Image Slideshow --><div class="carousel-form-wrapper position-relative" style="
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;">
+  <!-- Owl Carousel Images -->
+  <div class="owl-carousel owl-theme">
+    <div class="item"><img src="../static/img/1.webp" alt="Slide 1" style="width: 100%; height: auto;"></div>
+    <div class="item"><img src="../static/img/OWL3.webp" alt="Slide 2" style="width: 100%; height: auto;"></div>
+    <div class="item"><img src="../static/img/OWL2.webp" alt="Slide 3" style="width: 100%; height: auto;"></div>
+  </div>
+
+  <!-- Self Drive Car Rental Form OVERLAY -->
+  <div class="self-drive-form-overlay" style="
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    border-radius: 10px;
+    z-index: 10;
+  ">
+    <h1 style="text-align: center;">SELF DRIVE CAR RENTAL</h1>
+    <form action="mahakumbh-special-car-booking" method="get" class="advance-search-query">
+      <hr />
+      <div class="regular-search">
+        
+        <div style="display: flex; gap: 10px;">
+          <div style="flex: 1;">
+            <label for="start_date">Pickup date & time</label>
+            <input type="text" name="start_date" required placeholder="dd-mm-yyyy H:00:00" style="width: 100%; padding: 10px;" />
+          </div>
+          <div style="flex: 1;">
+            <label for="end_date">Drop-off date & time</label>
+            <input type="text" name="end_date" required placeholder="dd-mm-yyyy H:00:00" style="width: 100%; padding: 10px;" />
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 15px;">
+        <a href="/browse_cars" style="
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  background: #ffc107;
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+">
+  Find Car
+</a>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- City Selection Modal -->
+<div class="modal fade" id="cityPopup">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select City</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <img src="/static/assets/city-nagpur.jpg" alt="Nagpur">
+                        <h6 class="city-option">Nagpur</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <section class="newsletter">
+        <h4>Newsletter</h4>
+        <p>Subscribe for the latest offers and updates.</p>
+        <form action="#">
+            <input type="text" placeholder="Your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+    <div class="footer-row">
+        <div class="footer-col">
+            <h4>KVK CARS</h4>
+            <ul class="links">
+                <li>Self-driving car rental service providing best-in-class vehicles across multiple cities.</li>
+            </ul>
+            <div class="social-icons">
+                <a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.twitter.com" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                <a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://www.youtube.com" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul class="links">
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Company</h4>
+            <ul class="links">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Careers</a></li>
+    
+</li>
+                <li><a href="#">Press</a></li>
+                <LI>            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSehHUy0L35Q_s9kgH3KpmYLf9kvUnUc8mBafRQ2G7rICqQy-g/viewform" target="_blank" style="
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4285F4;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: sans-serif;
+">
+    booking opening form
+</a></LI>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h4>Contact Us</h4>
+            <ul class="links">
+                <li><i class="fa-solid fa-map-marker-alt"></i> 1025/521 Ekmata Nagar, <li>Trimurti Nagar,Nagpur</li>Maharashtra 440022</li>
+                <li> </li>
+                <li><i class="fa-solid fa-phone"></i> +91 8077125139</li>
+                <li><i class="fa-solid fa-envelope"></i> info@kvkcars.com</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+      Copyright, <a href="https://kvkcars.com/"> KVK CARS 2025</a>-- All rights reserved.
+     </div>
+</footer>
+
+<div class="whatsapp-chat" onclick="toggleChat()">
+    💬
+</div>
+
+<div class="chat-popup" id="chatPopup">
+    <a href="https://wa.me/918077125139?text=Hello%20KVK%20Cars">General Inquiry</a>
+    <a href="https://wa.me/918077125139?text=I%20want%20to%20book%20a%20car">Bookings</a>
+    <a href="https://wa.me/918077125139?text=I%20have%20a%20payment%20issue">Payments</a>
+</div>
+
+<script>
+    function toggleChat() {
+        var chatPopup = document.getElementById("chatPopup");
+        if (chatPopup.style.display === "none" || chatPopup.style.display === "") {
+            chatPopup.style.display = "block";
+        } else {
+            chatPopup.style.display = "none";
+        }
+    }
+</script>
+
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(".owl-carousel").owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: false,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 2500, // 1 seconds
+            autoplayHoverPause: true,
+            items: 1
+        });
+    });
+</script>
+
+</html>

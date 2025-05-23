@@ -1,0 +1,361 @@
+/* Reset and basic */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 450px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 2rem;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #0c1c71;
+}
+
+p {
+  font-size: 1rem;
+  margin-bottom: 30px;
+  color: #4f4f4f;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1.5px solid #d8d8d8;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: #0c1c71;
+  outline: none;
+}
+
+.error {
+  color: #d93025;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.btn {
+  background: #0c1c71;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background: #09154f;
+}
+
+/* QR Section */
+.qr-section {
+  text-align: center;
+  margin-top: 1px;
+}
+
+.qr-section h3 {
+  color: #007BFF;
+  font-weight: 600;
+  margin-top: -20px;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.qr-image {
+  width: 300px;
+  height: auto;
+  border: 2px solid #d1d1d1;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: block;
+  margin: 1rem auto 0;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 0.9rem;
+  color: #777;
+  font-weight: 400;
+  padding-bottom: 30px;
+  position: relative; /* avoid fixed footer overlap */
+}
+
+/* Banner Area Styles */
+#banner-area {
+  background: url(//www.techdost.com/wp-content/uploads/2021/02/1.jpg) no-repeat center center/cover;
+  color: #fff;
+  padding: 60px 0;
+  position: relative;
+  text-align: left;
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 150px;
+}
+
+#banner-area .banner-heading {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+#banner-area .banner-title {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+#banner-area .breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 1rem;
+  color: black;
+}
+
+#banner-area .breadcrumb li {
+  display: inline;
+  margin-right: 0.5rem;
+}
+
+#banner-area .breadcrumb li a {
+  color: black;
+  text-decoration: none;
+}
+
+#banner-area .breadcrumb li::after {
+  content: ">";
+  margin-left: 0.5rem;
+}
+
+#banner-area .breadcrumb li:last-child::after {
+  content: "";
+}
+
+/* Payment Section */
+.form-container {
+  max-width: 1100px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.payment-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: -220px;
+  padding: 2rem 0;
+}
+
+.payment-form, .qr-section {
+  flex: 1 1 48%;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Responsive fallback: stack on smaller screens */
+@media (max-width: 768px) {
+  .payment-wrapper {
+    flex-direction: column;
+  }
+
+  .payment-form, .qr-section {
+    flex: 1 1 100%;
+  }
+}
+
+main {
+  padding-bottom: 150px;
+}
+
+/* content info  */
+.payment-wrapper {
+  padding: 100px 20px;
+  background: #f9f9f9;
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.section-heading {
+  max-width: 800px;
+  width: 100%;
+}
+
+.section-heading h1 {
+  font-size: 36px;
+  color: var(--e-global-color-primary, #2F2C2C);
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 10px;
+}
+
+.animate-border.center {
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: var(--e-global-color-accent, #61CE70);
+  margin: 10px auto 40px auto;
+}
+
+.payment-section {
+  display: flex;
+  justify-content: center;
+  align-items: stretch; /* 🔥 This is key */
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1100px;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.payment-column {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 30px;
+  flex: 1 1 400px;
+  max-width: 500px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* optional: to push content */
+}
+
+.payment-heading h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: var(--e-global-color-secondary, #54595F);
+}
+
+.payment-heading small {
+  display: block;
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 5px;
+}
+
+.payment-column p {
+  font-size: 16px;
+  color: #757575;
+  line-height: 1.6;
+}
+
+.form-section {
+  max-width: 1100px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.form-qr-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.payment-form {
+  flex: 1 1 48%;
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.qr-box {
+  flex: 1 1 48%;
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.qr-box h3 {
+  color: #007BFF;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.qr-image {
+  width: 280px;
+  height: auto;
+  border: 2px solid #d1d1d1;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-qr-wrapper {
+    flex-direction: column;
+  }
+
+  .payment-form, .qr-box {
+    flex: 1 1 100%;
+  }
+}
