@@ -31,17 +31,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-l6&7oeoqv%wjj%au6=v_zusj4jk5xw0s#xij$!d%hft*o7t#jg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-import os
 
-DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-if DEBUG:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-else:
-    ALLOWED_HOSTS = ['www.kvkcars.com', 'kvkcars.com']
+# DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
+
+# if DEBUG:
+#     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# else:
+#     ALLOWED_HOSTS = ['www.kvkcars.com', 'kvkcars.com']
 # DEBUG = True
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+DEBUG = False
+ALLOWED_HOSTS = ['https://kvk-cars.onrender.com']
 
 
 # Application definition
