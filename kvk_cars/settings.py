@@ -42,10 +42,17 @@ SECRET_KEY = 'django-insecure-l6&7oeoqv%wjj%au6=v_zusj4jk5xw0s#xij$!d%hft*o7t#jg
 # DEBUG = True
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-DEBUG = False
-ALLOWED_HOSTS = ['https://kvk-cars.onrender.com']
+# DEBUG = False
+# ALLOWED_HOSTS = ['https://kvk-cars.onrender.com']
 
+load_dotenv()  # take environment variables from .env.
 
+if os.getenv('DJANGO_ENV') == 'local':
+    DEBUG = True
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else:
+    DEBUG = False
+    ALLOWED_HOSTS = ['kvk-cars.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
