@@ -12,34 +12,27 @@ from car_rental.forms import PaymentForm
 def index(request):
     return render(request , 'index.html')
 
-
-
 def browse_cars(request):
-    cars = Car.objects.filter(is_available=True)
+    cars = Car.objects.all()  # Get all cars, regardless of availability
     
-    # Get filter parameters from GET
     search_query = request.GET.get('search', '')
     car_type = request.GET.get('car_type', '')
     transmission = request.GET.get('transmission', '')
     sort = request.GET.get('sort', '')
 
-    # Filter by search name
     if search_query:
         cars = cars.filter(name__icontains=search_query)
 
-    # Filter by car_type
     if car_type:
         cars = cars.filter(car_type=car_type)
 
-    # Filter by transmission
     if transmission:
-        cars = cars.filter(transmission=transmission)
+        cars = cars.filter(transmission__iexact=transmission)  # case-insensitive filter
 
-    # Sorting
     if sort == 'price_low':
-        cars = cars.order_by('price_per_day')
+        cars = cars.order_by('free_km_price')
     elif sort == 'price_high':
-        cars = cars.order_by('-price_per_day')
+        cars = cars.order_by('-free_km_price')
 
     context = {
         'cars': cars,

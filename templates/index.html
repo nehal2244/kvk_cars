@@ -74,38 +74,67 @@
     z-index: 10;
   ">
     <h1 style="text-align: center;">SELF DRIVE CAR RENTAL</h1>
-    <form action="mahakumbh-special-car-booking" method="get" class="advance-search-query">
-      <hr />
-      <div class="regular-search">
-        
-        <div style="display: flex; gap: 10px;">
-          <div style="flex: 1;">
-            <label for="start_date">Pickup date & time</label>
-            <input type="text" name="start_date" required placeholder="dd-mm-yyyy H:00:00" style="width: 100%; padding: 10px;" />
-          </div>
-          <div style="flex: 1;">
-            <label for="end_date">Drop-off date & time</label>
-            <input type="text" name="end_date" required placeholder="dd-mm-yyyy H:00:00" style="width: 100%; padding: 10px;" />
-          </div>
-        </div>
+<form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">  
+  <hr />
+  <div class="regular-search">
+    <div style="display: flex; gap: 10px;">
+      <div style="flex: 1;">
+        <label for="start_date">Pickup date</label>
+        <input 
+          type="date" 
+          id="start_date" 
+          name="start_date" 
+          style="width: 100%; padding: 10px;" 
+        />
       </div>
-      <div style="margin-top: 15px;">
-        <a href="/browse_cars" style="
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-  padding: 12px;
-  background: #ffc107;
-  color: #000;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 4px;
-">
-  Find Car
-</a>
+      <div style="flex: 1;">
+        <label for="start_time">Pickup time</label>
+        <input 
+          type="time" 
+          id="start_time" 
+          name="start_time" 
+          style="width: 100%; padding: 10px;" 
+        />
+      </div>
+      <div style="flex: 1;">
+        <label for="end_date">Drop-off date</label>
+        <input 
+          type="date" 
+          id="end_date" 
+          name="end_date" 
+          style="width: 100%; padding: 10px;" 
+        />
+      </div>
+      <div style="flex: 1;">
+        <label for="end_time">Drop-off time</label>
+        <input 
+          type="time" 
+          id="end_time" 
+          name="end_time" 
+          style="width: 100%; padding: 10px;" 
+        />
+      </div>
+    </div>
+    <div id="error-message" style="color: red; margin-top: 10px; display: none;"></div>
+  </div>
+  <div style="margin-top: 15px;">
+    <button type="submit" style="
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      padding: 12px;
+      background: #ffc107;
+      color: #000;
+      font-weight: bold;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    ">Find Car</button>
+  </div>
+</form>
 
-      </div>
-    </form>
+
+
   </div>
 </div>
 
@@ -238,6 +267,76 @@
             items: 1
         });
     });
+{% comment %} find car logic {% endcomment %}
+ document.getElementById('carBookingForm').addEventListener('submit', function(e) {  
+  const startDateInput = document.getElementById('start_date');
+  const startTimeInput = document.getElementById('start_time');
+  const endDateInput = document.getElementById('end_date');
+  const endTimeInput = document.getElementById('end_time');
+  const errorMessage = document.getElementById('error-message');
+
+  const startDateStr = startDateInput.value.trim();
+  const startTimeStr = startTimeInput.value.trim();
+  const endDateStr = endDateInput.value.trim();
+  const endTimeStr = endTimeInput.value.trim();
+
+  // Clear previous error
+  errorMessage.style.display = 'none';
+  errorMessage.textContent = '';
+
+  // Check if date and time fields are filled
+  if (!startDateStr || !startTimeStr || !endDateStr || !endTimeStr) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Please enter both pickup and drop-off dates and times.';
+    return;
+  }
+
+  // Combine date + time into ISO string to parse properly
+  const startDateTime = new Date(`${startDateStr}T${startTimeStr}`);
+  const endDateTime = new Date(`${endDateStr}T${endTimeStr}`);
+
+  if (isNaN(startDateTime.getTime())) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Pickup date/time is invalid. Please select proper values.';
+    return;
+  }
+
+  if (isNaN(endDateTime.getTime())) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Drop-off date/time is invalid. Please select proper values.';
+    return;
+  }
+
+  // Prevent past dates/times
+  const now = new Date();
+
+  if (startDateTime < now) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Oops! Pickup date/time cannot be in the past.';
+    return;
+  }
+
+  if (endDateTime < now) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Drop-off date/time cannot be in the past.';
+    return;
+  }
+
+  if (endDateTime < startDateTime) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Drop-off date/time cannot be earlier than pickup date/time.';
+    return;
+  }
+
+  // All good, form will submit normally
+});
+
 </script>
 
 </html>

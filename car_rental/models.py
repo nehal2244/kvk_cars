@@ -1,10 +1,15 @@
 from django.db import models
 
 class Car(models.Model):
+    TRANSMISSION_CHOICES = [
+        ('manual', 'Manual'),
+        ('automatic', 'Automatic'),
+    ]
+
     name = models.CharField(max_length=100)
     car_type = models.CharField(max_length=50)
     seating_capacity = models.PositiveIntegerField()
-    transmission = models.CharField(max_length=20)
+    transmission = models.CharField(max_length=20, choices=TRANSMISSION_CHOICES)
     
     # Pricing fields
     free_km_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)        # Price with free kms

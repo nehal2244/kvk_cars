@@ -25,10 +25,11 @@
     </select>
     
     <select name="transmission">
-      <option value="">Transmission</option>
-      <option value="Auto" {% if transmission == 'Auto' %}selected{% endif %}>Automatic</option>
-      <option value="Manual" {% if transmission == 'Manual' %}selected{% endif %}>Manual</option>
-    </select>
+  <option value="">Transmission</option>
+  <option value="automatic" {% if transmission == 'automatic' %}selected{% endif %}>Automatic</option>
+  <option value="manual" {% if transmission == 'manual' %}selected{% endif %}>Manual</option>
+</select>
+
     
     <select name="sort">
       <option value="">Sort By</option>
@@ -48,6 +49,13 @@
         <h3>{{ car.name }}</h3>
         <p>{{ car.car_type }} • {{ car.seating_capacity }}-Seater • {{ car.transmission }}</p>
         
+        <!-- Availability Label -->
+        {% if car.is_available %}
+          <p style="color: green; font-weight: bold;">Available</p>
+        {% else %}
+          <p style="color: red; font-weight: bold;">Not Available Right Now</p>
+        {% endif %}
+
         <!-- Pricing Options -->
         <div class="price-option">
           <p><strong>₹{{ car.free_km_price }}</strong></p>
@@ -63,7 +71,11 @@
         <!-- Buttons -->
         <div class="button-group">
           <a href="{% url 'car_detail' car.id %}" class="btn btn-view-details">View Details</a>
-          <a href="{% url 'car_book' car.id %}" class="btn btn-book-now">Book Now</a>
+          {% if car.is_available %}
+            <a href="{% url 'car_book' car.id %}" class="btn btn-book-now">Book Now</a>
+          {% else %}
+            <button disabled class="btn btn-book-now" style="background-color: gray; cursor: not-allowed;">Not Available</button>
+          {% endif %}
         </div>
 
       </div>
