@@ -1,5 +1,8 @@
 from django import forms
 from car_rental.models import Booking
+from django.utils import timezone
+from django.utils.timezone import make_aware
+import datetime
 
 class PaymentForm(forms.Form):
     name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={

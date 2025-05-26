@@ -7,8 +7,9 @@ from car_rental.forms import PaymentForm
 from datetime import datetime
 from car_rental.forms import BookingForm
 from django.shortcuts import render, get_object_or_404, redirect
-
-
+from django.utils import timezone
+from django.utils.timezone import make_aware
+import datetime
 
 # username = Admin
 # password = Admin@123
