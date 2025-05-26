@@ -55,7 +55,6 @@ SECRET_KEY = 'django-insecure-l6&7oeoqv%wjj%au6=v_zusj4jk5xw0s#xij$!d%hft*o7t#jg
 #     ALLOWED_HOSTS = ['kvk-cars.onrender.com']
 DEBUG = False
 ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Application definition
 
