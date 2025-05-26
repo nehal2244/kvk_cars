@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Car
+from car_rental.models import Car,Booking
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
@@ -12,7 +12,12 @@ class CarAdmin(admin.ModelAdmin):
         'unlimited_km_price',
         'free_kms',
         'extra_km_charge',
-        'is_available',
     ]
-    list_filter = ['car_type', 'transmission', 'is_available']
+    list_filter = ['car_type', 'transmission']
     search_fields = ['name']
+
+@admin.register(Booking)
+class BookingAdmin(admin.ModelAdmin):
+    list_display = ['car', 'start_datetime', 'end_datetime']
+    list_filter = ['car']
+    search_fields = ['car__name']

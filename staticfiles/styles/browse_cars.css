@@ -118,12 +118,6 @@ header {
   text-align: center;
 }
 
-.car-item {
-  margin: 4px 0;
-  font-size: 14px;
-  color: #444;
-}
-
 .price-option {
   border: 1px solid #ccc;
   padding: 8px;
@@ -150,8 +144,8 @@ header {
   font-weight: 600;
   text-align: center;
   cursor: pointer;
-  width: 120px;       /* fixed width */
-  flex: 0 0 auto;     /* prevent flex-grow/shrink */
+  width: 120px;
+  flex: 0 0 auto;
 }
 
 .btn-view-details {

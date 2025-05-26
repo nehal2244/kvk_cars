@@ -1,5 +1,5 @@
 from django import forms
-
+from car_rental.models import Booking
 
 class PaymentForm(forms.Form):
     name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
@@ -17,3 +17,14 @@ class PaymentForm(forms.Form):
         ('bank_transfer', 'Bank Transfer'),
     ]
     payment_method = forms.ChoiceField(choices=PAYMENT_CHOICES)
+
+
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = Booking
+        fields = ['start_datetime', 'end_datetime']
+
+        widgets = {
+            'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
