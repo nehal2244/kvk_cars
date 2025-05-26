@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.timezone import make_aware
+import datetime
 
 
 class Car(models.Model):
