@@ -2,10 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Browse Cars - KVK Cars</title>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'styles/browse_cars.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'styles/browse_cars.css' %}" />
 </head>
 <body>
 
@@ -15,7 +16,7 @@
 
   <!-- Filter Bar -->
   <form method="get" class="filter-bar">
-    <input type="text" name="search" placeholder="Search by model..." value="{{ search_query|default:'' }}">
+    <input type="text" name="search" placeholder="Search by model..." value="{{ search_query|default:'' }}" />
     
     <select name="car_type">
       <option value="">Car Type</option>
@@ -25,18 +26,23 @@
     </select>
     
     <select name="transmission">
-  <option value="">Transmission</option>
-  <option value="automatic" {% if transmission == 'automatic' %}selected{% endif %}>Automatic</option>
-  <option value="manual" {% if transmission == 'manual' %}selected{% endif %}>Manual</option>
-</select>
-
+      <option value="">Transmission</option>
+      <option value="automatic" {% if transmission == 'automatic' %}selected{% endif %}>Automatic</option>
+      <option value="manual" {% if transmission == 'manual' %}selected{% endif %}>Manual</option>
+    </select>
     
     <select name="sort">
       <option value="">Sort By</option>
       <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
       <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
     </select>
-    
+
+    <!-- Carry over date filters if needed -->
+<input type="hidden" name="start_date" value="{{ start_date }}">
+<input type="hidden" name="start_time" value="{{ start_time }}">
+<input type="hidden" name="end_date" value="{{ end_date }}">
+<input type="hidden" name="end_time" value="{{ end_time }}">
+
     <button type="submit" class="btn">Filter</button>
   </form>
 
@@ -44,19 +50,13 @@
   <div class="car-grid">
     {% for car in cars %}
     <div class="car-card">
-      <img src="{{ car.image_url }}" alt="{{ car.name }}">
+      <img src="{{ car.image_url }}" alt="{{ car.name }}" />
       <div class="car-card-content">
         <h3>{{ car.name }}</h3>
         <p>{{ car.car_type }} • {{ car.seating_capacity }}-Seater • {{ car.transmission }}</p>
-        
-        <!-- Availability Label -->
-        {% if car.is_available %}
-          <p style="color: green; font-weight: bold;">Available</p>
-        {% else %}
-          <p style="color: red; font-weight: bold;">Not Available Right Now</p>
-        {% endif %}
 
-        <!-- Pricing Options -->
+        <p style="color: green; font-weight: bold;">Available</p>
+
         <div class="price-option">
           <p><strong>₹{{ car.free_km_price }}</strong></p>
           <p>{{ car.free_kms }} Free KMs</p>
@@ -68,20 +68,15 @@
           <p>Unlimited KMs</p>
         </div>
 
-        <!-- Buttons -->
         <div class="button-group">
           <a href="{% url 'car_detail' car.id %}" class="btn btn-view-details">View Details</a>
-          {% if car.is_available %}
-            <a href="{% url 'car_book' car.id %}" class="btn btn-book-now">Book Now</a>
-          {% else %}
-            <button disabled class="btn btn-book-now" style="background-color: gray; cursor: not-allowed;">Not Available</button>
-          {% endif %}
+          <a href="{% url 'car_book' car.id %}" class="btn btn-book-now">Book Now</a>
         </div>
 
       </div>
     </div>
     {% empty %}
-    <p>No cars available at the moment.</p>
+    <p>No cars available for the selected time range.</p>
     {% endfor %}
   </div>
 

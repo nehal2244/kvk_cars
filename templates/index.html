@@ -268,7 +268,19 @@
         });
     });
 {% comment %} find car logic {% endcomment %}
- document.getElementById('carBookingForm').addEventListener('submit', function(e) {  
+window.addEventListener('DOMContentLoaded', () => {
+  const startDateInput = document.getElementById('start_date');
+  const endDateInput = document.getElementById('end_date');
+
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
+
+  // Set min attribute to today to disable past dates in calendar
+  startDateInput.min = today;
+  endDateInput.min = today;
+});
+
+document.getElementById('carBookingForm').addEventListener('submit', function(e) {  
   const startDateInput = document.getElementById('start_date');
   const startTimeInput = document.getElementById('start_time');
   const endDateInput = document.getElementById('end_date');

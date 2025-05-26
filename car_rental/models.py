@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 class Car(models.Model):
     TRANSMISSION_CHOICES = [
@@ -19,7 +22,15 @@ class Car(models.Model):
     free_kms = models.PositiveIntegerField(default=0)   # Number of free kms allowed
     
     image_url = models.URLField()
-    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
+
+
+class Booking(models.Model):
+    car = models.ForeignKey('Car', on_delete=models.CASCADE, related_name='bookings')
+    start_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.car.name} from {self.start_datetime} to {self.end_datetime}"

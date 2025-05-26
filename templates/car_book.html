@@ -1,6 +1,21 @@
-<!-- car_detail.html -->
-<h1>{{ car.name }}</h1>
-<p>Type: {{ car.car_type }}</p>
-<p>Seats: {{ car.seating_capacity }}</p>
-<p>Transmission: {{ car.transmission }}</p>
-<!-- Add more details as needed -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book {{ car.name }} - KVK Cars</title>
+  <link rel="stylesheet" href="{% static 'styles/browse_cars.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/car_book.css' %}" />
+</head>
+<body>
+  <h1>Book {{ car.name }}</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Confirm Booking</button>
+  </form>
+
+  <a href="{% url 'browse_cars' %}">Back to browse cars</a>
+</body>
+</html>
