@@ -10,50 +10,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
-
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 load_dotenv()  # loads .env file
-
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l6&7oeoqv%wjj%au6=v_zusj4jk5xw0s#xij$!d%hft*o7t#jg'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-l6&7oeoqv%wjj%au6=v_zusj4jk5xw0s#xij$!d%hft*o7t#jg')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
-
-# DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
-
-# if DEBUG:
-#     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-# else:
-#     ALLOWED_HOSTS = ['www.kvkcars.com', 'kvkcars.com']
-# DEBUG = True
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-# DEBUG = False
-# ALLOWED_HOSTS = ['https://kvk-cars.onrender.com']
-
-# load_dotenv()  # take environment variables from .env.
-
-# if os.getenv('DJANGO_ENV') == 'local':
-#     DEBUG = True
-#     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-# else:
-#     DEBUG = False
-#     ALLOWED_HOSTS = ['kvk-cars.onrender.com']
 DEBUG = False
+
 ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com']
 
 # Application definition
@@ -70,6 +40,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Uncomment the next line to enable WhiteNoise for static files (optional)
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -83,8 +55,7 @@ ROOT_URLCONF = 'kvk_cars.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"
-],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -98,7 +69,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kvk_cars.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -109,25 +79,15 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -140,19 +100,20 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'  # usually better to have leading slash
+STATIC_URL = '/static/'
 
+# Where Django will look for additional static files in dev (e.g. your static folder)
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Where collectstatic will gather static files for production
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# manually addeds 
