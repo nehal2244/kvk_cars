@@ -74,10 +74,12 @@
     z-index: 10;
   ">
     <h1 style="text-align: center;">SELF DRIVE CAR RENTAL</h1>
-<form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">  
+<form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">    
   <hr />
   <div class="regular-search">
-    <div style="display: flex; gap: 10px;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+
+      <!-- Pickup date -->
       <div style="flex: 1;">
         <label for="start_date">Pickup date</label>
         <input 
@@ -87,15 +89,34 @@
           style="width: 100%; padding: 10px;" 
         />
       </div>
+
+      <!-- Pickup time (12-hour) -->
       <div style="flex: 1;">
         <label for="start_time">Pickup time</label>
-        <input 
-          type="time" 
-          id="start_time" 
-          name="start_time" 
-          style="width: 100%; padding: 10px;" 
-        />
+        <div style="display: flex; gap: 5px;">
+          <input
+            type="text"
+            id="start_time"
+            name="start_time"
+            placeholder="hh:mm"
+            pattern="^(0?[1-9]|1[0-2]):[0-5][0-9]$"
+            style="flex: 3; padding: 10px;"
+          />
+          <select
+            id="start_ampm"
+            name="start_ampm"
+            style="flex: 1; padding: 10px;"
+          >
+            <option value="AM" selected>AM</option>
+            <option value="PM">PM</option>
+          </select>
+        </div>
       </div>
+
+      <!-- FLEX BREAK: forces the next items onto a new row -->
+      <div style="flex-basis: 100%; height: 0;"></div>
+
+      <!-- Drop-off date -->
       <div style="flex: 1;">
         <label for="end_date">Drop-off date</label>
         <input 
@@ -105,18 +126,34 @@
           style="width: 100%; padding: 10px;" 
         />
       </div>
+
+      <!-- Drop-off time (12-hour) -->
       <div style="flex: 1;">
         <label for="end_time">Drop-off time</label>
-        <input 
-          type="time" 
-          id="end_time" 
-          name="end_time" 
-          style="width: 100%; padding: 10px;" 
-        />
+        <div style="display: flex; gap: 5px;">
+          <input
+            type="text"
+            id="end_time"
+            name="end_time"
+            placeholder="hh:mm"
+            pattern="^(0?[1-9]|1[0-2]):[0-5][0-9]$"
+            style="flex: 3; padding: 10px;"
+          />
+          <select
+            id="end_ampm"
+            name="end_ampm"
+            style="flex: 1; padding: 10px;"
+          >
+            <option value="AM" selected>AM</option>
+            <option value="PM">PM</option>
+          </select>
+        </div>
       </div>
+
     </div>
     <div id="error-message" style="color: red; margin-top: 10px; display: none;"></div>
   </div>
+
   <div style="margin-top: 15px;">
     <button type="submit" style="
       display: inline-block;
@@ -272,31 +309,59 @@ window.addEventListener('DOMContentLoaded', () => {
   const startDateInput = document.getElementById('start_date');
   const endDateInput = document.getElementById('end_date');
 
-  // Get today's date in YYYY-MM-DD format
-  const today = new Date().toISOString().split('T')[0];
+  // Get today's date in YYYY-MM-DD format using local time
+  const now = new Date();
+  const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const today = localDate.toISOString().split('T')[0];
 
   // Set min attribute to today to disable past dates in calendar
   startDateInput.min = today;
   endDateInput.min = today;
 });
 
-document.getElementById('carBookingForm').addEventListener('submit', function(e) {  
+document.getElementById('carBookingForm').addEventListener('submit', function(e) {
   const startDateInput = document.getElementById('start_date');
   const startTimeInput = document.getElementById('start_time');
   const endDateInput = document.getElementById('end_date');
   const endTimeInput = document.getElementById('end_time');
+  const startAMPM = document.getElementById('start_ampm');
+  const endAMPM = document.getElementById('end_ampm');
   const errorMessage = document.getElementById('error-message');
 
+  const convertTo24Hour = (timeStr, ampm) => {
+    let [hour, minute] = timeStr.split(':');
+    hour = parseInt(hour, 10);
+    if (ampm === 'PM' && hour < 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
+    return `${String(hour).padStart(2, '0')}:${minute}`;
+  };
+
+  const createLocalDateTime = (dateStr, timeStr) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const [hour, minute] = timeStr.split(':').map(Number);
+    return new Date(year, month - 1, day, hour, minute);
+  };
+
   const startDateStr = startDateInput.value.trim();
-  const startTimeStr = startTimeInput.value.trim();
   const endDateStr = endDateInput.value.trim();
-  const endTimeStr = endTimeInput.value.trim();
+
+  let startTimeStr = startTimeInput.value.trim();
+  let endTimeStr = endTimeInput.value.trim();
+
+  // Convert time to 24-hour format based on AM/PM before validation
+  if (startTimeStr && startAMPM.value) {
+    startTimeStr = convertTo24Hour(startTimeStr, startAMPM.value);
+    startTimeInput.value = startTimeStr;
+  }
+  if (endTimeStr && endAMPM.value) {
+    endTimeStr = convertTo24Hour(endTimeStr, endAMPM.value);
+    endTimeInput.value = endTimeStr;
+  }
 
   // Clear previous error
   errorMessage.style.display = 'none';
   errorMessage.textContent = '';
 
-  // Check if date and time fields are filled
   if (!startDateStr || !startTimeStr || !endDateStr || !endTimeStr) {
     e.preventDefault();
     errorMessage.style.display = 'block';
@@ -304,9 +369,8 @@ document.getElementById('carBookingForm').addEventListener('submit', function(e)
     return;
   }
 
-  // Combine date + time into ISO string to parse properly
-  const startDateTime = new Date(`${startDateStr}T${startTimeStr}`);
-  const endDateTime = new Date(`${endDateStr}T${endTimeStr}`);
+  const startDateTime = createLocalDateTime(startDateStr, startTimeStr);
+  const endDateTime = createLocalDateTime(endDateStr, endTimeStr);
 
   if (isNaN(startDateTime.getTime())) {
     e.preventDefault();
@@ -322,7 +386,6 @@ document.getElementById('carBookingForm').addEventListener('submit', function(e)
     return;
   }
 
-  // Prevent past dates/times
   const now = new Date();
 
   if (startDateTime < now) {
@@ -345,8 +408,6 @@ document.getElementById('carBookingForm').addEventListener('submit', function(e)
     errorMessage.textContent = 'Drop-off date/time cannot be earlier than pickup date/time.';
     return;
   }
-
-  // All good, form will submit normally
 });
 
 </script>
