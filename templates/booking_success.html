@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Booking Successful - KVK Cars</title>
+  <link rel="stylesheet" href="{% static 'styles/browse_cars.css' %}" />
+</head>
+<body>
+  <h1>Booking Successful!</h1>
+  
+  <h2>Car: {{ booking.car.name }}</h2>
+  <p>Booking ID: {{ booking.id }}</p>
+  <p>Start Time: {{ booking.start_datetime }}</p>
+  <p>End Time: {{ booking.end_datetime }}</p>
+
+  <a href="{% url 'browse_cars' %}">Back to Browse Cars</a>
+</body>
+</html>

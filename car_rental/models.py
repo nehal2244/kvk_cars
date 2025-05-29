@@ -4,30 +4,47 @@ from django.utils import timezone
 from django.utils.timezone import make_aware
 import datetime
 
-
 class Car(models.Model):
     TRANSMISSION_CHOICES = [
         ('manual', 'Manual'),
         ('automatic', 'Automatic'),
     ]
 
+    FUEL_CHOICES = [
+        ('petrol', 'Petrol'),
+        ('ev', 'Electric Vehicle'),
+        ('cng', 'CNG'),
+    ]
+
     name = models.CharField(max_length=100)
     car_type = models.CharField(max_length=50)
     seating_capacity = models.PositiveIntegerField()
     transmission = models.CharField(max_length=20, choices=TRANSMISSION_CHOICES)
-    
+    fuel_type = models.CharField(max_length=10, choices=FUEL_CHOICES, default='petrol')
+
     # Pricing fields
-    free_km_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)        # Price with free kms
-    unlimited_km_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)   # Price for unlimited kms
-    extra_km_charge = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)      # Extra km charge per km
-    
-    free_kms = models.PositiveIntegerField(default=0)   # Number of free kms allowed
-    
-    image_url = models.URLField()
+    free_km_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
+    free_kms = models.PositiveIntegerField(default=0)
+    unlimited_km_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
+    extra_km_charge = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+
+    # NEW: Prices for fixed km plans
+    price_100km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
+    price_200km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
+    price_300km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
+
+    image_file = models.ImageField(upload_to='car_images/', blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.name
 
+    def image_preview(self):
+        if self.image_file:
+            return self.image_file.url
+        elif self.image_url:
+            return self.image_url
+        return ''
 
 class Booking(models.Model):
     car = models.ForeignKey('Car', on_delete=models.CASCADE, related_name='bookings')

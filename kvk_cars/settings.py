@@ -25,8 +25,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-l6&7oeoqv%wjj%au6=v
 DEBUG = False
 
 ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com']
-#DEBUG = True
-#ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# DEBUG = True
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -119,3 +119,19 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+# manually added
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'ambadenehal117@gmail.com'  # replace with your email
+# EMAIL_HOST_PASSWORD = 'ctfb ussc nzcx mokp'  # replace with your email password or app password
+
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

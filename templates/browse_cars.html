@@ -37,11 +37,11 @@
       <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
     </select>
 
-    <!-- Carry over date filters if needed -->
-<input type="hidden" name="start_date" value="{{ start_date }}">
-<input type="hidden" name="start_time" value="{{ start_time }}">
-<input type="hidden" name="end_date" value="{{ end_date }}">
-<input type="hidden" name="end_time" value="{{ end_time }}">
+    <!-- Preserve date filters -->
+    <input type="hidden" name="start_date" value="{{ start_date }}">
+    <input type="hidden" name="start_time" value="{{ start_time }}">
+    <input type="hidden" name="end_date" value="{{ end_date }}">
+    <input type="hidden" name="end_time" value="{{ end_time }}">
 
     <button type="submit" class="btn">Filter</button>
   </form>
@@ -50,25 +50,57 @@
   <div class="car-grid">
     {% for car in cars %}
     <div class="car-card">
-      <img src="{{ car.image_url }}" alt="{{ car.name }}" />
+{% if car.image_file %}
+    <img src="{{ car.image_file.url }}" alt="{{ car.name }}">
+{% elif car.image_url %}
+    <img src="{{ car.image_url }}" alt="{{ car.name }}">
+{% else %}
+    <p>No image available</p>
+{% endif %}
+
       <div class="car-card-content">
         <h3>{{ car.name }}</h3>
-        <p>{{ car.car_type }} • {{ car.seating_capacity }}-Seater • {{ car.transmission }}</p>
+        
+    <p style="display: inline;text-align: center; white-space: nowrap; margin-left: -18px; font-size: 0.90rem;" >
+  <span>⚙️ {{ car.get_transmission_display }}</span>
+  <span> • ⛽ {{ car.get_fuel_type_display }}</span>
+  <span> • 👥 {{ car.seating_capacity }} Persons</span>
+</p>
 
-        <p style="color: green; font-weight: bold;">Available</p>
 
-        <div class="price-option">
-          <p><strong>₹{{ car.free_km_price }}</strong></p>
-          <p>{{ car.free_kms }} Free KMs</p>
-          <p>Extra kms charged at ₹{{ car.extra_km_charge }}/km</p>
+
+        <p style="color: #39FF14; font-weight: bold;">Available</p>
+
+              
+<ul class="car_plans_section" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; list-style: none; padding: 0;">
+  <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+    <div class="car_plans_inner_section">
+      <h4>₹{{ car.price_100km|floatformat:0 }}</h4>
+      <span>100 KMs</span>
+    </div>
+  </li>
+  <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+    <div class="car_plans_inner_section">
+      <h4>₹{{ car.price_200km|floatformat:0 }}</h4>
+      <span>200 KMs</span>
+    </div>
+  </li>
+  <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+    <div class="car_plans_inner_section">
+      <h4>₹{{ car.price_300km|floatformat:0 }}</h4>
+      <span>300 KMs</span>
+    </div>
+  </li>
+         <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center; background-color: #ff4818; ;"> <div class="car_plans_inner_section" >
+          <p style="color: white;"><strong>₹{{ car.unlimited_km_price|floatformat:0 }}</strong></p>
+          <p style="color: white;">Unlimited KMs</p>
         </div>
+      </li>
 
-        <div class="price-option">
-          <p><strong>₹{{ car.unlimited_km_price }}</strong></p>
-          <p>Unlimited KMs</p>
-        </div>
+</ul>
 
-        <div class="button-group">
+
+        <div class="button-group" >
           <a href="{% url 'car_detail' car.id %}" class="btn btn-view-details">View Details</a>
           <a href="{% url 'car_book' car.id %}" class="btn btn-book-now">Book Now</a>
         </div>
@@ -76,7 +108,7 @@
       </div>
     </div>
     {% empty %}
-    <p>No cars available for the selected time range.</p>
+    <p>No cars available for the selected filters.</p>
     {% endfor %}
   </div>
 

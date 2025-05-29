@@ -13,6 +13,8 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
 />
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <link rel="stylesheet" href="/static/styles/index.css">
        
@@ -74,102 +76,71 @@
     z-index: 10;
   ">
     <h1 style="text-align: center;">SELF DRIVE CAR RENTAL</h1>
-<form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">    
+    
+    <form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">
   <hr />
   <div class="regular-search">
-    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+    <div class="d-flex flex-wrap" style="gap:10px;">
 
       <!-- Pickup date -->
-      <div style="flex: 1;">
+      <div class="flex-fill">
         <label for="start_date">Pickup date</label>
-        <input 
-          type="date" 
-          id="start_date" 
-          name="start_date" 
-          style="width: 100%; padding: 10px;" 
+        <input
+          type="date"
+          id="start_date"
+          name="start_date"
+          class="form-control"
         />
       </div>
 
-      <!-- Pickup time (12-hour) -->
-      <div style="flex: 1;">
+      <!-- Pickup time (12-hour with Flatpickr) -->
+      <div class="flex-fill">
         <label for="start_time">Pickup time</label>
-        <div style="display: flex; gap: 5px;">
-          <input
-            type="text"
-            id="start_time"
-            name="start_time"
-            placeholder="hh:mm"
-            pattern="^(0?[1-9]|1[0-2]):[0-5][0-9]$"
-            style="flex: 3; padding: 10px;"
-          />
-          <select
-            id="start_ampm"
-            name="start_ampm"
-            style="flex: 1; padding: 10px;"
-          >
-            <option value="AM" selected>AM</option>
-            <option value="PM">PM</option>
-          </select>
-        </div>
+        <input
+          type="text"
+          id="start_time"
+          name="start_time"
+          placeholder="hh:mm AM/PM"
+          class="form-control"
+        />
       </div>
 
-      <!-- FLEX BREAK: forces the next items onto a new row -->
-      <div style="flex-basis: 100%; height: 0;"></div>
+      <div class="flex-break"></div>
 
       <!-- Drop-off date -->
-      <div style="flex: 1;">
+      <div class="flex-fill">
         <label for="end_date">Drop-off date</label>
-        <input 
-          type="date" 
-          id="end_date" 
-          name="end_date" 
-          style="width: 100%; padding: 10px;" 
+        <input
+          type="date"
+          id="end_date"
+          name="end_date"
+          class="form-control"
         />
       </div>
 
-      <!-- Drop-off time (12-hour) -->
-      <div style="flex: 1;">
+      <!-- Drop-off time (12-hour with Flatpickr) -->
+      <div class="flex-fill">
         <label for="end_time">Drop-off time</label>
-        <div style="display: flex; gap: 5px;">
-          <input
-            type="text"
-            id="end_time"
-            name="end_time"
-            placeholder="hh:mm"
-            pattern="^(0?[1-9]|1[0-2]):[0-5][0-9]$"
-            style="flex: 3; padding: 10px;"
-          />
-          <select
-            id="end_ampm"
-            name="end_ampm"
-            style="flex: 1; padding: 10px;"
-          >
-            <option value="AM" selected>AM</option>
-            <option value="PM">PM</option>
-          </select>
-        </div>
+        <input
+          type="text"
+          id="end_time"
+          name="end_time"
+          placeholder="hh:mm AM/PM"
+          class="form-control"
+        />
       </div>
 
     </div>
-    <div id="error-message" style="color: red; margin-top: 10px; display: none;"></div>
+
+    <div id="error-message" class="text-danger mt-2" style="display:none;"></div>
   </div>
 
-  <div style="margin-top: 15px;">
-    <button type="submit" style="
-      display: inline-block;
-      width: 100%;
-      text-align: center;
-      padding: 12px;
-      background: #ffc107;
-      color: #000;
-      font-weight: bold;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-    ">Find Car</button>
+  <div class="mt-3">
+    <button type="submit" class="btn btn-warning btn-block font-weight-bold" style="margin-top: 13px;">
+      Find Car
+    </button>
   </div>
 </form>
-
 
 
   </div>
@@ -291,6 +262,9 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script>
     $(document).ready(function(){
         $(".owl-carousel").owlCarousel({
@@ -304,112 +278,113 @@
             items: 1
         });
     });
-{% comment %} find car logic {% endcomment %}
+// {% comment %} find car logic {% endcomment %} 
+
 window.addEventListener('DOMContentLoaded', () => {
-  const startDateInput = document.getElementById('start_date');
-  const endDateInput = document.getElementById('end_date');
-
-  // Get today's date in YYYY-MM-DD format using local time
   const now = new Date();
-  const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const today = localDate.toISOString().split('T')[0];
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  // Set min attribute to today to disable past dates in calendar
-  startDateInput.min = today;
-  endDateInput.min = today;
+  // Declare endPicker first so we can reference it inside start_date onChange
+  const endPicker = flatpickr("#end_date", {
+    dateFormat: "Y-m-d",
+    minDate: today,
+    disable: [
+      date => date < today
+    ]
+  });
+
+  flatpickr("#start_date", {
+    dateFormat: "Y-m-d",
+    minDate: today,
+    disable: [
+      date => date < today
+    ],
+    onChange: function(selectedDates) {
+      if (selectedDates.length) {
+        // Set minDate for end date picker to the selected start date
+        endPicker.set('minDate', selectedDates[0]);
+      }
+    }
+  });
+
+  // Flatpickr for time fields
+  flatpickr("#start_time", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "h:i K",
+    time_24hr: false
+  });
+
+  flatpickr("#end_time", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "h:i K",
+    time_24hr: false
+  });
 });
 
-document.getElementById('carBookingForm').addEventListener('submit', function(e) {
-  const startDateInput = document.getElementById('start_date');
-  const startTimeInput = document.getElementById('start_time');
-  const endDateInput = document.getElementById('end_date');
-  const endTimeInput = document.getElementById('end_time');
-  const startAMPM = document.getElementById('start_ampm');
-  const endAMPM = document.getElementById('end_ampm');
+// Unified form submit validation
+document.getElementById('carBookingForm').addEventListener('submit', function (e) {
+  const startDateStr = document.getElementById('start_date').value.trim();
+  const endDateStr = document.getElementById('end_date').value.trim();
+  const startTimeStr = document.getElementById('start_time').value.trim();
+  const endTimeStr = document.getElementById('end_time').value.trim();
   const errorMessage = document.getElementById('error-message');
 
-  const convertTo24Hour = (timeStr, ampm) => {
-    let [hour, minute] = timeStr.split(':');
-    hour = parseInt(hour, 10);
-    if (ampm === 'PM' && hour < 12) hour += 12;
-    if (ampm === 'AM' && hour === 12) hour = 0;
-    return `${String(hour).padStart(2, '0')}:${minute}`;
-  };
-
-  const createLocalDateTime = (dateStr, timeStr) => {
-    const [year, month, day] = dateStr.split('-').map(Number);
-    const [hour, minute] = timeStr.split(':').map(Number);
-    return new Date(year, month - 1, day, hour, minute);
-  };
-
-  const startDateStr = startDateInput.value.trim();
-  const endDateStr = endDateInput.value.trim();
-
-  let startTimeStr = startTimeInput.value.trim();
-  let endTimeStr = endTimeInput.value.trim();
-
-  // Convert time to 24-hour format based on AM/PM before validation
-  if (startTimeStr && startAMPM.value) {
-    startTimeStr = convertTo24Hour(startTimeStr, startAMPM.value);
-    startTimeInput.value = startTimeStr;
-  }
-  if (endTimeStr && endAMPM.value) {
-    endTimeStr = convertTo24Hour(endTimeStr, endAMPM.value);
-    endTimeInput.value = endTimeStr;
-  }
-
-  // Clear previous error
   errorMessage.style.display = 'none';
   errorMessage.textContent = '';
 
-  if (!startDateStr || !startTimeStr || !endDateStr || !endTimeStr) {
+  if (!startDateStr || !endDateStr || !startTimeStr || !endTimeStr) {
     e.preventDefault();
     errorMessage.style.display = 'block';
-    errorMessage.textContent = 'Please enter both pickup and drop-off dates and times.';
+    errorMessage.textContent = 'Please enter pickup and drop-off dates and times.';
     return;
   }
 
-  const startDateTime = createLocalDateTime(startDateStr, startTimeStr);
-  const endDateTime = createLocalDateTime(endDateStr, endTimeStr);
+  const toDateTime = (dateStr, timeStr) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    let [hourStr, minutePart] = timeStr.split(':');
+    let minute = parseInt(minutePart);
+    let ampm = timeStr.slice(-2).toUpperCase();
 
-  if (isNaN(startDateTime.getTime())) {
-    e.preventDefault();
-    errorMessage.style.display = 'block';
-    errorMessage.textContent = 'Pickup date/time is invalid. Please select proper values.';
-    return;
-  }
+    let hour = parseInt(hourStr);
+    if (ampm === 'PM' && hour < 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
 
-  if (isNaN(endDateTime.getTime())) {
-    e.preventDefault();
-    errorMessage.style.display = 'block';
-    errorMessage.textContent = 'Drop-off date/time is invalid. Please select proper values.';
-    return;
-  }
+    return new Date(year, month - 1, day, hour, minute);
+  };
 
+  const pickupDateTime = toDateTime(startDateStr, startTimeStr);
+  const dropoffDateTime = toDateTime(endDateStr, endTimeStr);
   const now = new Date();
 
-  if (startDateTime < now) {
+  // Normalize seconds and milliseconds
+  now.setSeconds(0, 0);
+  pickupDateTime.setSeconds(0, 0);
+  dropoffDateTime.setSeconds(0, 0);
+
+  if (pickupDateTime.getTime() < now.getTime()) {
     e.preventDefault();
     errorMessage.style.display = 'block';
-    errorMessage.textContent = 'Oops! Pickup date/time cannot be in the past.';
+    errorMessage.textContent = 'Pickup date/time cannot be in the past.';
     return;
   }
 
-  if (endDateTime < now) {
+  // Enforce dropoff to be at least 1 hour after pickup
+  const minDropoffTime = new Date(pickupDateTime.getTime() + 60 * 60 * 1000);
+  if (dropoffDateTime.getTime() < minDropoffTime.getTime()) {
     e.preventDefault();
     errorMessage.style.display = 'block';
-    errorMessage.textContent = 'Drop-off date/time cannot be in the past.';
-    return;
-  }
-
-  if (endDateTime < startDateTime) {
-    e.preventDefault();
-    errorMessage.style.display = 'block';
-    errorMessage.textContent = 'Drop-off date/time cannot be earlier than pickup date/time.';
+    errorMessage.textContent = 'Drop-off time must be at least 1 hour after pickup time.';
     return;
   }
 });
 
-</script>
 
+
+</script>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</body>
 </html>
