@@ -10,8 +10,31 @@
 </head>
 <body>
 
-<header>Browse Cars</header>
+<header class="rn-header">
+    <div class="rn-menubar py-1 shadow-sm">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto pr-0">
+                    <a class="brand-logo" href="{% url 'index' %}">
+                        <img src="/static/img/logo.png" alt="KVK Car Logo">
+                    </a>
+                </div>
+                <div class="col-auto tagline">KVK CARS !! Kahin bhi kabhi bhi !!</div>
+                <div class="col menu-links">
 
+                    <a href="{% url 'index' %}">Home</a>
+
+                    <a href="/about">About Us</a>
+                    <a href="https://forms.gle/ooEVzYV2BceAtkVw6">Bookings Open</a>
+                    
+                    <a href="/pay-online">Pay Online</a>
+                    <a class="btn-call" href="tel:+918077125139">Call</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 <div class="container">
 
   <!-- Filter Bar -->
