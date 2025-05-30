@@ -25,14 +25,12 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-l6&7oeoqv%wjj%au6=v
 DEBUG = False
 
 ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com']
-<<<<<<< HEAD
+
 # DEBUG = True
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-=======
+
 #DEBUG = True
 #ALLOWED_HOSTS = ['localhost', '127.0.0.1']
->>>>>>> ece8744 (Describe your changes briefly)
-
 
 # Application definition
 
