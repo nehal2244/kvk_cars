@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.timezone import make_aware
 import datetime
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 class Car(models.Model):
     TRANSMISSION_CHOICES = [
@@ -45,6 +47,7 @@ class Car(models.Model):
         elif self.image_url:
             return self.image_url
         return ''
+    
 
 class Booking(models.Model):
     car = models.ForeignKey('Car', on_delete=models.CASCADE, related_name='bookings')
@@ -53,3 +56,28 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.car.name} from {self.start_datetime} to {self.end_datetime}"
+
+    def clean(self):
+        # 1. End date must be after start date
+        if self.end_datetime <= self.start_datetime:
+            raise ValidationError({'end_datetime': _('End date and time must be after start date and time.')})
+
+        # 2. Start date must be in the future
+        if self.start_datetime < timezone.now():
+            raise ValidationError({'start_datetime': _('Booking cannot start in the past.')})
+
+        # 3. Prevent overlapping bookings for the same car
+        overlapping = Booking.objects.filter(
+            car=self.car,
+            end_datetime__gt=self.start_datetime,
+            start_datetime__lt=self.end_datetime
+        )
+        if self.pk:
+            overlapping = overlapping.exclude(pk=self.pk)
+
+        if overlapping.exists():
+            raise ValidationError(_('This booking overlaps with an existing booking for this car.'))
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Ensure validation runs
+        super().save(*args, **kwargs)
