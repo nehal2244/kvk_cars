@@ -40,3 +40,7 @@ class BookingAdmin(admin.ModelAdmin):
     list_display = ['car', 'start_datetime', 'end_datetime']
     list_filter = ['car']
     search_fields = ['car__name']
+
+    def save_model(self, request, obj, form, change):
+        obj.full_clean()
+        super().save_model(request, obj, form, change)

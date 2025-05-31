@@ -23,7 +23,3 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include ("car_rental.urls"))
 ]
-
-# 👇 This line makes uploaded media (images) available in development
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
