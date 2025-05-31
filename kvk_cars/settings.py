@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-l6&7oeoqv%wjj%au6=v_zusj4jk5xw0s#xij$!d%hft*o7t#jg')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# DEBUG = False
 
-ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com', 'www.kvkcars.com']
+# ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com', 'www.kvkcars.com']
 
-# DEBUG = True
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+DEBUG = True
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 #DEBUG = True
 #ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -85,8 +85,12 @@ WSGI_APPLICATION = 'kvk_cars.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'kvk_cars',
+        'USER': 'root',
+        'PASSWORD': 'abc@123',
+        'HOST': 'localhost',  # or use your VPS IP if connecting remotely
+        'PORT': '3306',
     }
 }
 
