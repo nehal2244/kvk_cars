@@ -22,51 +22,57 @@ def index(request):
     return render(request , 'index.html')
 
 def browse_cars(request):
+    # Start with all cars
     cars = Car.objects.all()
+    error = None
+
+    # Get filter parameters
     search_query = request.GET.get('search', '')
     car_type = request.GET.get('car_type', '')
     transmission = request.GET.get('transmission', '')
     sort = request.GET.get('sort', '')
-    
+
     start_date = request.GET.get('start_date')
     start_time = request.GET.get('start_time')
     end_date = request.GET.get('end_date')
     end_time = request.GET.get('end_time')
 
-    error = None
-
-    if start_date and start_time and end_date and end_time:
+    # Handle date/time filtering
+    if all([start_date, start_time, end_date, end_time]):
         try:
             start_datetime = make_aware(datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %I:%M %p"))
             end_datetime = make_aware(datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %I:%M %p"))
 
             if end_datetime <= start_datetime:
                 error = "Drop-off must be after pickup."
-                cars = []  # show no cars
-
+                # Show all cars with warning instead of hiding everything
             else:
-                # Filter out booked cars
+                # Exclude booked cars during selected time
                 booked_car_ids = Booking.objects.filter(
                     start_datetime__lt=end_datetime,
                     end_datetime__gt=start_datetime
                 ).values_list('car_id', flat=True)
+
                 cars = cars.exclude(id__in=booked_car_ids)
 
         except ValueError:
             error = "Invalid date or time format."
-            cars = []
+            # Do not change `cars` to none; just show warning
 
-    # Apply additional filters
+    # Apply text search and other filters
     if search_query:
         cars = cars.filter(name__icontains=search_query)
+
     if car_type:
         cars = cars.filter(car_type=car_type)
+
     if transmission:
         cars = cars.filter(transmission__iexact=transmission)
+
     if sort == 'price_low':
-        cars = cars.order_by('free_km_price')
+        cars = cars.order_by('price_100km')
     elif sort == 'price_high':
-        cars = cars.order_by('-free_km_price')
+        cars = cars.order_by('-price_100km')
 
     context = {
         'cars': cars,

@@ -228,3 +228,55 @@ header {
 .menu-links .btn-call:hover {
   background-color: #15803d;
 }
+
+/* Global box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Banner styles */
+.banner-area {
+  background: url(//www.techdost.com/wp-content/uploads/2021/02/1.jpg) no-repeat center center/cover;
+  color: #fff;
+  padding: 60px 0;
+  position: relative;
+  text-align: left;
+  font-family: "Roboto", sans-serif;
+  margin-bottom: 150px;
+}
+
+.banner-heading {
+  max-width: 800px;
+}
+
+.banner-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.breadcrumb {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 5px;
+  font-size: 16px;
+}
+
+.breadcrumb li::after {
+  content: ">";
+  margin: 0 5px;
+  color: #ddd;
+}
+
+.breadcrumb li:last-child::after {
+  content: "";
+}
+
+.breadcrumb a {
+  color: #fff;
+  text-decoration: underline;
+}

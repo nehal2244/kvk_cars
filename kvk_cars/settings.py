@@ -83,16 +83,27 @@ WSGI_APPLICATION = 'kvk_cars.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'kvk_cars',
+#         'USER': 'root',
+#         'PASSWORD': 'abc@123',
+#         'HOST': 'localhost',  # or use your VPS IP if connecting remotely
+#         'PORT': '3306',
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'kvk_cars',
-        'USER': 'root',
+        'USER': 'root',  # or use a safer custom user you created
         'PASSWORD': 'abc@123',
-        'HOST': 'localhost',  # or use your VPS IP if connecting remotely
+        'HOST': '69.62.80.9',
         'PORT': '3306',
     }
 }
+
 
 
 # Password validation
@@ -139,14 +150,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # manually added
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'ambadenehal117@gmail.com'  # replace with your email
-# EMAIL_HOST_PASSWORD = 'ctfb ussc nzcx mokp'  # replace with your email password or app password
 
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ambadenehal117@gmail.com'  # replace with your email
+EMAIL_HOST_PASSWORD = 'ctfb ussc nzcx mokp'  # replace with your email password or app password
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

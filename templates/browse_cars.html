@@ -9,35 +9,107 @@
   <link rel="stylesheet" href="{% static 'styles/browse_cars.css' %}" />
 </head>
 <body>
+<!-- banner  -->
+     <div id="banner-area" class="banner-area">
+  <div class="container">
+    <div class="banner-heading">
+      <h1 class="banner-title">Find Car To Book</h1>
+      <ol class="breadcrumb">
+<li><a href="{% url 'index' %}">Home</a></li>
+<li><a href="{% url 'about' %}">About Us</a></li>
 
-<header class="rn-header">
-    <div class="rn-menubar py-1 shadow-sm">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-auto pr-0">
-                    <a class="brand-logo" href="{% url 'index' %}">
-                        <img src="/static/img/logo.png" alt="KVK Car Logo">
-                    </a>
-                </div>
-                <div class="col-auto tagline">KVK CARS !! Kahin bhi kabhi bhi !!</div>
-                <div class="col menu-links">
+        <li>Find Cars</li>
+      </ol>
 
-                    <a href="{% url 'index' %}">Home</a>
 
-                    <a href="/about">About Us</a>
-                    <a href="https://forms.gle/ooEVzYV2BceAtkVw6">Bookings Open</a>
-                    
-                    <a href="/pay-online">Pay Online</a>
-                    <a class="btn-call" href="tel:+918077125139">Call</a>
-                    
-                </div>
-            </div>
-        </div>
+<!-- modufy time  -->
+ 
+<!-- find car and modify section  -->
+ 
+ 
+    <form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">
+  <hr />
+  <div class="regular-search">
+    <div class="d-flex flex-wrap" style="gap:10px;">
+
+      <!-- Pickup date -->
+      <div class="flex-fill">
+        <label for="start_date">Pickup date</label>
+        <input
+          type="date"
+          id="start_date"
+          name="start_date"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Pickup time (12-hour with Flatpickr) -->
+      <div class="flex-fill">
+        <label for="start_time">Pickup time</label>
+        <input
+          type="text"
+          id="start_time"
+          name="start_time"
+          placeholder="hh:mm AM/PM"
+          class="form-control"
+        />
+      </div>
+
+      <div class="flex-break"></div>
+
+      <!-- Drop-off date -->
+      <div class="flex-fill">
+        <label for="end_date">Drop-off date</label>
+        <input
+          type="date"
+          id="end_date"
+          name="end_date"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Drop-off time (12-hour with Flatpickr) -->
+      <div class="flex-fill">
+        <label for="end_time">Drop-off time</label>
+        <input
+          type="text"
+          id="end_time"
+          name="end_time"
+          placeholder="hh:mm AM/PM"
+          class="form-control"
+        />
+      </div>
+
     </div>
-</header>
-<div class="container">
+
+    <div id="error-message" class="text-danger mt-2" style="display:none;"></div>
+  </div>
+
+  <div class="mt-3">
+    <button type="submit" class="btn btn-warning btn-block font-weight-bold" style="margin-top: 13px;">
+      Find Car
+    </button>
+  </div>
+</form>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- heading  -->
+ <section class="payment-wrapper">
+  <div class="section-heading">
+    <h1>Find your car now and book instantly!
+
+</h1>
+    <span class="animate-border center"></span>
+  </div>
+
 
   <!-- Filter Bar -->
+<div class="container">
+
   <form method="get" class="filter-bar">
     <input type="text" name="search" placeholder="Search by model..." value="{{ search_query|default:'' }}" />
     
@@ -55,10 +127,10 @@
     </select>
     
     <select name="sort">
-      <option value="">Sort By</option>
-      <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
-      <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
-    </select>
+  <option value="">Sort By</option>
+  <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>100km Price: Low to High</option>
+  <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>100km Price: High to Low</option>
+</select>
 
     <!-- Preserve date filters -->
     <input type="hidden" name="start_date" value="{{ start_date }}">
@@ -68,8 +140,12 @@
 
     <button type="submit" class="btn">Filter</button>
   </form>
+  
+
 
   <!-- Car Listings -->
+
+
   <div class="car-grid">
     {% for car in cars %}
     <div class="car-card">
@@ -136,6 +212,88 @@
   </div>
 
 </div>
+
+<!-- script flatpicker  -->
+ <!-- Flatpickr CSS & JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  const endPicker = flatpickr("#end_date", {
+    dateFormat: "Y-m-d",
+    minDate: today,
+  });
+
+  flatpickr("#start_date", {
+    dateFormat: "Y-m-d",
+    minDate: today,
+    onChange: function(selectedDates) {
+      if (selectedDates.length) {
+        endPicker.set('minDate', selectedDates[0]);
+      }
+    }
+  });
+
+  flatpickr("#start_time", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "h:i K"
+  });
+
+  flatpickr("#end_time", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "h:i K"
+  });
+});
+</script>
+
+<!-- modify time script  -->
+ <!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    const endPicker = flatpickr("#end_date", {
+        dateFormat: "Y-m-d",
+        minDate: today,
+    });
+
+    flatpickr("#start_date", {
+        dateFormat: "Y-m-d",
+        minDate: today,
+        onChange: function (selectedDates) {
+            if (selectedDates.length > 0) {
+                const selectedDate = selectedDates[0];
+                endPicker.set('minDate', selectedDate);
+            }
+        }
+    });
+
+    flatpickr("#start_time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "h:i K",
+        time_24hr: false,
+    });
+
+    flatpickr("#end_time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "h:i K",
+        time_24hr: false,
+    });
+});
+</script>
 
 </body>
 </html>
