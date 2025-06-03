@@ -83,26 +83,29 @@ WSGI_APPLICATION = 'kvk_cars.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'kvk_cars',
-#         'USER': 'root',
-#         'PASSWORD': 'abc@123',
-#         'HOST': 'localhost',  # or use your VPS IP if connecting remotely
-#         'PORT': '3306',
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'kvk_cars',
-        'USER': 'root',  # or use a safer custom user you created
+        'USER': 'root',
         'PASSWORD': 'abc@123',
-        'HOST': '69.62.80.9',
+        'HOST': 'localhost',  # or use your VPS IP if connecting remotely
         'PORT': '3306',
     }
 }
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'kvk_cars',
+#         'USER': 'root',  # or use a safer custom user you created
+#         'PASSWORD': 'abc@123',
+#         'HOST': '69.62.80.9',
+#         'PORT': '3306',
+#     }
+# }
 
 
 
