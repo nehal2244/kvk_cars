@@ -1,12 +1,14 @@
 /* RESET & BASE STYLES */
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
 }
 
-body, html {
+html, body {
   width: 100%;
   height: 100%;
   background-color: #fff;
@@ -14,13 +16,16 @@ body, html {
   overflow-x: hidden;
 }
 
-.container, .mt-3 {
+/* Container Helpers */
+.container,
+.mt-3 {
   width: 100% !important;
   max-width: 100% !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 
+/* Filter Bar */
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -45,14 +50,15 @@ body, html {
   border: none;
   cursor: pointer;
   transition: background 0.3s;
-  width: 120px;       /* fixed width */
-  flex: 0 0 auto;     /* prevent flex-grow/shrink */
+  width: 120px;
+  flex: 0 0 auto;
 }
 
 .filter-bar .btn:hover {
   background-color: #007BFF;
 }
 
+/* Car Grid */
 .car-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -60,6 +66,7 @@ body, html {
   padding: 20px;
 }
 
+/* Car Card */
 .car-card {
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -80,8 +87,7 @@ body, html {
   padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 0px;
-  background : linear-gradient(135deg, #ffffff, #e6e6e6)  !important;
+  background: linear-gradient(135deg, #ffffff, #e6e6e6) !important;
 }
 
 .car-card-content h3 {
@@ -102,28 +108,31 @@ body, html {
   border-radius: 5px;
   text-decoration: none;
   transition: background 0.3s;
-  width: 120px;       /* fixed width */
-  flex: 0 0 auto;     /* prevent flex-grow/shrink */
+  width: 120px;
+  flex: 0 0 auto;
 }
 
 .car-card-content .btn:hover {
-  background-color:  rgb(0, 0, 0 ,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
+/* Header */
 header {
   background-color: #000;
   color: #fff;
-  padding: 0px;
+  padding: 0;
   font-size: 1.5rem;
   text-align: center;
 }
 
+/* Car Item */
 .car-item {
   margin: 4px 0;
   font-size: 14px;
   color: #444;
 }
 
+/* Price Option */
 .price-option {
   border: 1px solid #ccc;
   padding: 8px;
@@ -137,6 +146,7 @@ header {
   color: #222;
 }
 
+/* Button Groups */
 .button-group {
   margin-top: 10px;
   display: flex;
@@ -150,8 +160,8 @@ header {
   font-weight: 600;
   text-align: center;
   cursor: pointer;
-  width: 120px;       /* fixed width */
-  flex: 0 0 auto;     /* prevent flex-grow/shrink */
+  width: 120px;
+  flex: 0 0 auto;
 }
 
 .btn-view-details {
@@ -168,75 +178,7 @@ header {
   opacity: 0.85;
 }
 
-/* header stryles  */
-/* === HEADER STYLES === */
-.rn-header {
-  background-color: #0f172a;
-  color: #ffffff;
-  font-family: 'Open Sans', sans-serif;
-}
-
-.rn-menubar {
-  padding: 10px 0;
-  background-color: #0f172a;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.brand-logo img {
-  height: 80px;
-  margin-left: -85%;
-}
-
-.tagline {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-left: -83%;
-  white-space: nowrap;
-}
-
-.menu-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-  margin-left: auto;
-}
-
-.menu-links a {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 6px 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.menu-links a:hover {
-  background-color: #1e293b;
-}
-
-.menu-links .btn-call {
-  background-color: #16a34a;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.menu-links .btn-call:hover {
-  background-color: #15803d;
-}
-
-/* Global box-sizing */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-/* Banner styles */
+/* Banner Area */
 .banner-area {
   background: url(//www.techdost.com/wp-content/uploads/2021/02/1.jpg) no-repeat center center/cover;
   color: #fff;
@@ -248,11 +190,16 @@ header {
 }
 
 .banner-heading {
+  color: #fff;
+  text-align: center;
+  margin: 0 auto 0 auto;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
   max-width: 800px;
 }
 
 .banner-title {
-  font-size: 48px;
+  font-size: 60px;
   font-weight: 700;
   margin-bottom: 10px;
 }
@@ -260,15 +207,14 @@ header {
 .breadcrumb {
   list-style: none;
   padding: 0;
-  margin: 0;
-  display: flex;
-  gap: 5px;
-  font-size: 16px;
+  margin: 10px 0 0 0;
+  display: inline-flex;
+  gap: 8px;
 }
 
 .breadcrumb li::after {
   content: ">";
-  margin: 0 5px;
+  margin-left: 8px;
   color: #ddd;
 }
 
@@ -279,4 +225,105 @@ header {
 .breadcrumb a {
   color: #fff;
   text-decoration: underline;
+}
+
+/* Payment Wrapper */
+.payment-wrapper {
+  background: #f9f9f9;
+  color: #333;
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: -220px;
+  padding: 100px 20px;
+}
+
+/* Car Booking Form */
+#carBookingForm {
+  position: relative;
+  max-width: 600px;
+  width: 90%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: #000;
+  text-align: left;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  z-index: 1;
+  margin-top: 3%;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 15px 20px;
+  margin-bottom: 25px;
+  font-family: "Roboto Slab", serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.45em;
+  color: #2F2F2F;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Form Layout */
+#carBookingForm .regular-search > .d-flex {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+#carBookingForm .flex-fill {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#carBookingForm label {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+#carBookingForm .form-control {
+  font-family: inherit;
+  font-size: 16px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  width: 100%;
+  color: #2F2F2F;
+  background-color: #fff;
+}
+
+/* Submit Button */
+#carBookingForm button.btn {
+  margin-top: 13px;
+  background-color: #f0ad4e; /* Bootstrap warning-ish */
+  color: #2F2F2F;
+  font-weight: 700;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#carBookingForm button.btn:hover {
+  background-color: #ec971f;
+}
+
+/* Horizontal rule inside form */
+#carBookingForm > hr {
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
 }
