@@ -8,7 +8,7 @@ from datetime import datetime
 from car_rental.forms import BookingForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware,is_naive
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
@@ -116,41 +116,28 @@ def car_book(request, pk):
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
+        booking = form.instance
+        booking.car = car
+
         if form.is_valid():
             start = form.cleaned_data['start_datetime']
             end = form.cleaned_data['end_datetime']
 
-            overlapping = Booking.objects.filter(
-                car=car,
-                start_datetime__lt=end,
-                end_datetime__gt=start
-            ).exists()
+            # Only make aware if datetime is naive
+            if is_naive(start):
+                start = make_aware(start)
+            if is_naive(end):
+                end = make_aware(end)
 
-            if overlapping:
-                form.add_error(None, "This car is already booked for the selected time period.")
-            else:
-                booking = form.save(commit=False)
-                booking.car = car
-                booking.save()
+            booking.start_datetime = start
+            booking.end_datetime = end
+            booking.save()
 
-                # Send email to admin
-                subject = f"New Booking: {car.name}"
-                message = (
-                    f"Car '{car.name}' has been booked.\n"
-                    f"Start: {start}\n"
-                    f"End: {end}\n"
-                    f"Booking ID: {booking.id}\n"
-                )
-                admin_email = settings.DEFAULT_FROM_EMAIL  # or your admin email
-                # send_mail(subject, message, admin_email, [admin_email])
-
-                # Redirect to a booking success page with booking ID
-                return redirect('booking_success', booking_id=booking.id)
+            return redirect('booking_success', booking_id=booking.id)
     else:
         form = BookingForm()
 
     return render(request, 'car_book.html', {'car': car, 'form': form})
-
 def booking_success(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     return render(request, 'booking_success.html', {'booking': booking})
