@@ -13,6 +13,7 @@ class CarAdmin(admin.ModelAdmin):
         'unlimited_km_price',
         'free_kms',
         'extra_km_charge',
+        'extra_hour_charge'
     ]
     list_filter = ['car_type', 'transmission', 'fuel_type']
     search_fields = ['name']
@@ -28,6 +29,7 @@ class CarAdmin(admin.ModelAdmin):
         'free_kms',
         'unlimited_km_price',
         'extra_km_charge',
+        'extra_hour_charge',
         'price_100km',
         'price_200km',
         'price_300km',

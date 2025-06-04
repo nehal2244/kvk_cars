@@ -14,6 +14,10 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('cars/book/<int:pk>/', views.car_book, name='car_book'),
     path('booking-success/<int:booking_id>/', views.booking_success, name='booking_success'),
+    # urls.py
+    path('api/get_dynamic_prices/', views.get_dynamic_prices, name='get_dynamic_prices'),
+
+
 ]
 
 if settings.DEBUG:

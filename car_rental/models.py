@@ -29,7 +29,12 @@ class Car(models.Model):
     free_kms = models.PositiveIntegerField(default=0)
     unlimited_km_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     extra_km_charge = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-
+    extra_hour_charge = models.DecimalField(
+        max_digits=6, 
+        decimal_places=2, 
+        default=0.0,
+        help_text="Charge per hour after 12 hours rental"
+    )
     # NEW: Prices for fixed km plans
     price_100km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     price_200km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
@@ -48,6 +53,23 @@ class Car(models.Model):
             return self.image_url
         return ''
     
+    def calculate_price(self, rental_hours, km_package):
+        km_price_map = {
+            '100km': self.price_100km,
+            '200km': self.price_200km,
+            '300km': self.price_300km,
+            'unlimited': self.unlimited_km_price,
+        }
+        base_price = km_price_map.get(km_package, self.price_100km)
+
+        if rental_hours <= 12:
+            return base_price
+        else:
+            extra_hours = rental_hours - 12
+            extra_price = extra_hours * self.extra_hour_charge
+            return base_price + extra_price
+
+
 
 class Booking(models.Model):
     car = models.ForeignKey('Car', on_delete=models.CASCADE, related_name='bookings')

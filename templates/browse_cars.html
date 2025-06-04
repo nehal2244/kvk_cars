@@ -1,4 +1,6 @@
 {% load static %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -377,6 +379,7 @@ header {
 
   </style>
 </head>
+
 <body>
 <!-- banner  -->
      <div id="banner-area" class="banner-area">
@@ -546,33 +549,63 @@ header {
 
         <p style="color: #39FF14; font-weight: bold;">Available</p>
 
-              
-<ul class="car_plans_section" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; list-style: none; padding: 0;">
+ 
+<!-- 12 hour  -->
+ <ul class="car_plans_section" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; list-style: none; padding: 0;">
   <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
     <div class="car_plans_inner_section">
-      <h4>₹{{ car.price_100km|floatformat:0 }}</h4>
+      <h4>
+        ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+            {{ calculated_prices|get_item:car.id|get_item:'100km'|floatformat:0 }}
+          {% else %}
+            {{ car.price_100km|floatformat:0 }}
+        {% endif %}
+      </h4>
       <span>100 KMs</span>
     </div>
   </li>
   <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
     <div class="car_plans_inner_section">
-      <h4>₹{{ car.price_200km|floatformat:0 }}</h4>
+      <h4>
+        ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+            {{ calculated_prices|get_item:car.id|get_item:'200km'|floatformat:0 }}
+          {% else %}
+            {{ car.price_200km|floatformat:0 }}
+        {% endif %}
+      </h4>
       <span>200 KMs</span>
     </div>
   </li>
   <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
     <div class="car_plans_inner_section">
-      <h4>₹{{ car.price_300km|floatformat:0 }}</h4>
+      <h4>
+        ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+            {{ calculated_prices|get_item:car.id|get_item:'300km'|floatformat:0 }}
+          {% else %}
+            {{ car.price_300km|floatformat:0 }}
+        {% endif %}
+      </h4>
       <span>300 KMs</span>
     </div>
   </li>
-         <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center; background-color: #ff4818; ;"> <div class="car_plans_inner_section" >
-          <p style="color: white;"><strong>₹{{ car.unlimited_km_price|floatformat:0 }}</strong></p>
-          <p style="color: white;">Unlimited KMs</p>
-        </div>
-      </li>
-
+  <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center; background-color: #ff4818;">
+    <div class="car_plans_inner_section">
+      <p style="color: white;">
+        <strong>
+          ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+              {{ calculated_prices|get_item:car.id|get_item:'unlimited'|floatformat:0 }}
+            {% else %}
+              {{ car.unlimited_km_price|floatformat:0 }}
+          {% endif %}
+        </strong>
+      </p>
+      <p style="color: white;">Unlimited KMs</p>
+    </div>
+  </li>
 </ul>
+
+
+<!-- 12 hour  -->
           <!-- Extra km charge below the button -->
     <p class="extra-km-charge">Extra KM Charge: ₹{{ car.extra_km_charge }}</p>
 
@@ -591,8 +624,7 @@ header {
     <p>No cars available for the selected filters.</p>
     {% endfor %}
   </div>
-
-</div>
+  </div>
 
 <!-- script flatpicker  -->
  <!-- Flatpickr CSS & JS -->
@@ -674,6 +706,9 @@ document.addEventListener('DOMContentLoaded', function () {
         time_24hr: false,
     });
 });
+
+
+
 </script>
 
 </body>
