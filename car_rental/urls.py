@@ -16,6 +16,7 @@ urlpatterns = [
     path('booking-success/<int:booking_id>/', views.booking_success, name='booking_success'),
     # urls.py
     path('api/get_dynamic_prices/', views.get_dynamic_prices, name='get_dynamic_prices'),
+    path('contactus/' , views.contactus , name ='conatctus'),
 
 
 ]

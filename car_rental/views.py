@@ -219,3 +219,8 @@ def get_dynamic_prices(request):
         'unlimited': round(float(car.calculate_price(rental_hours_decimal, 'unlimited')), 2),
     }
     return JsonResponse({'prices': prices})
+
+
+
+def contactus(request):
+    return render(request, "contactus.html")

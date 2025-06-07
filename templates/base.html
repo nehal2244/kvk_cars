@@ -13,6 +13,42 @@
     <link rel="stylesheet" href="/static/styles/index.css" />
     
     {% block extra_css %}{% endblock %}
+    <style>
+        .social-icons a {
+  display: inline-block;
+  margin: 0 5px;
+  text-align: center;
+  color: white;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.social-icons a:nth-child(1) {
+  background-color: #3b5998; /* Facebook */
+}
+.social-icons a:nth-child(2) {
+  background-color: #1da1f2; /* Twitter */
+}
+.social-icons a:nth-child(3) {
+  background-color: #e4405f; /* Instagram */
+}
+.social-icons a:nth-child(4) {
+  background-color: #0077b5; /* LinkedIn */
+}
+.social-icons a:nth-child(5) {
+  background-color: #ff0000; /* YouTube */
+}
+
+.social-icons a:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+    </style>
 </head>
 <body>
 
@@ -39,6 +75,8 @@
                     <a href="https://forms.gle/ooEVzYV2BceAtkVw6">Bookings Open</a>
                     
                     <a href="/pay-online">Pay Online</a>
+                    
+                    <a href="/contactus">Contact Us</a>
                     <a class="btn-call" href="tel:+918077125139">Call</a>
                 </div>
             </div>

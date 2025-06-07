@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Kvk Cars{% endblock %}
+
+{% block extra_css %}
+<style>
+  @media (max-width: 768px) {
+    .section-title h2 {
+      text-align: center !important;
+    }
+  }
+
+  .contact-section {
+    background-color: #f7f7f7;
+    padding: 50px 0;
+  }
+
+  .contact-form-box {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .contact-email-box {
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contact-section">
+  <div class="container">
+    <div class="section-title text-center mb-4">
+      <h2 class="text-uppercase" style="color: #ffc107;">Contact <span style="color: #333;">Us</span></h2>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="contact-form-box">
+          <form id="contact_form" onsubmit="return sendWhatsappMessage(event)">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" name="form_name" placeholder="Enter Name" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="email" class="form-control" name="form_email" placeholder="Enter Email" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" name="form_subject" placeholder="Enter Subject" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" name="form_phone" placeholder="Enter Phone" required>
+              </div>
+              <div class="col-12 mb-3">
+                <textarea class="form-control" name="form_message" rows="5" placeholder="Enter Message" required></textarea>
+              </div>
+              <div class="col-12 text-center">
+                <button type="submit" class="btn btn-warning text-uppercase me-2">Send your message</button>
+                <button type="reset" class="btn btn-secondary text-uppercase">Reset</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="contact-email-box mt-4">
+  <strong>For any enquiries, reach us at:</strong><br>
+  <a href="https://mail.google.com/mail/?view=cm&to=kvkcars24@gmail.com" target="_blank">
+  kvkcars24@gmail.com
+</a>
+<a href="https://wa.me/918077125139" class="btn btn-success mt-3">Chat on WhatsApp</a>
+
+<a href="tel:+918077125139">GM: +91 8077125139</a>
+
+
+</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- map  -->
+ 
+  <!-- Map and office container on right -->
+  <div class="office-container" style="flex: 1; min-width: 300px; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; padding: 15px;">
+    <h3 class="text-uppercase mb-3 text-center">Head Office</h3>
+    <p class="text-center" style="font-size: 16px; color: #444;">
+      <svg width="20" height="20" fill="#4caf50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 5px;">
+        <path d="M12 3l9 8h-3v9h-12v-9h-3z"/>
+      </svg>
+      KVK Cars Rental Service Provider, KVK Cars Parking, Nagpur, Maharashtra  440001
+      <br>
+      <a href="https://maps.google.com/?q=KVK+Cars+Nagpur" target="_blank" class="btn btn-outline-warning mt-2">Get Directions</a>
+
+    </p>
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3722.6356345741383!2d79.007025574716!3d21.087210185769504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd495d057e4c901%3A0x3c45f5ce687a578e!2sKvk%20cars%20parking!5e0!3m2!1sen!2sin!4v1749104444381!5m2!1sen!2sin" 
+      width="100%" 
+      height="350" 
+      style="border:0; border-radius: 8px;" 
+      allowfullscreen="" 
+      loading="lazy">
+    </iframe>
+  </div>
+
+
+
+  <!-- content  -->
+   <!-- After the Map and Office Info -->
+    <div class="customer-satisfaction-box mt-5 p-4" style="background: #fff8e1; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); text-align: center;">
+  <h3 class="text-uppercase mb-3" style="color: #ffc107;">KVK Cars: Where Customer Satisfaction Comes First</h3>
+  
+  <p style="margin-bottom: 20px;">
+    At <strong>KVK Cars</strong>, your satisfaction isn't just a goal — it's our promise. We believe that every ride should be smooth, reliable, and tailored to your needs. From the moment you reach out to us, to the time you return your vehicle, we’re committed to making your experience comfortable, transparent, and hassle-free.
+  </p>
+
+  <ul style="list-style: none; padding-left: 0; display: inline-block; text-align: left;">
+    <li>🟡 <strong>Prompt and Friendly Service:</strong> Our support team is always just a call or message away, ready to assist you anytime.</li>
+    <li>🟡 <strong>Clean, Well-Maintained Vehicles:</strong> We ensure every car is thoroughly cleaned, serviced, and ready to hit the road.</li>
+    <li>🟡 <strong>Flexible Rental Plans:</strong> Whether it’s a quick city trip or a long getaway, we’ve got plans that fit just right.</li>
+    <li>🟡 <strong>No Hidden Charges:</strong> Transparent pricing is our policy — what you see is what you pay.</li>
+  </ul>
+
+  <p style="font-weight: 600; margin-top: 20px;">
+    Your journey is our priority. At <strong>KVK Cars</strong>, your satisfaction drives us forward.
+  </p>
+</div>
+
+  <!-- operating hours  -->
+<div class="support-box mt-4 p-3 bg-light border-left border-warning" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  <strong>Need Help?</strong><br>
+  Call us at <a href="tel:+918077125139">+91 8077 125 139</a> or email <a href="mailto:kvkcars24@gmail.com">kvkcars24@gmail.com</a>
+
+  <h5 style="margin-top: 2px;">Operating Hours</h5>
+  <ul style="list-style-type: none; padding-left: 0; text-align: center;">
+    <li>24 x 7 </li>
+    <li>Open daily, 24 hours a day</li>
+  </ul>
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function sendWhatsappMessage(event) {
+  event.preventDefault();
+  const name = document.querySelector('input[name="form_name"]').value.trim();
+  const email = document.querySelector('input[name="form_email"]').value.trim();
+  const subject = document.querySelector('input[name="form_subject"]').value.trim();
+  const phone = document.querySelector('input[name="form_phone"]').value.trim();
+  const message = document.querySelector('textarea[name="form_message"]').value.trim();
+
+  if (!name || !email || !subject || !phone || !message) {
+    alert('Please fill all the fields.');
+    return false;
+  }
+
+  const text = encodeURIComponent(
+    `*Contact Form Submission*\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\nPhone: ${phone}\nMessage: ${message}`
+  );
+
+  const whatsappNumber = '918077125139';
+  const whatsappURL = `https://wa.me/${whatsappNumber}?text=${text}`;
+  window.open(whatsappURL, '_blank');
+  document.getElementById('contact_form').reset();
+  return false;
+}
+</script>
+{% endblock %}
