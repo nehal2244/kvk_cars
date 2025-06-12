@@ -2,11 +2,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render, redirect
 from car_rental.models import Car, Booking
 from car_rental.forms import PaymentForm, BookingForm
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.utils.timezone import make_aware, is_naive
 from django.core.mail import send_mail
 from django.conf import settings
 from decimal import Decimal
+from django.http import JsonResponse
 
 
 def index(request):
@@ -27,6 +28,7 @@ def browse_cars(request):
     end_date = request.GET.get('end_date')
     end_time = request.GET.get('end_time')
 
+    # Handle date/time filtering and exclude booked cars
     if all([start_date, start_time, end_date, end_time]):
         try:
             start_datetime = make_aware(datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %I:%M %p"))
@@ -41,25 +43,23 @@ def browse_cars(request):
                 ).values_list('car_id', flat=True)
                 cars = cars.exclude(id__in=booked_car_ids)
 
+                # Calculate dynamic prices
+                rental_hours = (end_datetime - start_datetime).total_seconds() / 3600
+                rental_hours_decimal = Decimal(str(rental_hours))
+
+                for car in cars:
+                    car.dynamic_price_100km = float(car.calculate_price(rental_hours_decimal, '100km'))
+                    car.dynamic_price_200km = float(car.calculate_price(rental_hours_decimal, '200km'))
+                    car.dynamic_price_300km = float(car.calculate_price(rental_hours_decimal, '300km'))
+                    car.dynamic_price_unlimited = float(car.calculate_price(rental_hours_decimal, 'unlimited'))
+
         except ValueError:
             error = "Invalid date or time format."
-
-    if all([start_date, start_time, end_date, end_time]) and not error:
-        try:
-            start_datetime = make_aware(datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %I:%M %p"))
-            end_datetime = make_aware(datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %I:%M %p"))
-
-            rental_hours = (end_datetime - start_datetime).total_seconds() / 3600
-            rental_hours_decimal = Decimal(str(rental_hours))
-
-            for car in cars:
-                car.dynamic_price_100km = float(car.calculate_price(rental_hours_decimal, '100km'))
-                car.dynamic_price_200km = float(car.calculate_price(rental_hours_decimal, '200km'))
-                car.dynamic_price_300km = float(car.calculate_price(rental_hours_decimal, '300km'))
-                car.dynamic_price_unlimited = float(car.calculate_price(rental_hours_decimal, 'unlimited'))
         except Exception:
+            # You might want to log this exception in real app
             pass
 
+    # Apply text search and other filters
     if search_query:
         cars = cars.filter(name__icontains=search_query)
 
@@ -74,8 +74,9 @@ def browse_cars(request):
     elif sort == 'price_high':
         cars = cars.order_by('-price_100km')
 
+    # Calculate prices for template
     calculated_prices = {}
-    if all([start_date, start_time, end_date, end_time]):
+    if all([start_date, start_time, end_date, end_time]) and not error:
         try:
             start_datetime = make_aware(datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %I:%M %p"))
             end_datetime = make_aware(datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %I:%M %p"))
@@ -89,6 +90,7 @@ def browse_cars(request):
                     '300km': round(float(car.calculate_price(rental_hours_decimal, '300km')), 2),
                     'unlimited': round(float(car.calculate_price(rental_hours_decimal, 'unlimited')), 2),
                 }
+
         except Exception:
             pass
 
@@ -118,6 +120,7 @@ def pay_online(request):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
+            # Handle payment processing here
             return redirect('payment_success')
     else:
         form = PaymentForm()
@@ -137,9 +140,6 @@ def car_book(request, pk):
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
-        booking = form.instance
-        booking.car = car
-
         if form.is_valid():
             start = form.cleaned_data['start_datetime']
             end = form.cleaned_data['end_datetime']
@@ -149,11 +149,28 @@ def car_book(request, pk):
             if is_naive(end):
                 end = make_aware(end)
 
-            booking.start_datetime = start
-            booking.end_datetime = end
-            booking.save()
+            full_name = form.cleaned_data['full_name']
+            email = form.cleaned_data['email']
+            phone = form.cleaned_data['phone']
 
-            return redirect('booking_success', booking_id=booking.id)
+            subject = f"New Booking Request for {car.name}"
+            message = f"""
+New booking request received:
+
+Car: {car.name}
+User Name: {full_name}
+Email: {email}
+Phone: {phone}
+Start Date & Time: {start}
+End Date & Time: {end}
+
+Please review and approve/reject this booking.
+"""
+            manager_email = settings.MANAGER_EMAIL
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [manager_email], fail_silently=False)
+
+            return render(request, 'booking_pending.html', {'car': car, 'full_name': full_name})
+
     else:
         form = BookingForm()
 
@@ -168,8 +185,6 @@ def booking_success(request, booking_id):
 
     return render(request, 'booking_success.html', {'booking': booking})
 
-
-from django.http import JsonResponse
 
 def get_dynamic_prices(request):
     start_date = request.GET.get('start_date')
@@ -189,7 +204,6 @@ def get_dynamic_prices(request):
         return JsonResponse({'error': 'Invalid date/time format'}, status=400)
 
     cars = Car.objects.all()
-
     prices = {}
     for car in cars:
         prices[car.id] = {
@@ -198,6 +212,7 @@ def get_dynamic_prices(request):
             '300km': round(float(car.calculate_price(rental_hours_decimal, '300km')), 2),
             'unlimited': round(float(car.calculate_price(rental_hours_decimal, 'unlimited')), 2),
         }
+
     return JsonResponse({'prices': prices})
 
 

@@ -382,334 +382,266 @@ header {
 
 <body>
 <!-- banner  -->
-     <div id="banner-area" class="banner-area">
+<div id="banner-area" class="banner-area">
   <div class="container">
     <div class="banner-heading">
       <h1 class="banner-title">Find Car To Book</h1>
       <ol class="breadcrumb">
-<li><a href="{% url 'index' %}">Home</a></li>
-<li><a href="{% url 'about' %}">About Us</a></li>
-
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About Us</a></li>
         <li>Find Cars</li>
       </ol>
 
-<!-- terms and condtions  -->
- 
-<div class="terms-scroll">
-  <p>
-    Note: 12-Hour's rental rate is fixed. After 12 hours, extra hours will be charged at an additional hourly rate. Extra kilometers beyond the included limit will be charged as per the rates mentioned below in the car section. Please refer to the car details for exact per-hour and per-kilometer charges. All rentals are subject to terms and conditions. Drive safely!
-  </p>
-</div>
-
-<!-- modufy time  -->
- 
-<!-- find car and modify section  -->
- 
- 
-    <form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">
-  <hr />
-  <div class="regular-search">
-    <div class="d-flex flex-wrap" style="gap:10px;">
-
-      <!-- Pickup date -->
-      <div class="flex-fill">
-        <label for="start_date">Pickup date</label>
-        <input
-          type="date"
-          id="start_date"
-          name="start_date"
-          class="form-control"
-        />
+      <!-- terms and condtions  -->
+      <div class="terms-scroll">
+        <p>
+          Note: 12-Hour's rental rate is fixed. After 12 hours, extra hours will be charged at an additional hourly rate. Extra kilometers beyond the included limit will be charged as per the rates mentioned below in the car section. Please refer to the car details for exact per-hour and per-kilometer charges. All rentals are subject to terms and conditions. Drive safely!
+        </p>
       </div>
 
-      <!-- Pickup time (12-hour with Flatpickr) -->
-      <div class="flex-fill">
-        <label for="start_time">Pickup time</label>
-        <input
-          type="text"
-          id="start_time"
-          name="start_time"
-          placeholder="hh:mm AM/PM"
-          class="form-control"
-        />
-      </div>
+      <!-- find car and modify section  -->
+      <form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">
+        <hr />
+        <div class="regular-search">
+          <div class="d-flex flex-wrap" style="gap:10px;">
+            <!-- Pickup date -->
+            <div class="flex-fill">
+              <label for="start_date">Pickup date</label>
+              <input
+                type="date"
+                id="start_date"
+                name="start_date"
+                class="form-control"
+              />
+            </div>
 
-      <div class="flex-break"></div>
+            <!-- Pickup time (12-hour with Flatpickr) -->
+            <div class="flex-fill">
+              <label for="start_time">Pickup time</label>
+              <input
+                type="text"
+                id="start_time"
+                name="start_time"
+                placeholder="hh:mm AM/PM"
+                class="form-control"
+              />
+            </div>
 
-      <!-- Drop-off date -->
-      <div class="flex-fill">
-        <label for="end_date">Drop-off date</label>
-        <input
-          type="date"
-          id="end_date"
-          name="end_date"
-          class="form-control"
-        />
-      </div>
+            <div class="flex-break"></div>
 
-      <!-- Drop-off time (12-hour with Flatpickr) -->
-      <div class="flex-fill">
-        <label for="end_time">Drop-off time</label>
-        <input
-          type="text"
-          id="end_time"
-          name="end_time"
-          placeholder="hh:mm AM/PM"
-          class="form-control"
-        />
-      </div>
+            <!-- Drop-off date -->
+            <div class="flex-fill">
+              <label for="end_date">Drop-off date</label>
+              <input
+                type="date"
+                id="end_date"
+                name="end_date"
+                class="form-control"
+              />
+            </div>
 
-    </div>
+            <!-- Drop-off time (12-hour with Flatpickr) -->
+            <div class="flex-fill">
+              <label for="end_time">Drop-off time</label>
+              <input
+                type="text"
+                id="end_time"
+                name="end_time"
+                placeholder="hh:mm AM/PM"
+                class="form-control"
+              />
+            </div>
+          </div>
 
-    <div id="error-message" class="text-danger mt-2" style="display:none;"></div>
-  </div>
+          <div id="error-message" class="text-danger mt-2" style="display:none;"></div>
+        </div>
 
-  <div class="mt-3">
-    <button type="submit" class="btn btn-warning btn-block font-weight-bold" style="margin-top: 13px;">
-      Modify
-    </button>
-  </div>
-</form>
-
+        <div class="mt-3">
+          <button type="submit" class="btn btn-warning btn-block font-weight-bold" style="margin-top: 13px;">
+            Modify
+          </button>
+        </div>
+      </form>
 
     </div>
   </div>
 </div>
 
 <!-- heading  -->
- <section class="payment-wrapper">
+<section class="payment-wrapper">
   <div class="section-heading">
-    <h1>Find your car now and book instantly!
-
-</h1>
+    <h1>Find your car now and book instantly!</h1>
     <span class="animate-border center"></span>
   </div>
 
-
   <!-- Filter Bar -->
-<div class="container">
+  <div class="container">
+    <form method="get" class="filter-bar">
+      <input type="text" name="search" placeholder="Search by model..." value="{{ search_query|default:'' }}" />
 
-  <form method="get" class="filter-bar">
-    <input type="text" name="search" placeholder="Search by model..." value="{{ search_query|default:'' }}" />
-    
-    <select name="car_type">
-      <option value="">Car Type</option>
-      <option value="SUV" {% if car_type == 'SUV' %}selected{% endif %}>SUV</option>
-      <option value="Sedan" {% if car_type == 'Sedan' %}selected{% endif %}>Sedan</option>
-      <option value="Hatchback" {% if car_type == 'Hatchback' %}selected{% endif %}>Hatchback</option>
-    </select>
-    
-    <select name="transmission">
-      <option value="">Transmission</option>
-      <option value="automatic" {% if transmission == 'automatic' %}selected{% endif %}>Automatic</option>
-      <option value="manual" {% if transmission == 'manual' %}selected{% endif %}>Manual</option>
-    </select>
-    
-    <select name="sort">
-  <option value="">Sort By</option>
-  <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>100km Price: Low to High</option>
-  <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>100km Price: High to Low</option>
-</select>
+      <select name="car_type">
+        <option value="">Car Type</option>
+        <option value="SUV" {% if car_type == 'SUV' %}selected{% endif %}>SUV</option>
+        <option value="Sedan" {% if car_type == 'Sedan' %}selected{% endif %}>Sedan</option>
+        <option value="Hatchback" {% if car_type == 'Hatchback' %}selected{% endif %}>Hatchback</option>
+      </select>
 
-    <!-- Preserve date filters -->
-    <input type="hidden" name="start_date" value="{{ start_date }}">
-    <input type="hidden" name="start_time" value="{{ start_time }}">
-    <input type="hidden" name="end_date" value="{{ end_date }}">
-    <input type="hidden" name="end_time" value="{{ end_time }}">
+      <select name="transmission">
+        <option value="">Transmission</option>
+        <option value="automatic" {% if transmission == 'automatic' %}selected{% endif %}>Automatic</option>
+        <option value="manual" {% if transmission == 'manual' %}selected{% endif %}>Manual</option>
+      </select>
 
-    <button type="submit" class="btn">Filter</button>
-  </form>
-  
+      <select name="sort">
+        <option value="">Sort By</option>
+        <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>100km Price: Low to High</option>
+        <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>100km Price: High to Low</option>
+      </select>
 
+      <!-- Preserve date filters -->
+      <input type="hidden" name="start_date" value="{{ start_date }}">
+      <input type="hidden" name="start_time" value="{{ start_time }}">
+      <input type="hidden" name="end_date" value="{{ end_date }}">
+      <input type="hidden" name="end_time" value="{{ end_time }}">
 
-  <!-- Car Listings -->
+      <button type="submit" class="btn">Filter</button>
+    </form>
 
-
-  <div class="car-grid">
-    {% for car in cars %}
-    <div class="car-card">
-{% if car.image_file %}
-    <img src="{{ car.image_file.url }}" alt="{{ car.name }}">
-{% elif car.image_url %}
-    <img src="{{ car.image_url }}" alt="{{ car.name }}">
-{% else %}
-    <p>No image available</p>
-{% endif %}
-
-      <div class="car-card-content">
-        <h3>{{ car.name }}</h3>
-        
-    <p style="display: inline;text-align: center; white-space: nowrap; margin-left: -18px; font-size: 0.90rem;" >
-  <span>⚙️ {{ car.get_transmission_display }}</span>
-  <span> • ⛽ {{ car.get_fuel_type_display }}</span>
-  <span> • 👥 {{ car.seating_capacity }} Persons</span>
-</p>
-
-
-
-        <p style="color: #39FF14; font-weight: bold;">Available</p>
-
- 
-<!-- 12 hour  -->
- <ul class="car_plans_section" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; list-style: none; padding: 0;">
-  <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
-    <div class="car_plans_inner_section">
-      <h4>
-        ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
-            {{ calculated_prices|get_item:car.id|get_item:'100km'|floatformat:0 }}
-          {% else %}
-            {{ car.price_100km|floatformat:0 }}
+    <!-- Car Listings -->
+    <div class="car-grid">
+      {% for car in cars %}
+      <div class="car-card">
+        {% if car.image_file %}
+          <img src="{{ car.image_file.url }}" alt="{{ car.name }}">
+        {% elif car.image_url %}
+          <img src="{{ car.image_url }}" alt="{{ car.name }}">
+        {% else %}
+          <p>No image available</p>
         {% endif %}
-      </h4>
-      <span>100 KMs</span>
-    </div>
-  </li>
-  <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
-    <div class="car_plans_inner_section">
-      <h4>
-        ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
-            {{ calculated_prices|get_item:car.id|get_item:'200km'|floatformat:0 }}
-          {% else %}
-            {{ car.price_200km|floatformat:0 }}
-        {% endif %}
-      </h4>
-      <span>200 KMs</span>
-    </div>
-  </li>
-  <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
-    <div class="car_plans_inner_section">
-      <h4>
-        ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
-            {{ calculated_prices|get_item:car.id|get_item:'300km'|floatformat:0 }}
-          {% else %}
-            {{ car.price_300km|floatformat:0 }}
-        {% endif %}
-      </h4>
-      <span>300 KMs</span>
-    </div>
-  </li>
-  <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center; background-color: #ff4818;">
-    <div class="car_plans_inner_section">
-      <p style="color: white;">
-        <strong>
-          ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
-              {{ calculated_prices|get_item:car.id|get_item:'unlimited'|floatformat:0 }}
-            {% else %}
-              {{ car.unlimited_km_price|floatformat:0 }}
-          {% endif %}
-        </strong>
-      </p>
-      <p style="color: white;">Unlimited KMs</p>
-    </div>
-  </li>
-</ul>
 
+        <div class="car-card-content">
+          <h3>{{ car.name }}</h3>
 
-<!-- 12 hour  -->
+          <p style="display: inline;text-align: center; white-space: nowrap; margin-left: -18px; font-size: 0.90rem;">
+            <span>⚙️ {{ car.get_transmission_display }}</span>
+            <span> • ⛽ {{ car.get_fuel_type_display }}</span>
+            <span> • 👥 {{ car.seating_capacity }} Persons</span>
+          </p>
+
+          <p style="color: #39FF14; font-weight: bold;">Available</p>
+
+          <!-- 12 hour  -->
+          <ul class="car_plans_section" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; list-style: none; padding: 0;">
+            <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+              <div class="car_plans_inner_section">
+                <h4>
+                  ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+                      {{ calculated_prices|get_item:car.id|get_item:'100km'|floatformat:0 }}
+                    {% else %}
+                      {{ car.price_100km|floatformat:0 }}
+                  {% endif %}
+                </h4>
+                <span>100 KMs</span>
+              </div>
+            </li>
+            <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+              <div class="car_plans_inner_section">
+                <h4>
+                  ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+                      {{ calculated_prices|get_item:car.id|get_item:'200km'|floatformat:0 }}
+                    {% else %}
+                      {{ car.price_200km|floatformat:0 }}
+                  {% endif %}
+                </h4>
+                <span>200 KMs</span>
+              </div>
+            </li>
+            <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+              <div class="car_plans_inner_section">
+                <h4>
+                  ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+                      {{ calculated_prices|get_item:car.id|get_item:'300km'|floatformat:0 }}
+                    {% else %}
+                      {{ car.price_300km|floatformat:0 }}
+                  {% endif %}
+                </h4>
+                <span>300 KMs</span>
+              </div>
+            </li>
+            <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center; background-color: #ff4818;">
+              <div class="car_plans_inner_section">
+                <p style="color: white;">
+                  <strong>
+                    ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+                        {{ calculated_prices|get_item:car.id|get_item:'unlimited'|floatformat:0 }}
+                      {% else %}
+                        {{ car.unlimited_km_price|floatformat:0 }}
+                    {% endif %}
+                  </strong>
+                </p>
+                <p style="color: white;">Unlimited KMs</p>
+              </div>
+            </li>
+          </ul>
+
           <!-- Extra km charge below the button -->
-    <p class="extra-km-charge">Extra KM Charge: ₹{{ car.extra_km_charge }}</p>
+          <p class="extra-km-charge">Extra KM Charge: ₹{{ car.extra_km_charge }}</p>
 
+          <div class="button-group">
+            <a href="{% url 'car_detail' car.id %}" class="btn btn-view-details">View Details</a>
 
+            
 
-        <div class="button-group" >
-          <a href="{% url 'car_detail' car.id %}" class="btn btn-view-details">View Details</a>
-          <a href="{% url 'car_book' car.id %}" class="btn btn-book-now">Book Now</a>
-
-
+            <a href="{% url 'car_book' car.id %}?start_date={{ start_date }}&end_date={{ end_date }}&hours={{ hours }}&kms={{ kms }}&price={{ calculated_price }}" class="btn btn-primary">
+              Book Now
+            </a>
+          </div>
         </div>
-
       </div>
+      {% empty %}
+      <p>No cars available for the selected filters.</p>
+      {% endfor %}
     </div>
-    {% empty %}
-    <p>No cars available for the selected filters.</p>
-    {% endfor %}
-  </div>
   </div>
 
-<!-- script flatpicker  -->
- <!-- Flatpickr CSS & JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <!-- Flatpickr CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  const endPicker = flatpickr("#end_date", {
-    dateFormat: "Y-m-d",
-    minDate: today,
-  });
-
-  flatpickr("#start_date", {
-    dateFormat: "Y-m-d",
-    minDate: today,
-    onChange: function(selectedDates) {
-      if (selectedDates.length) {
-        endPicker.set('minDate', selectedDates[0]);
-      }
-    }
-  });
-
-  flatpickr("#start_time", {
-    enableTime: true,
-    noCalendar: true,
-    dateFormat: "h:i K"
-  });
-
-  flatpickr("#end_time", {
-    enableTime: true,
-    noCalendar: true,
-    dateFormat: "h:i K"
-  });
-});
-</script>
-
-<!-- modify time script  -->
- <!-- Flatpickr CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    const endPicker = flatpickr("#end_date", {
+      const endPicker = flatpickr("#end_date", {
         dateFormat: "Y-m-d",
         minDate: today,
-    });
+      });
 
-    flatpickr("#start_date", {
+      flatpickr("#start_date", {
         dateFormat: "Y-m-d",
         minDate: today,
-        onChange: function (selectedDates) {
-            if (selectedDates.length > 0) {
-                const selectedDate = selectedDates[0];
-                endPicker.set('minDate', selectedDate);
-            }
+        onChange: function(selectedDates) {
+          if (selectedDates.length) {
+            endPicker.set('minDate', selectedDates[0]);
+          }
         }
-    });
+      });
 
-    flatpickr("#start_time", {
+      flatpickr("#start_time", {
         enableTime: true,
         noCalendar: true,
-        dateFormat: "h:i K",
-        time_24hr: false,
-    });
+        dateFormat: "h:i K"
+      });
 
-    flatpickr("#end_time", {
+      flatpickr("#end_time", {
         enableTime: true,
         noCalendar: true,
-        dateFormat: "h:i K",
-        time_24hr: false,
+        dateFormat: "h:i K"
+      });
     });
-});
-
-
-
-</script>
+  </script>
 
 </body>
 </html>
+

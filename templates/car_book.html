@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -10,13 +11,55 @@
 <body>
   <h1>Book {{ car.name }}</h1>
 
-  <form method="post">
-
+  <form method="post" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Confirm Booking</button>
+    
+    {{ form.non_field_errors }}
+
+    <p>
+      <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}:</label><br>
+      {{ form.full_name }}
+      {{ form.full_name.errors }}
+    </p>
+
+    <p>
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label><br>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </p>
+
+    <p>
+      <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}:</label><br>
+      {{ form.phone }}
+      {{ form.phone.errors }}
+    </p>
+
+    <p>
+      <label for="{{ form.start_datetime.id_for_label }}">{{ form.start_datetime.label }}:</label><br>
+      {{ form.start_datetime }}
+      {{ form.start_datetime.errors }}
+    </p>
+
+    <p>
+      <label for="{{ form.end_datetime.id_for_label }}">{{ form.end_datetime.label }}:</label><br>
+      {{ form.end_datetime }}
+      {{ form.end_datetime.errors }}
+    </p>
+
+    <button type="submit" style="padding:10px 20px;">Confirm Booking</button>
   </form>
 
+  <p><a href="{% url 'browse_cars' %}">Back to browse cars</a></p>
+</body>
+</html>
+=======
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 2rem auto; background:#222; padding: 2rem; color: white; border-radius: 8px;">
+  <h2>Book {{ car.name }}</h2>
+
+  <form method="post">
   {% csrf_token %}
 
   <label for="full_name">Full Name:</label><br>
@@ -36,14 +79,8 @@
 
   <button type="submit" style="padding:10px 20px;">Confirm Booking</button>
 </form>
- 
 
-  <a href="{% url 'browse_cars' %}">Back to browse cars</a>
-
-  {% if form.non_field_errors %}
-    <div style="color: red;">
-      {{ form.non_field_errors }}
-    </div>
-  {% endif %}
-</body>
-</html>
+  <a href="{% url 'browse_cars' %}" style="color:#ffc107; display:block; margin-top: 20px;">Back to Browse Cars</a>
+</div>
+{% endblock %}
+>>>>>>> 9db167e5a19094184e538ad455328923b66ca073

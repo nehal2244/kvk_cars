@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Booking Request Pending - {{ car.name }} | KVK Cars</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #34495e;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+        a:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Booking Request Sent!</h1>
+    <p>Thank you, {{ full_name }}.</p>
+    <p>Your booking request for <strong>{{ car.name }}</strong> has been received.</p>
+    <p>We will review your request and get back to you shortly via email.</p>
+    <a href="{% url 'browse_cars' %}">Back to Browse Cars</a>
+</body>
+</html>
+
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto; background:#222; padding: 2rem; color: white; border-radius: 8px;">
+  <h2>Booking Request Sent</h2>
+  <p>Your booking request for <strong>{{ car.name }}</strong> has been recorded.</p>
+  <p>To confirm, click below to send the booking details to the manager via WhatsApp manually:</p>
+
+  <a href="{{ whatsapp_url }}" target="_blank"
+     style="display:inline-block; background:#25D366; color:white; padding:10px 20px; text-decoration:none; border-radius:5px;">
+    📲 Send on WhatsApp
+  </a>
+
+  <p style="margin-top: 20px;">
+    <a href="{% url 'browse_cars' %}" style="color:#ffc107;">⬅️ Back to Cars</a>
+  </p>
+</div>
+{% endblock %}
+>>>>>>> 9db167e5a19094184e538ad455328923b66ca073

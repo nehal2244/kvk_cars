@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+
 from django.utils.timezone import make_aware
 import datetime
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+
 
 class Car(models.Model):
     TRANSMISSION_CHOICES = [
@@ -30,8 +32,8 @@ class Car(models.Model):
     unlimited_km_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     extra_km_charge = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     extra_hour_charge = models.DecimalField(
-        max_digits=6, 
-        decimal_places=2, 
+        max_digits=6,
+        decimal_places=2,
         default=0.0,
         help_text="Charge per hour after 12 hours rental"
     )
@@ -52,7 +54,7 @@ class Car(models.Model):
         elif self.image_url:
             return self.image_url
         return ''
-    
+
     def calculate_price(self, rental_hours, km_package):
         km_price_map = {
             '100km': self.price_100km,
@@ -70,25 +72,26 @@ class Car(models.Model):
             return base_price + extra_price
 
 
-
 class Booking(models.Model):
     car = models.ForeignKey('Car', on_delete=models.CASCADE, related_name='bookings')
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
 
-
     user_email = models.EmailField()
     is_approved = models.BooleanField(default=False)
-   
+
     aadhar_card = models.FileField(upload_to='documents/aadhar/', null=True, blank=True)
     pan_card = models.FileField(upload_to='documents/pan/', null=True, blank=True)
     driving_license = models.FileField(upload_to='documents/license/', null=True, blank=True)
-
 
     def __str__(self):
         return f"{self.car.name} from {self.start_datetime} to {self.end_datetime}"
 
     def clean(self):
+        # Defensive check: ensure start_datetime and end_datetime are provided
+        if self.start_datetime is None or self.end_datetime is None:
+            raise ValidationError(_('Start date and end date must be provided.'))
+
         # 1. End date must be after start date
         if self.end_datetime <= self.start_datetime:
             raise ValidationError({'end_datetime': _('End date and time must be after start date and time.')})
@@ -110,5 +113,5 @@ class Booking(models.Model):
             raise ValidationError(_('This booking overlaps with an existing booking for this car.'))
 
     def save(self, *args, **kwargs):
-        self.full_clean()  # Ensure validation runs
+        self.full_clean()  # Ensure validation runs before save
         super().save(*args, **kwargs)

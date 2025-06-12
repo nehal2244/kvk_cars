@@ -18,6 +18,13 @@ urlpatterns = [
     path('api/get_dynamic_prices/', views.get_dynamic_prices, name='get_dynamic_prices'),
     path('contactus/' , views.contactus , name ='conatctus'),
 
+    path('approve-booking/<int:booking_id>/', views.approve_booking, name='approve_booking'),
+    path('car_book/<int:car_id>/', views.car_book, name='car_book'),
+    
+
+
+
+
 
 ]
 
