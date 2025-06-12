@@ -11,10 +11,32 @@
   <h1>Book {{ car.name }}</h1>
 
   <form method="post">
+
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Confirm Booking</button>
   </form>
+
+  {% csrf_token %}
+
+  <label for="full_name">Full Name:</label><br>
+  <input type="text" id="full_name" name="full_name" required><br><br>
+
+  <label for="email">Email:</label><br>
+  <input type="email" id="email" name="email" required><br><br>
+
+  <label for="phone">Phone Number:</label><br>
+  <input type="text" id="phone" name="phone" required><br><br>
+
+  <label for="start_date">Start Date & Time:</label><br>
+  <input type="datetime-local" id="start_date" name="start_date" required><br><br>
+
+  <label for="end_date">End Date & Time:</label><br>
+  <input type="datetime-local" id="end_date" name="end_date" required><br><br>
+
+  <button type="submit" style="padding:10px 20px;">Confirm Booking</button>
+</form>
+ 
 
   <a href="{% url 'browse_cars' %}">Back to browse cars</a>
 

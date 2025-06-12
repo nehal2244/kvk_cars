@@ -76,6 +76,15 @@ class Booking(models.Model):
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
 
+
+    user_email = models.EmailField()
+    is_approved = models.BooleanField(default=False)
+   
+    aadhar_card = models.FileField(upload_to='documents/aadhar/', null=True, blank=True)
+    pan_card = models.FileField(upload_to='documents/pan/', null=True, blank=True)
+    driving_license = models.FileField(upload_to='documents/license/', null=True, blank=True)
+
+
     def __str__(self):
         return f"{self.car.name} from {self.start_datetime} to {self.end_datetime}"
 
