@@ -2,44 +2,114 @@
 {% load static %}
 
 {% block content %}
+<div class="booking-container" style="max-width: 600px; margin: auto;">
   <h1>Book {{ car.name }}</h1>
 
   <form method="post" novalidate>
     {% csrf_token %}
     {{ form.non_field_errors }}
 
-    <p>
-      <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}:</label><br>
+    <div class="form-group">
+      <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}:</label>
       {{ form.full_name }}
       {{ form.full_name.errors }}
-    </p>
+    </div>
 
-    <p>
-      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label><br>
+    <div class="form-group">
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
       {{ form.email }}
       {{ form.email.errors }}
-    </p>
+    </div>
 
-    <p>
-      <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}:</label><br>
+    <div class="form-group">
+      <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}:</label>
       {{ form.phone }}
       {{ form.phone.errors }}
-    </p>
+    </div>
 
-    <p>
-      <label for="{{ form.start_datetime.id_for_label }}">{{ form.start_datetime.label }}:</label><br>
+    <div class="form-group">
+      <label for="{{ form.start_datetime.id_for_label }}">Pickup Date & Time:</label>
       {{ form.start_datetime }}
       {{ form.start_datetime.errors }}
-    </p>
+    </div>
 
-    <p>
-      <label for="{{ form.end_datetime.id_for_label }}">{{ form.end_datetime.label }}:</label><br>
+    <div class="form-group">
+      <label for="{{ form.end_datetime.id_for_label }}">Drop-off Date & Time:</label>
       {{ form.end_datetime }}
       {{ form.end_datetime.errors }}
-    </p>
+    </div>
 
-    <button type="submit" style="padding:10px 20px;">Confirm Booking</button>
+    <div class="form-group">
+      <label for="kmsSelect">Kilometers Plan:</label>
+      <select name="kms" id="kmsSelect" class="form-control" required>
+        <option value="100km" {% if kms == '100km' %}selected{% endif %}>100 km</option>
+        <option value="200km" {% if kms == '200km' %}selected{% endif %}>200 km</option>
+        <option value="300km" {% if kms == '300km' %}selected{% endif %}>300 km</option>
+        <option value="unlimited" {% if kms == 'unlimited' %}selected{% endif %}>Unlimited</option>
+      </select>
+    </div>
+
+    <input type="hidden" name="kms_hidden" id="kmsHidden" value="{{ kms }}">
+
+    <div class="form-summary" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 6px;">
+      <p><strong>Rental Hours:</strong> {{ hours }} hours</p>
+      <p><strong>Estimated Price:</strong> <strong id="priceDisplay">₹{{ price|floatformat:2 }}</strong></p>
+    </div>
+
+    <button type="submit" class="btn btn-success" style="margin-top: 20px; padding: 10px 20px; border-radius: 5px;">
+      Confirm Booking
+    </button>
   </form>
 
-  <p><a href="{% url 'browse_cars' %}">← Back to Browse Cars</a></p>
+  <p style="margin-top: 20px;"><a href="{% url 'browse_cars' %}">← Back to browse cars</a></p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const kmsSelect = document.getElementById("kmsSelect");
+    const kmsHidden = document.getElementById("kmsHidden");
+    const priceDisplay = document.getElementById("priceDisplay");
+
+    const startInput = document.getElementById("{{ form.start_datetime.auto_id }}");
+    const endInput = document.getElementById("{{ form.end_datetime.auto_id }}");
+
+    function getDateParts(val) {
+      if (!val) return [null, null];
+      const [date, time] = val.split('T');
+      return [date, time];
+    }
+
+    function updatePrice() {
+      const [startDate, startTime] = getDateParts(startInput.value);
+      const [endDate, endTime] = getDateParts(endInput.value);
+      const kms = kmsSelect.value;
+
+      if (!startDate || !startTime || !endDate || !endTime) return;
+
+      kmsHidden.value = kms;
+
+      const url = `/get_dynamic_prices/?start_date=${startDate}&start_time=${startTime}&end_date=${endDate}&end_time=${endTime}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const carPrices = data.prices?.["{{ car.id }}"];
+          if (carPrices && carPrices[kms]) {
+            priceDisplay.textContent = "₹" + parseFloat(carPrices[kms]).toFixed(2);
+          } else {
+            priceDisplay.textContent = "₹0.00";
+          }
+        })
+        .catch(err => {
+          console.error("Failed to fetch dynamic price:", err);
+        });
+    }
+
+    kmsSelect.addEventListener('change', updatePrice);
+    startInput.addEventListener('change', updatePrice);
+    endInput.addEventListener('change', updatePrice);
+
+    updatePrice(); // Trigger initially
+  });
+</script>
 {% endblock %}

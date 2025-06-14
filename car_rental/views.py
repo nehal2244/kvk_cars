@@ -140,50 +140,58 @@ def about(request):
 
 
 
-def car_book(request, pk):
+def car_book(request, pk):  
     car = get_object_or_404(Car, pk=pk)
 
-    # Get query parameters from URL
+    # Get parameters from GET request
     start_date = request.GET.get('start_date')
+    start_time = request.GET.get('start_time') or "10:00 AM"
     end_date = request.GET.get('end_date')
-    hours = request.GET.get('hours') or "0"
-    kms = request.GET.get('kms') or "0"
-    price = request.GET.get('price') or "0"
+    end_time = request.GET.get('end_time') or "10:00 AM"
+    kms = request.GET.get('kms') or "100km"
+
+    # Parse datetime and calculate hours
+    hours_float = 0.0
+    try:
+        start_datetime = make_aware(datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %I:%M %p"))
+        end_datetime = make_aware(datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %I:%M %p"))
+        hours_float = round((end_datetime - start_datetime).total_seconds() / 3600, 2)
+    except:
+        start_datetime = None
+        end_datetime = None
+
+    # Calculate all price tiers
+    try:
+        price = float(car.calculate_price(hours_float, kms))
+    except:
+        price = 0.0
 
     try:
-        hours = float(hours)
-        kms = float(kms)
-        price = float(price)
-    except ValueError:
-        hours = kms = price = 0
+        price_100 = round(car.calculate_price(hours_float, '100km'), 2)
+        price_200 = round(car.calculate_price(hours_float, '200km'), 2)
+        price_300 = round(car.calculate_price(hours_float, '300km'), 2)
+        price_unlimited = round(car.calculate_price(hours_float, 'unlimited'), 2)
+    except:
+        price_100 = price_200 = price_300 = price_unlimited = 0.0
 
-    # Try converting dates to datetime objects
-    start_datetime = end_datetime = None
-    try:
-        if start_date:
-            start_datetime = make_aware(datetime.strptime(start_date + " 10:00 AM", "%Y-%m-%d %I:%M %p"))
-        if end_date:
-            end_datetime = make_aware(datetime.strptime(end_date + " 10:00 AM", "%Y-%m-%d %I:%M %p"))
-    except Exception:
-        pass
-
-    # Set initial data for form
+    # Pre-fill form dates
     initial_data = {}
     if start_datetime:
         initial_data['start_datetime'] = start_datetime
     if end_datetime:
         initial_data['end_datetime'] = end_datetime
 
+    # Form handling
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-
             if data['end_datetime'] <= data['start_datetime']:
                 form.add_error('end_datetime', 'End datetime must be after start datetime.')
-            elif data['start_datetime'] < datetime.now().astimezone():
+            elif data['start_datetime'] < timezone.now():
                 form.add_error('start_datetime', 'Start datetime cannot be in the past.')
             else:
+                # Create booking object
                 booking = Booking.objects.create(
                     car=car,
                     start_datetime=data['start_datetime'],
@@ -191,29 +199,34 @@ def car_book(request, pk):
                     user_email=data['email']
                 )
 
-                # Approval link
+                # Create approval link
                 approval_link = request.build_absolute_uri(
                     reverse('approve_booking', args=[str(booking.approval_token)])
                 )
 
-                # Email content
+                # Email message with full booking details
                 message = (
-                    f"New booking request for {car.name}\n\n"
-                    f"Name: {data['full_name']}\n"
+                    f"🚗 Booking Request: {car.name}\n\n"
+                    f"Full Name: {data['full_name']}\n"
                     f"Email: {data['email']}\n"
-                    f"Phone: {data['phone']}\n"
-                    f"Start: {data['start_datetime']}\n"
-                    f"End: {data['end_datetime']}\n\n"
-                    f"To approve this booking, click:\n{approval_link}"
+                    f"Phone: {data['phone']}\n\n"
+                    f"Pickup Date & Time: {data['start_datetime'].strftime('%d-%m-%Y %H:%M')}\n"
+                    f"Drop-off Date & Time: {data['end_datetime'].strftime('%d-%m-%Y %H:%M')}\n"
+                    f"Kilometers Plan: {kms}\n"
+                    f"Rental Hours: {hours_float} hours\n"
+                    f"Estimated Price: ₹{price:.2f}\n\n"
+                    f"✅ Approve here: {approval_link}"
                 )
 
+                # Send email to manager
                 send_mail(
-                    subject=f"Booking Request for {car.name}",
+                    subject=f"New Booking Request - {car.name}",
                     message=message,
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[settings.MANAGER_EMAIL],
                     fail_silently=False,
                 )
+
                 return redirect('booking_pending')
     else:
         form = BookingForm(initial=initial_data)
@@ -222,11 +235,18 @@ def car_book(request, pk):
         'car': car,
         'form': form,
         'start_date': start_date,
+        'start_time': start_time,
         'end_date': end_date,
-        'hours': hours,
+        'end_time': end_time,
+        'hours': hours_float,
         'kms': kms,
         'price': price,
+        'price_100': price_100,
+        'price_200': price_200,
+        'price_300': price_300,
+        'price_unlimited': price_unlimited,
     }
+
     return render(request, 'car_book.html', context)
 
 def booking_pending(request):
