@@ -6,6 +6,8 @@ from django.utils.timezone import make_aware
 import datetime
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+import uuid
+
 
 
 class Car(models.Model):
@@ -72,17 +74,18 @@ class Car(models.Model):
             return base_price + extra_price
 
 
-class Booking(models.Model):
+class Booking(models.Model): 
     car = models.ForeignKey('Car', on_delete=models.CASCADE, related_name='bookings')
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
 
     user_email = models.EmailField()
     is_approved = models.BooleanField(default=False)
+    approval_token = models.UUIDField(default=uuid.uuid4, editable=False, null=True)  # no unique=True yet
 
-    aadhar_card = models.FileField(upload_to='documents/aadhar/', null=True, blank=True)
-    pan_card = models.FileField(upload_to='documents/pan/', null=True, blank=True)
-    driving_license = models.FileField(upload_to='documents/license/', null=True, blank=True)
+    # ✅ New fields retained
+    pickup_by_customer = models.BooleanField(default=True, help_text="Will the customer pick up the car?")
+    dropoff_by_customer = models.BooleanField(default=True, help_text="Will the customer drop off the car?")
 
     def __str__(self):
         return f"{self.car.name} from {self.start_datetime} to {self.end_datetime}"

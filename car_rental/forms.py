@@ -21,25 +21,9 @@ class PaymentForm(forms.Form):
     ]
     payment_method = forms.ChoiceField(choices=PAYMENT_CHOICES)
 
-
-class BookingForm(forms.ModelForm):
-    class Meta:
-        model = Booking
-
-        fields = ['start_datetime', 'end_datetime']
-
-
-        fields = ['start_datetime', 'end_datetime',  'aadhar_card', 'pan_card', 'driving_license']
-        widgets = {
-            'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-        }
-
-
 class BookingForm(forms.Form):
-    full_name = forms.CharField(max_length=150, label='Full Name')
-    email = forms.EmailField(label='Email')
-    phone = forms.CharField(max_length=20, label='Phone Number')
-    start_datetime = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}), label='Start Date & Time')
-    end_datetime = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}), label='End Date & Time')
-
+    full_name = forms.CharField(max_length=150)
+    email = forms.EmailField()
+    phone = forms.CharField(max_length=20)
+    start_datetime = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    end_datetime = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))

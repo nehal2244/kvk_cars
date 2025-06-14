@@ -23,13 +23,13 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')
 # DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1')
 
 # ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '69.62.80.9,kvkcars.com,www.kvkcars.com').split(',')
-DEBUG = False
+# DEBUG = False
 
 
-ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com', 'www.kvkcars.com']
+# ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com', 'www.kvkcars.com']
 
-# DEBUG = True
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+DEBUG = True
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com', 'www.kvkcars.com']
 
@@ -122,5 +122,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # manually addded
-MANAGER_EMAIL = 'kvkcars24@gmail.com'  # Put the manager's real email here
+MANAGER_EMAIL = 'kvkcars24@gmail.com'   # Your real email here
 
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development: prints emails to console

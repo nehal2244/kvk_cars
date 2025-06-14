@@ -8,6 +8,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 from decimal import Decimal
 from django.http import JsonResponse
+import uuid
+from django.utils import timezone
+from django.urls import reverse
+
 
 
 def index(request):
@@ -135,46 +139,87 @@ def about(request):
     return render(request, "about.html")
 
 
+
 def car_book(request, pk):
     car = get_object_or_404(Car, pk=pk)
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
-            start = form.cleaned_data['start_datetime']
-            end = form.cleaned_data['end_datetime']
+            data = form.cleaned_data
 
-            if is_naive(start):
-                start = make_aware(start)
-            if is_naive(end):
-                end = make_aware(end)
+            # Validate start/end datetime logic (optional)
+            if data['end_datetime'] <= data['start_datetime']:
+                form.add_error('end_datetime', 'End datetime must be after start datetime.')
+            elif data['start_datetime'] < timezone.now():
+                form.add_error('start_datetime', 'Start datetime cannot be in the past.')
+            else:
+                # Create the booking first to generate the token
+                booking = Booking.objects.create(
+                    car=car,
+                    start_datetime=data['start_datetime'],
+                    end_datetime=data['end_datetime'],
+                    user_email=data['email']
+                )
 
-            full_name = form.cleaned_data['full_name']
-            email = form.cleaned_data['email']
-            phone = form.cleaned_data['phone']
+                # Generate approval link
+                from django.urls import reverse
+                approval_link = request.build_absolute_uri(
+                    reverse('approve_booking', args=[str(booking.approval_token)])
+                )
 
-            subject = f"New Booking Request for {car.name}"
-            message = f"""
-New booking request received:
+                # Compose email message
+                message = (
+                    f"New booking request for {car.name}\n\n"
+                    f"Name: {data['full_name']}\n"
+                    f"Email: {data['email']}\n"
+                    f"Phone: {data['phone']}\n"
+                    f"Start: {data['start_datetime']}\n"
+                    f"End: {data['end_datetime']}\n\n"
+                    f"To approve this booking, click the link below:\n{approval_link}"
+                )
 
-Car: {car.name}
-User Name: {full_name}
-Email: {email}
-Phone: {phone}
-Start Date & Time: {start}
-End Date & Time: {end}
-
-Please review and approve/reject this booking.
-"""
-            manager_email = settings.MANAGER_EMAIL
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [manager_email], fail_silently=False)
-
-            return render(request, 'booking_pending.html', {'car': car, 'full_name': full_name})
-
+                send_mail(
+                    subject=f"Booking Request for {car.name}",
+                    message=message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[settings.MANAGER_EMAIL],
+                    fail_silently=False,
+                )
+                return redirect('booking_pending')
     else:
         form = BookingForm()
 
     return render(request, 'car_book.html', {'car': car, 'form': form})
+
+
+
+def booking_pending(request):
+    return render(request, 'booking_pending.html')
+
+def approve_booking(request, token):
+    booking = get_object_or_404(Booking, approval_token=token)
+    booking.is_approved = True
+    booking.save()
+
+    # Send confirmation email to customer
+    success_link = request.build_absolute_uri(
+        reverse('booking_success', args=[booking.id])
+    )
+
+    send_mail(
+        subject="Your booking is approved!",
+        message=(
+            f"Dear customer,\n\n"
+            f"Your booking for {booking.car.name} has been approved.\n"
+            f"You can view confirmation details here:\n{success_link}"
+        ),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[booking.user_email],
+        fail_silently=False,
+    )
+
+    return render(request, 'booking_approved.html', {'booking': booking})
 
 
 def booking_success(request, booking_id):
@@ -219,18 +264,3 @@ def get_dynamic_prices(request):
 def contactus(request):
     return render(request, "contactus.html")
 
-
-def approve_booking(request, booking_id):
-    booking = get_object_or_404(Booking, pk=booking_id)
-    booking.is_approved = True
-    booking.save()
-
-    send_mail(
-        'Your Booking Has Been Approved',
-        f"Dear Customer,\n\nYour booking for {booking.car.name} from {booking.start_datetime} to {booking.end_datetime} has been approved. Thank you!",
-        settings.DEFAULT_FROM_EMAIL,
-        [booking.user_email],
-        fail_silently=True,
-    )
-
-    return render(request, 'booking_approved.html', {'booking': booking})
