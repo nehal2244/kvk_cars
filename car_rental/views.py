@@ -11,7 +11,7 @@ from django.http import JsonResponse
 import uuid
 from django.utils import timezone
 from django.urls import reverse
-
+from django.utils.dateparse import parse_datetime
 
 
 def index(request):
@@ -143,18 +143,41 @@ def about(request):
 def car_book(request, pk):
     car = get_object_or_404(Car, pk=pk)
 
+    # Get query params safely
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    hours = request.GET.get('hours') or "0"
+    kms = request.GET.get('kms') or "0"
+    price = request.GET.get('price') or "0"
+
+    try:
+        hours = float(hours)
+        kms = float(kms)
+        price = float(price)
+    except ValueError:
+        hours = kms = price = 0
+
+    # Optional: pass these to template
+    extra_context = {
+        'car': car,
+        'form': BookingForm(),
+        'start_date': start_date,
+        'end_date': end_date,
+        'hours': hours,
+        'kms': kms,
+        'price': price,
+    }
+
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
 
-            # Validate start/end datetime logic (optional)
             if data['end_datetime'] <= data['start_datetime']:
                 form.add_error('end_datetime', 'End datetime must be after start datetime.')
             elif data['start_datetime'] < timezone.now():
                 form.add_error('start_datetime', 'Start datetime cannot be in the past.')
             else:
-                # Create the booking first to generate the token
                 booking = Booking.objects.create(
                     car=car,
                     start_datetime=data['start_datetime'],
@@ -162,13 +185,10 @@ def car_book(request, pk):
                     user_email=data['email']
                 )
 
-                # Generate approval link
-                from django.urls import reverse
                 approval_link = request.build_absolute_uri(
                     reverse('approve_booking', args=[str(booking.approval_token)])
                 )
 
-                # Compose email message
                 message = (
                     f"New booking request for {car.name}\n\n"
                     f"Name: {data['full_name']}\n"
@@ -187,11 +207,9 @@ def car_book(request, pk):
                     fail_silently=False,
                 )
                 return redirect('booking_pending')
-    else:
-        form = BookingForm()
+        extra_context['form'] = form
 
-    return render(request, 'car_book.html', {'car': car, 'form': form})
-
+    return render(request, 'car_book.html', extra_context)
 
 
 def booking_pending(request):
