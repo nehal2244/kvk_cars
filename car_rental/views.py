@@ -143,7 +143,7 @@ def about(request):
 def car_book(request, pk):
     car = get_object_or_404(Car, pk=pk)
 
-    # Get query params safely
+    # Get query parameters from URL
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
     hours = request.GET.get('hours') or "0"
@@ -157,16 +157,22 @@ def car_book(request, pk):
     except ValueError:
         hours = kms = price = 0
 
-    # Optional: pass these to template
-    extra_context = {
-        'car': car,
-        'form': BookingForm(),
-        'start_date': start_date,
-        'end_date': end_date,
-        'hours': hours,
-        'kms': kms,
-        'price': price,
-    }
+    # Try converting dates to datetime objects
+    start_datetime = end_datetime = None
+    try:
+        if start_date:
+            start_datetime = make_aware(datetime.strptime(start_date + " 10:00 AM", "%Y-%m-%d %I:%M %p"))
+        if end_date:
+            end_datetime = make_aware(datetime.strptime(end_date + " 10:00 AM", "%Y-%m-%d %I:%M %p"))
+    except Exception:
+        pass
+
+    # Set initial data for form
+    initial_data = {}
+    if start_datetime:
+        initial_data['start_datetime'] = start_datetime
+    if end_datetime:
+        initial_data['end_datetime'] = end_datetime
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
@@ -175,7 +181,7 @@ def car_book(request, pk):
 
             if data['end_datetime'] <= data['start_datetime']:
                 form.add_error('end_datetime', 'End datetime must be after start datetime.')
-            elif data['start_datetime'] < timezone.now():
+            elif data['start_datetime'] < datetime.now().astimezone():
                 form.add_error('start_datetime', 'Start datetime cannot be in the past.')
             else:
                 booking = Booking.objects.create(
@@ -185,10 +191,12 @@ def car_book(request, pk):
                     user_email=data['email']
                 )
 
+                # Approval link
                 approval_link = request.build_absolute_uri(
                     reverse('approve_booking', args=[str(booking.approval_token)])
                 )
 
+                # Email content
                 message = (
                     f"New booking request for {car.name}\n\n"
                     f"Name: {data['full_name']}\n"
@@ -196,7 +204,7 @@ def car_book(request, pk):
                     f"Phone: {data['phone']}\n"
                     f"Start: {data['start_datetime']}\n"
                     f"End: {data['end_datetime']}\n\n"
-                    f"To approve this booking, click the link below:\n{approval_link}"
+                    f"To approve this booking, click:\n{approval_link}"
                 )
 
                 send_mail(
@@ -207,10 +215,19 @@ def car_book(request, pk):
                     fail_silently=False,
                 )
                 return redirect('booking_pending')
-        extra_context['form'] = form
+    else:
+        form = BookingForm(initial=initial_data)
 
-    return render(request, 'car_book.html', extra_context)
-
+    context = {
+        'car': car,
+        'form': form,
+        'start_date': start_date,
+        'end_date': end_date,
+        'hours': hours,
+        'kms': kms,
+        'price': price,
+    }
+    return render(request, 'car_book.html', context)
 
 def booking_pending(request):
     return render(request, 'booking_pending.html')
