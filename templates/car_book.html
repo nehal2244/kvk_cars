@@ -52,7 +52,8 @@
     <input type="hidden" name="kms_hidden" id="kmsHidden" value="{{ kms }}">
 
     <div class="form-summary" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 6px;">
-      <p><strong>Rental Hours:</strong> {{ hours }} hours</p>
+      <p><strong>Rental Hours:</strong> <span id="rentalHoursDisplay">{{ hours }}</span> hours</p>
+
       <p><strong>Estimated Price:</strong> <strong id="priceDisplay">₹{{ price|floatformat:2 }}</strong></p>
     </div>
 
@@ -69,14 +70,19 @@
     const kmsSelect = document.getElementById("kmsSelect");
     const kmsHidden = document.getElementById("kmsHidden");
     const priceDisplay = document.getElementById("priceDisplay");
+    const rentalHoursDisplay = document.getElementById("rentalHoursDisplay");
 
     const startInput = document.getElementById("{{ form.start_datetime.auto_id }}");
     const endInput = document.getElementById("{{ form.end_datetime.auto_id }}");
 
     function getDateParts(val) {
       if (!val) return [null, null];
-      const [date, time] = val.split('T');
-      return [date, time];
+      if (val.includes("T")) {
+        return val.split("T");
+      } else {
+        const parts = val.split(" ");
+        return [parts[0], parts[1] || "10:00"];
+      }
     }
 
     function updatePrice() {
@@ -88,20 +94,29 @@
 
       kmsHidden.value = kms;
 
-      const url = `/get_dynamic_prices/?start_date=${startDate}&start_time=${startTime}&end_date=${endDate}&end_time=${endTime}`;
+      const url = `/api/get_dynamic_prices/?car_id={{ car.id }}&start_date=${startDate}&start_time=${startTime}&end_date=${endDate}&end_time=${endTime}`;
 
       fetch(url)
         .then(res => res.json())
         .then(data => {
-          const carPrices = data.prices?.["{{ car.id }}"];
-          if (carPrices && carPrices[kms]) {
-            priceDisplay.textContent = "₹" + parseFloat(carPrices[kms]).toFixed(2);
+          if (data.prices && data.prices[kms]) {
+            priceDisplay.textContent = "₹" + parseFloat(data.prices[kms]).toFixed(2);
+          } else if (data.prices) {
+            priceDisplay.textContent = "₹" + Object.values(data.prices)[0].toFixed(2);
           } else {
             priceDisplay.textContent = "₹0.00";
           }
+
+          // 🔥 Update rental hours (calculate from start and end)
+          const start = new Date(`${startDate} ${startTime}`);
+          const end = new Date(`${endDate} ${endTime}`);
+          const hours = (end - start) / (1000 * 60 * 60); // Convert ms to hours
+          rentalHoursDisplay.textContent = hours.toFixed(2);
         })
         .catch(err => {
           console.error("Failed to fetch dynamic price:", err);
+          priceDisplay.textContent = "₹0.00";
+          rentalHoursDisplay.textContent = "0.00";
         });
     }
 
@@ -112,4 +127,5 @@
     updatePrice(); // Trigger initially
   });
 </script>
+
 {% endblock %}

@@ -181,17 +181,24 @@ def car_book(request, pk):
     if end_datetime:
         initial_data['end_datetime'] = end_datetime
 
-    # Form handling
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
+
+            hours_float_post = round((data['end_datetime'] - data['start_datetime']).total_seconds() / 3600, 2)
+            kms_post = request.POST.get('kms') or kms
+
+            try:
+                price_post = float(car.calculate_price(hours_float_post, kms_post))
+            except:
+                price_post = 0.0
+
             if data['end_datetime'] <= data['start_datetime']:
                 form.add_error('end_datetime', 'End datetime must be after start datetime.')
             elif data['start_datetime'] < timezone.now():
                 form.add_error('start_datetime', 'Start datetime cannot be in the past.')
             else:
-                # Create booking object
                 booking = Booking.objects.create(
                     car=car,
                     start_datetime=data['start_datetime'],
@@ -199,12 +206,16 @@ def car_book(request, pk):
                     user_email=data['email']
                 )
 
-                # Create approval link
+                request.session[f'booking_info_{booking.id}'] = {
+                    'full_name': data['full_name'],
+                    'phone': data['phone'],
+                    'email': data['email']
+                }
+
                 approval_link = request.build_absolute_uri(
                     reverse('approve_booking', args=[str(booking.approval_token)])
                 )
 
-                # Email message with full booking details
                 message = (
                     f"🚗 Booking Request: {car.name}\n\n"
                     f"Full Name: {data['full_name']}\n"
@@ -212,13 +223,12 @@ def car_book(request, pk):
                     f"Phone: {data['phone']}\n\n"
                     f"Pickup Date & Time: {data['start_datetime'].strftime('%d-%m-%Y %H:%M')}\n"
                     f"Drop-off Date & Time: {data['end_datetime'].strftime('%d-%m-%Y %H:%M')}\n"
-                    f"Kilometers Plan: {kms}\n"
-                    f"Rental Hours: {hours_float} hours\n"
-                    f"Estimated Price: ₹{price:.2f}\n\n"
+                    f"Kilometers Plan: {kms_post}\n"
+                    f"Rental Hours: {hours_float_post} hours\n"
+                    f"Estimated Price: ₹{price_post:.2f}\n\n"
                     f"✅ Approve here: {approval_link}"
                 )
 
-                # Send email to manager
                 send_mail(
                     subject=f"New Booking Request - {car.name}",
                     message=message,
@@ -254,25 +264,40 @@ def booking_pending(request):
 
 def approve_booking(request, token):
     booking = get_object_or_404(Booking, approval_token=token)
-    booking.is_approved = True
-    booking.save()
 
-    # Send confirmation email to customer
-    success_link = request.build_absolute_uri(
-        reverse('booking_success', args=[booking.id])
-    )
+    if not booking.is_approved:
+        booking.is_approved = True
 
-    send_mail(
-        subject="Your booking is approved!",
-        message=(
-            f"Dear customer,\n\n"
-            f"Your booking for {booking.car.name} has been approved.\n"
-            f"You can view confirmation details here:\n{success_link}"
-        ),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[booking.user_email],
-        fail_silently=False,
-    )
+        # Fetch and apply extra user info from session
+        session_key = f'booking_info_{booking.id}'
+        extra_info = request.session.get(session_key)
+
+        if extra_info:
+            booking.full_name = extra_info.get('full_name')
+            booking.phone = extra_info.get('phone')
+            booking.user_email = extra_info.get('email')
+            del request.session[session_key]
+
+        booking.save()
+
+        # Send confirmation email to customer
+        success_link = request.build_absolute_uri(
+            reverse('booking_success', args=[booking.id])
+        )
+
+        send_mail(
+            subject="Your booking is approved!",
+            message=(
+                f"Dear {booking.full_name},\n\n"
+                f"Your booking for {booking.car.name} has been approved.\n"
+                f"Pickup: {booking.start_datetime.strftime('%d-%m-%Y %H:%M')}\n"
+                f"Drop-off: {booking.end_datetime.strftime('%d-%m-%Y %H:%M')}\n"
+                f"You can view confirmation details here:\n{success_link}"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[booking.user_email],
+            fail_silently=False,
+        )
 
     return render(request, 'booking_approved.html', {'booking': booking})
 
@@ -287,34 +312,53 @@ def booking_success(request, booking_id):
 
 
 def get_dynamic_prices(request):
+    from datetime import datetime
+
+    def parse_datetime_flexible(date_str, time_str):
+        try:
+            # Try 12-hour format with AM/PM
+            return make_aware(datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %I:%M %p"))
+        except ValueError:
+            try:
+                # Try 24-hour format
+                return make_aware(datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M"))
+            except ValueError:
+                return None
+
     start_date = request.GET.get('start_date')
     start_time = request.GET.get('start_time')
     end_date = request.GET.get('end_date')
     end_time = request.GET.get('end_time')
+    car_id = request.GET.get('car_id')
 
-    if not all([start_date, start_time, end_date, end_time]):
-        return JsonResponse({'error': 'Incomplete date/time data'}, status=400)
+    if not all([start_date, start_time, end_date, end_time, car_id]):
+        return JsonResponse({'error': 'Missing data'}, status=400)
 
     try:
-        start_datetime = make_aware(datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %I:%M %p"))
-        end_datetime = make_aware(datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %I:%M %p"))
+        car = Car.objects.get(id=car_id)
+
+        start_datetime = parse_datetime_flexible(start_date, start_time)
+        end_datetime = parse_datetime_flexible(end_date, end_time)
+
+        if not start_datetime or not end_datetime:
+            return JsonResponse({'error': 'Invalid date/time format'}, status=400)
+
         rental_hours = (end_datetime - start_datetime).total_seconds() / 3600
         rental_hours_decimal = Decimal(str(rental_hours))
-    except Exception:
-        return JsonResponse({'error': 'Invalid date/time format'}, status=400)
 
-    cars = Car.objects.all()
-    prices = {}
-    for car in cars:
-        prices[car.id] = {
+        prices = {
             '100km': round(float(car.calculate_price(rental_hours_decimal, '100km')), 2),
             '200km': round(float(car.calculate_price(rental_hours_decimal, '200km')), 2),
             '300km': round(float(car.calculate_price(rental_hours_decimal, '300km')), 2),
             'unlimited': round(float(car.calculate_price(rental_hours_decimal, 'unlimited')), 2),
         }
 
-    return JsonResponse({'prices': prices})
+        return JsonResponse({'prices': prices})
 
+    except Car.DoesNotExist:
+        return JsonResponse({'error': 'Car not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 def contactus(request):
     return render(request, "contactus.html")

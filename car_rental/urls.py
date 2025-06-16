@@ -23,6 +23,8 @@ urlpatterns = [
 
     # API
     path('api/get_dynamic_prices/', views.get_dynamic_prices, name='get_dynamic_prices'),
+    path('get_dynamic_prices/', views.get_dynamic_prices),  # optional alias
+
 
     path('contactus/', views.contactus, name='contactus'),
 ]

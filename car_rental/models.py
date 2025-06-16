@@ -78,6 +78,9 @@ class Booking(models.Model):
     car = models.ForeignKey('Car', on_delete=models.CASCADE, related_name='bookings')
     start_datetime = models.DateTimeField()
     end_datetime = models.DateTimeField()
+    
+    full_name = models.CharField(max_length=150, null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
 
     user_email = models.EmailField()
     is_approved = models.BooleanField(default=False)
