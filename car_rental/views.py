@@ -2,16 +2,17 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render, redirect
 from car_rental.models import Car, Booking
 from car_rental.forms import PaymentForm, BookingForm
-from datetime import datetime, timedelta
-from django.utils.timezone import make_aware, is_naive
+from datetime import datetime
+from django.utils.timezone import make_aware, timezone
 from django.core.mail import send_mail
 from django.conf import settings
 from decimal import Decimal
 from django.http import JsonResponse
-import uuid
-from django.utils import timezone
 from django.urls import reverse
-from django.utils.dateparse import parse_datetime
+from django.utils import timezone
+# ...
+timezone.now()
+
 
 
 def index(request):
@@ -32,7 +33,7 @@ def browse_cars(request):
     end_date = request.GET.get('end_date')
     end_time = request.GET.get('end_time')
 
-    # Handle date/time filtering and exclude booked cars
+    # Filter cars based on booking availability
     if all([start_date, start_time, end_date, end_time]):
         try:
             start_datetime = make_aware(datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %I:%M %p"))
@@ -45,9 +46,9 @@ def browse_cars(request):
                     start_datetime__lt=end_datetime,
                     end_datetime__gt=start_datetime
                 ).values_list('car_id', flat=True)
+
                 cars = cars.exclude(id__in=booked_car_ids)
 
-                # Calculate dynamic prices
                 rental_hours = (end_datetime - start_datetime).total_seconds() / 3600
                 rental_hours_decimal = Decimal(str(rental_hours))
 
@@ -60,10 +61,9 @@ def browse_cars(request):
         except ValueError:
             error = "Invalid date or time format."
         except Exception:
-            # You might want to log this exception in real app
-            pass
+            pass  # Optionally log exceptions
 
-    # Apply text search and other filters
+    # Apply search and filters
     if search_query:
         cars = cars.filter(name__icontains=search_query)
 
@@ -78,7 +78,7 @@ def browse_cars(request):
     elif sort == 'price_high':
         cars = cars.order_by('-price_100km')
 
-    # Calculate prices for template
+    # Prepare prices for template
     calculated_prices = {}
     if all([start_date, start_time, end_date, end_time]) and not error:
         try:
@@ -94,9 +94,8 @@ def browse_cars(request):
                     '300km': round(float(car.calculate_price(rental_hours_decimal, '300km')), 2),
                     'unlimited': round(float(car.calculate_price(rental_hours_decimal, 'unlimited')), 2),
                 }
-
         except Exception:
-            pass
+            pass  # Optionally log exceptions
 
     context = {
         'cars': cars,
@@ -111,7 +110,6 @@ def browse_cars(request):
         'error': error,
         'calculated_prices': calculated_prices,
     }
-
     return render(request, 'browse_cars.html', context)
 
 
@@ -124,7 +122,7 @@ def pay_online(request):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
-            # Handle payment processing here
+            # Payment processing logic here
             return redirect('payment_success')
     else:
         form = PaymentForm()
@@ -139,31 +137,27 @@ def about(request):
     return render(request, "about.html")
 
 
-
-def car_book(request, pk):  
+def car_book(request, pk):
     car = get_object_or_404(Car, pk=pk)
 
-    # Get parameters from GET request
     start_date = request.GET.get('start_date')
     start_time = request.GET.get('start_time') or "10:00 AM"
     end_date = request.GET.get('end_date')
     end_time = request.GET.get('end_time') or "10:00 AM"
     kms = request.GET.get('kms') or "100km"
 
-    # Parse datetime and calculate hours
     hours_float = 0.0
     try:
         start_datetime = make_aware(datetime.strptime(f"{start_date} {start_time}", "%Y-%m-%d %I:%M %p"))
         end_datetime = make_aware(datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %I:%M %p"))
         hours_float = round((end_datetime - start_datetime).total_seconds() / 3600, 2)
-    except:
+    except Exception:
         start_datetime = None
         end_datetime = None
 
-    # Calculate all price tiers
     try:
         price = float(car.calculate_price(hours_float, kms))
-    except:
+    except Exception:
         price = 0.0
 
     try:
@@ -171,10 +165,9 @@ def car_book(request, pk):
         price_200 = round(car.calculate_price(hours_float, '200km'), 2)
         price_300 = round(car.calculate_price(hours_float, '300km'), 2)
         price_unlimited = round(car.calculate_price(hours_float, 'unlimited'), 2)
-    except:
+    except Exception:
         price_100 = price_200 = price_300 = price_unlimited = 0.0
 
-    # Pre-fill form dates
     initial_data = {}
     if start_datetime:
         initial_data['start_datetime'] = start_datetime
@@ -185,13 +178,12 @@ def car_book(request, pk):
         form = BookingForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-
             hours_float_post = round((data['end_datetime'] - data['start_datetime']).total_seconds() / 3600, 2)
             kms_post = request.POST.get('kms') or kms
 
             try:
                 price_post = float(car.calculate_price(hours_float_post, kms_post))
-            except:
+            except Exception:
                 price_post = 0.0
 
             if data['end_datetime'] <= data['start_datetime']:
@@ -236,7 +228,6 @@ def car_book(request, pk):
                     recipient_list=[settings.MANAGER_EMAIL],
                     fail_silently=False,
                 )
-
                 return redirect('booking_pending')
     else:
         form = BookingForm(initial=initial_data)
@@ -259,8 +250,10 @@ def car_book(request, pk):
 
     return render(request, 'car_book.html', context)
 
+
 def booking_pending(request):
     return render(request, 'booking_pending.html')
+
 
 def approve_booking(request, token):
     booking = get_object_or_404(Booking, approval_token=token)
@@ -268,7 +261,6 @@ def approve_booking(request, token):
     if not booking.is_approved:
         booking.is_approved = True
 
-        # Fetch and apply extra user info from session
         session_key = f'booking_info_{booking.id}'
         extra_info = request.session.get(session_key)
 
@@ -280,7 +272,6 @@ def approve_booking(request, token):
 
         booking.save()
 
-        # Send confirmation email to customer
         success_link = request.build_absolute_uri(
             reverse('booking_success', args=[booking.id])
         )
@@ -316,11 +307,9 @@ def get_dynamic_prices(request):
 
     def parse_datetime_flexible(date_str, time_str):
         try:
-            # Try 12-hour format with AM/PM
             return make_aware(datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %I:%M %p"))
         except ValueError:
             try:
-                # Try 24-hour format
                 return make_aware(datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M"))
             except ValueError:
                 return None
@@ -360,6 +349,6 @@ def get_dynamic_prices(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
 def contactus(request):
     return render(request, "contactus.html")
-
