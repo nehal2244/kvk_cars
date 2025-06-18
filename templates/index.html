@@ -1,31 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-    <title>KVK Cars</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-/>
-<!-- Flatpickr CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+  <title>KVK Cars</title>
 
-    <link rel="stylesheet" href="/static/styles/index.css">
-       
-   <style>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+  <!-- Owl Carousel -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/styles/index.css" />
+
+ <style>
+  /* === General Smooth Scroll === */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* === COMMENTED: Original body style replaced by mobile-friendly version ===
   body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #e6f0fa;
+    overflow-x: hidden;
   }
+  === End original body style === */
 
+  /* === Social Icons Section === */
   .social-icons {
     display: flex;
     justify-content: center;
@@ -46,110 +58,75 @@
     transition: all 0.3s ease;
   }
 
-  .social-icons a:nth-child(1) {
-    background-color: #3b5998; /* Facebook */
-  }
-  .social-icons a:nth-child(2) {
-    background-color: #1da1f2; /* Twitter */
-  }
-  .social-icons a:nth-child(3) {
-    background-color: #e4405f; /* Instagram */
-  }
-  .social-icons a:nth-child(4) {
-    background-color: #0077b5; /* LinkedIn */
-  }
-  .social-icons a:nth-child(5) {
-    background-color: #ff0000; /* YouTube */
-  }
+  .social-icons a:nth-child(1) { background-color: #3b5998; }
+  .social-icons a:nth-child(2) { background-color: #1da1f2; }
+  .social-icons a:nth-child(3) { background-color: #e4405f; }
+  .social-icons a:nth-child(4) { background-color: #0077b5; }
+  .social-icons a:nth-child(5) { background-color: #ff0000; }
 
   .social-icons a:hover {
     opacity: 0.8;
     transform: scale(1.1);
   }
 
-  /* Responsive Padding and Layout */
-  @media (max-width: 768px) {
-    .social-icons {
-      gap: 12px;
-      padding: 10px 0;
-    }
-
-    .social-icons a {
-      width: 40px;
-      height: 40px;
-      font-size: 18px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .social-icons {
-      flex-direction: row;
-      justify-content: center;
-    }
-
-    .social-icons a {
-      width: 36px;
-      height: 36px;
-      font-size: 16px;
-    }
-  }
-
-
-   /* Carousel container with relative positioning */
+  /* === Carousel Section === */
   .carousel-section {
     position: relative;
     overflow: hidden;
     padding: 60px 20px;
-    background-color: #fff;
+    background-color: #28a745;
   }
-  /* Owl carousel wrapper absolute full area */
+
   .carousel-background {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     z-index: 0;
     overflow: hidden;
   }
+
   .carousel-background .owl-carousel img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  /* Overlay to darken carousel images for text readability */
+
   .carousel-overlay {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0, 0, 0, 0.3);
     z-index: 1;
   }
-  /* Content container with higher z-index to be above carousel */
+
   .carousel-content-container {
     position: relative;
     z-index: 2;
     max-width: 1100px;
     margin: auto;
     color: #222;
+    text-align: center;
+    padding: 0 15px;
   }
 
-  /* Styling your headings and paragraphs */
   .carousel-content-container h2 {
     color: #007bff;
     font-size: 28px;
     margin-bottom: 10px;
-    text-align: center;
   }
+
   .carousel-content-container h3 {
     font-size: 22px;
     color: #222;
     margin-bottom: 20px;
-    text-align: center;
   }
+
   .carousel-content-container p {
     font-size: 18px;
     color: #555;
     max-width: 800px;
     margin: 0 auto 30px auto;
-    text-align: center;
+    word-wrap: break-word;
   }
+
   .carousel-content-container ul {
     list-style: none;
     padding: 0;
@@ -159,14 +136,18 @@
     justify-content: center;
     gap: 20px;
   }
+
   .carousel-content-container ul li {
     font-size: 16px;
     color: #333;
+    word-wrap: break-word;
   }
+
   .carousel-content-container ul li::before {
     content: "✅ ";
     color: #28a745;
   }
+
   .carousel-content-container a.call-now {
     display: inline-block;
     padding: 12px 30px;
@@ -177,33 +158,41 @@
     font-weight: bold;
     font-size: 18px;
     margin: 20px auto 0 auto;
-    text-align: center;
+    width: 90%;
+    max-width: 300px;
   }
-  /* Grid section styling */
+
+  /* === Features Section === */
   .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
-    color: #444;
+    color: whitesmoke;
     margin-top: 40px;
+    background: rgba(0,0,0,0.4);
+    padding: 10px;
+    border-radius: 6px;
   }
+
   .features-grid h4 {
-    color: #222;
+    color: #ffc107;
     margin-bottom: 8px;
   }
-  /* Lower section text and button */
+
+  /* === Bottom Text Section === */
   .bottom-text {
     text-align: center;
     margin-top: 40px;
-    color: #444;
+    color: whitesmoke;
   }
+
   .bottom-text h3 {
-    color: #000;
+    color: #ffc107;
     font-size: 24px;
     margin-bottom: 10px;
   }
 
-  /* Responsive adjustments */
+  /* === Responsive (Tablet) === */
   @media (max-width: 768px) {
     .carousel-section {
       padding: 40px 10px;
@@ -218,39 +207,216 @@
     .carousel-content-container ul li {
       font-size: 16px;
     }
+    .social-icons a {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
   }
+
+  /* === Responsive (Mobile) === */
+  @media (max-width: 480px) {
+    .carousel-content-container h2 {
+      font-size: 20px;
+    }
+    .carousel-content-container h3 {
+      font-size: 16px;
+    }
+    .carousel-content-container p,
+    .carousel-content-container ul li {
+      font-size: 14px;
+    }
+    .carousel-content-container ul {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .social-icons a {
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+    }
+  }
+
+  /* === Mobile Friendly: Carousel Form Fixes === */
+  @media (max-width: 768px) {
+    .carousel-form-wrapper {
+      position: relative !important;
+      padding-top: 70px;
+    }
+
+    .self-drive-form-overlay {
+      top: auto !important;
+      left: 0 !important;
+      transform: none !important;
+      margin: 20px auto;
+      width: 95% !important;
+      padding: 20px !important;
+      position: relative !important;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .rn-header .row {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .rn-header .menu-links {
+      margin-top: 10px;
+    }
+  }
+
+  /* === Resets & Root Style === */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* === Final Applied Body + Background Gradient === */
+  body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: black;
+    background: linear-gradient(to bottom, #1E2A38 40%, #F4F4F6 100%);
+  }
+
+  /* === Header Section (Responsive) === */
+  .row.align-items-center {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 15px;
+    background-color: #0A192F;
+  }
+
+  .brand-logo img {
+    height: 60px;
+    width: auto;
+  }
+
+  .tagline {
+    color: #ffc107;
+    margin-left: 10px;
+    font-weight: 600;
+  }
+
+  .menu-links {
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px;
+  }
+
+  .menu-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    transition: background 0.3s;
+    border-radius: 5px;
+  }
+
+  .menu-links a:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-call {
+    background: var(--success);
+    color: white !important;
+    font-weight: bold;
+
+  }
+
+  /* === Header Responsive (Mobile) === */
+  @media (max-width: 768px) {
+    .row.align-items-center {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .tagline {
+      margin: 10px 0;
+    }
+
+    .menu-links {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .menu-links a {
+      width: 100%;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #444;
+    }
+  }
+
+  @media (max-width: 768px) {
+  .btn-call {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+}
+@media (max-width: 768px) {
+  .menu-links a {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+  }
+
+  .menu-links .btn-call {
+    text-align: center;
+    margin-top: 10px;
+    background-color: #28a745 !important;
+    border: none;
+  }
+}
+
+/* heading color  */
+.yellow-heading {
+  color: #ffc107;
+}
+
+
 </style>
+
 
 </head>
 <body>
 
-<header class="rn-header">
-    <div class="rn-menubar py-1 shadow-sm">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-auto pr-0">
-                    <a class="brand-logo" href="{% url 'index' %}">
-                        <img src="/static/img/logo.png" alt="KVK Car Logo">
-                    </a>
-                </div>
-                <div class="col-auto tagline">KVK CARS !! Kahin bhi kabhi bhi !!</div>
-                <div class="col menu-links">
+<div class="row align-items-center">
+  <div class="col-auto pr-0">
+    <a class="brand-logo" href="/">
+      <img src="/static/img/logo.png" alt="KVK Car Logo">
+    </a>
+  </div>
+  
+  <div class="col-auto tagline">KVK CARS !! Kahin bhi kabhi bhi !!</div>
+  
+  <div class="col menu-links">
+    <a href="/">Home</a>
+    <a href="/about">About Us</a>
+    <a href="https://forms.gle/ooEVzYV2BceAtkVw6">Bookings Open</a>
+    <a href="/pay-online">Pay Online</a>
+    <a href="/contactus">Contact Us</a>
+    <a class="btn-call" href="tel:+918077125139" style="background-color: #28a745;">Call</a>
+  </div>
+</div>
 
-                    <a href="{% url 'index' %}">Home</a>
-
-                    <a href="/about">About Us</a>
-                    <a href="https://forms.gle/ooEVzYV2BceAtkVw6">Bookings Open</a>
-                    
-                    <a href="/pay-online">Pay Online</a>
-                    
-                    <a href="/contactus">Contact Us</a>
-                    <a class="btn-call" href="tel:+918077125139">Call</a>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
 
 <!-- Image Slideshow -->
  <div class="carousel-form-wrapper position-relative" style="
@@ -283,6 +449,8 @@
   ">
 
     <form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">
+      <h2 class="text-center font-weight-bold my-4">Explore Cars. Drive Yourself.</h2>
+
   <hr />
   <div class="regular-search">
     <div class="d-flex flex-wrap" style="gap:10px;">
@@ -350,59 +518,77 @@
 
   </div>
 </div>
+<section class="carousel-section" style="background-color:#1E2A38; padding: 60px 20px; font-family: Arial, sans-serif;">
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1200px; margin: auto;">
+
+    <!-- Left Block -->
+    <div style="flex: 1 1 500px; background: url('/static/img/whitebg.jpg') center/cover no-repeat; padding: 40px 25px; border-radius: 8px; color: #000;">
+      <h2 id="rental-price-heading" class="yellow-heading">🚘 Get Rental Cars at the Best Price</h2>
+      <h2 id="trip-heading" class="yellow-heading">Enjoy Your Trip Without Worry!</h2>
+      <p>
+        Why pay more when you can ride in comfort for less?<br>
+        At <strong>KVK CARS</strong>, we make travel <strong>affordable, stress-free, and fun</strong>.
+      </p>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>✅ Budget-friendly rental rates</li>
+        <li>✅ No hidden charges</li>
+        <li>✅ Clean, reliable, and ready-to-go vehicles</li>
+        <li>✅ Perfect for family trips, solo getaways, or business travel</li>
+      </ul>
+      <p style="font-style: italic; margin-top: 20px;">
+        “Your journey, your car — at the price you’ll love.”
+      </p>
+
+      
+      <h3 id="travel-far-heading" class="yellow-heading" style="margin-top: 25px;">🌍 Plan Big. Travel Far.</h3>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>🚙 From Swift to Fortuner – full lineup available</li>
+        <li>🪑 Spacious and comfy for families</li>
+        <li>🧳 Large boot space for luggage</li>
+        <li>📆 Advance booking = guaranteed ride</li>
+      </ul>
+      <p style="font-style: italic;">“KVK CARS — More Than Just a Rental. It’s Your Travel Partner.”</p>
 
 
-<!-- bugdet frenidly content  --><section class="carousel-section">
+         </div>
 
-  <div class="carousel-background">
-    <div class="carousel-overlay"></div>
-    <div class="owl-carousel owl-theme">
-      <div class="item"><img src="../static/img/1.webp" alt="Slide 1"></div>
-      <div class="item"><img src="../static/img/OWL3.webp" alt="Slide 2"></div>
-      <div class="item"><img src="../static/img/OWL2.webp" alt="Slide 3"></div>
+    <!-- Right Block -->
+    <div style="flex: 1 1 500px; background: url('/static/img/whitebg.jpg') center/cover no-repeat; padding: 40px 25px; border-radius: 8px; color: #000;">
+
+      <h2 id="nagpur-heading" class="yellow-heading" style="margin-top: 25px;">📍 KVK CARS – Proudly Nagpur-Based</h2>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>✅ 100% Self-Drive Rentals in Nagpur</li>
+        <li>✅ Covers entire city + nearby areas</li>
+        <li>✅ Airport pickup/drop available</li>
+        <li>✅ Trusted by locals and travelers alike</li>
+      </ul>
+      <p style="font-style: italic;">“Nagpur ka apna trusted car rental – KVK CARS!”</p>
+
+       <h3 id="self-drive-heading" class="yellow-heading" style="margin-top: 25px;">🛻 Self-Drive Freedom – No Driver, No Delay!</h3>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>✅ 100% private, no drivers involved</li>
+        <li>✅ Explore on your schedule — not theirs</li>
+        <li>✅ No extra driver charges</li>
+        <li>✅ Full privacy and control</li>
+      </ul>
+      <p style="font-style: italic;">“Drive your way, not the driver’s way.”</p>
     </div>
+
   </div>
-
-  <div class="carousel-content-container">
-
-    <!-- First content block -->
-<div style="background: #f9f9f9; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; font-family: Arial, sans-serif; color: #f0f0f0; text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">
-
-<!-- First content block -->
- <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; max-width: 800px; margin: auto; font-family: Arial, sans-serif; color: black; text-shadow: 1px 1px 4px rgba(0,0,0,0.7); text-align: center;">
-
-  <h2>🚘 Get Rental Cars at the Best Price</h2>
-  <h3>Enjoy Your Trip Without Worry!</h3>
-  <p>
-    Why pay more when you can ride in comfort for less?<br>
-    At <strong>KVK CARS</strong>, we make travel <strong>affordable, stress-free, and fun</strong>.
-  </p>
-
-  <ul style="list-style: none; padding-left: 0;">
-    <li>✅ Budget-friendly rental rates</li>
-    <li>✅ No hidden charges</li>
-    <li>✅ Clean, reliable, and ready-to-go vehicles</li>
-    <li>✅ Perfect for family trips, solo getaways, or business travel</li>
-  </ul>
-
-  <p style="font-style: italic; margin-bottom: 30px;">
-    “Your journey, your car — at the price you’ll love.”
-  </p>
-</div>
-
-
+</section>
 
 
     <!-- Second content block -->
-    <section style="background-color: #f9f9f9; padding: 40px 20px; margin-top: 60px; border-radius: 8px;">
+    <section style="background-color: #e6f0fa; padding: 40px 20px; margin-top: 60px; border-radius: 8px;">
 
     <!-- Second content block -->
-    <section style="background: url('/static/img/whitebg.jpg') center/cover no-repeat; padding: 40px 20px; margin-top: 60px; border-radius: 8px;">
+    <section style="background: url('/static/img/car bg.jpeg') center/cover no-repeat; padding: 40px 20px; margin-top: 60px; border-radius: 8px;">
 
-      <h2 style="text-align: center; font-size: 32px; color: #222; margin-bottom: 20px;">
+      <h2 style="text-align: center; font-size: 32px; color: #ffc107; margin-bottom: 20px;">
         ❤️ Customer Satisfaction is Our First Priority
       </h2>
-      <p style="text-align: center; font-size: 18px; color: #555; max-width: 800px; margin: 0 auto 30px;">
+      <p style="text-align: center; font-size: 18px; color: #007bff; max-width: 800px; margin: 0 auto 30px;">
         At <strong>KVK CARS</strong>, we believe every journey begins with trust. That’s why we focus on delivering a rental experience that’s smooth, reliable, and completely customer-focused.
       </p>
 
@@ -445,6 +631,7 @@
 
 
 <!-- City Selection Modal -->
+ 
 <div class="modal fade" id="cityPopup">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

@@ -47,43 +47,68 @@
   opacity: 0.8;
   transform: scale(1.1);
 }
+  #kvkNavbar .nav-link {
+    color: whitesmoke !important;
+  }
 
-    </style>
+  #kvkNavbar .nav-link:hover {
+    color: #f8f9fa !important; /* lighter white on hover */
+  }
+
+</style>
 </head>
 <body>
-
 <!-- NAVBAR -->
 <header class="rn-header">
-    <div class="rn-menubar py-1 shadow-sm">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-auto pr-0">
-                    <a class="brand-logo" href="{% url 'index' %}">
-                        <img src="/static/img/logo.png" alt="KVK Car Logo" />
-                    </a>
-                </div>
-                <div class="col-auto tagline">KVK CARS !! Kahin bhi kabhi bhi !!</div>
-                <div class="col menu-links">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-sm">
+    <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="/static/img/logo.png" alt="KVK Car Logo" style="max-height: 40px;" />
+      </a>
 
-                    <button class="rn-navbar-toggler" data-toggle="modal" data-target="#cityPopup">
-                        <i class="fa fa-map-marker"></i> Nagpur
-                    </button>
+      <!-- Tagline (mobile hidden) -->
+      <span class="d-none d-md-inline-block font-weight-bold text-primary ml-2">
+        KVK CARS !! Kahin bhi kabhi bhi !!
+      </span>
 
-                    
-                <li>
-                    <a href="{% url 'index' %}">Home</a>
+      <!-- Mobile Toggler -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#kvkNavbar" aria-controls="kvkNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-                    <a href="/about">About Us</a>
-                    <a href="https://forms.gle/ooEVzYV2BceAtkVw6">Bookings Open</a>
-                    
-                    <a href="/pay-online">Pay Online</a>
-                    
-                    <a href="/contactus">Contact Us</a>
-                    <a class="btn-call" href="tel:+918077125139">Call</a>
-                </div>
-            </div>
-        </div>
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse text-white" id="kvkNavbar">
+        <ul class="navbar-nav ml-auto align-items-lg-center text-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://forms.gle/ooEVzYV2BceAtkVw6" target="_blank">Bookings Open</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/pay-online">Pay Online</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contactus">Contact Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary text-white px-3 py-1 mt-2 mt-lg-0 ml-lg-3" href="tel:+918077125139">
+              <i class="fa fa-phone"></i> Call
+            </a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-secondary mt-2 mt-lg-0 ml-lg-3" data-toggle="modal" data-target="#cityPopup">
+              <i class="fa fa-map-marker"></i> Nagpur
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>
 </header>
 
 <!-- MODAL -->

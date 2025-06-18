@@ -40,7 +40,7 @@ class Car(models.Model):
         help_text="Charge per hour after 12 hours rental"
     )
     # NEW: Prices for fixed km plans
-    price_100km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
+    price_100km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0, verbose_name="150 KM")
     price_200km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     price_300km = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
 

@@ -162,7 +162,7 @@ header {
 .button-group {
   margin-top: 10px;
   display: flex;
-  gap: 10px;
+  gap: 40px;
 }
 
 .btn {
@@ -541,10 +541,10 @@ header {
                       {{ car.price_100km|floatformat:0 }}
                   {% endif %}
                 </h4>
-                <span>100 KMs</span>
+                <span>150 KMs</span>
               </div>
             </li>
-            <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+            <!-- <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
               <div class="car_plans_inner_section">
                 <h4>
                   ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
@@ -567,7 +567,7 @@ header {
                 </h4>
                 <span>300 KMs</span>
               </div>
-            </li>
+            </li> -->
             <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center; background-color: #ff4818;">
               <div class="car_plans_inner_section">
                 <p style="color: white;">
@@ -591,10 +591,11 @@ header {
             <a href="{% url 'car_detail' car.id %}" class="btn btn-view-details">View Details</a>
 
             
-
-<a href="{% url 'car_book' car.id %}?start_date={{ start_date }}&start_time={{ start_time }}&end_date={{ end_date }}&end_time={{ end_time }}&kms=100km">
+<a href="{% url 'car_book' car.id %}?start_date={{ start_date }}&start_time={{ start_time }}&end_date={{ end_date }}&end_time={{ end_time }}&kms=100km"
+   class="btn btn-view-details">
     Book Now
 </a>
+
 
 
 
