@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+    <title>{% block title %}KVK Cars{% endblock %}</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="/static/styles/index.css" />
+    
+    {% block extra_css %}{% endblock %}
+    <style>
+        .social-icons a {
+  display: inline-block;
+  margin: 0 5px;
+  text-align: center;
+  color: white;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.social-icons a:nth-child(1) {
+  background-color: #3b5998; /* Facebook */
+}
+.social-icons a:nth-child(2) {
+  background-color: #1da1f2; /* Twitter */
+}
+.social-icons a:nth-child(3) {
+  background-color: #e4405f; /* Instagram */
+}
+.social-icons a:nth-child(4) {
+  background-color: #0077b5; /* LinkedIn */
+}
+.social-icons a:nth-child(5) {
+  background-color: #ff0000; /* YouTube */
+}
+
+.social-icons a:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+  #kvkNavbar .nav-link {
+    color: whitesmoke !important;
+  }
+
+  #kvkNavbar .nav-link:hover {
+    color: #f8f9fa !important; /* lighter white on hover */
+  }
+
+</style>
+</head>
+<body>
+<!-- NAVBAR -->
+<header class="rn-header">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-sm">
+    <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="/static/img/logo.png" alt="KVK Car Logo" style="max-height: 40px;" />
+      </a>
+
+      <!-- Tagline (mobile hidden) -->
+      <span class="d-none d-md-inline-block font-weight-bold text-primary ml-2">
+        KVK CARS !! Kahin bhi kabhi bhi !!
+      </span>
+
+      <!-- Mobile Toggler -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#kvkNavbar" aria-controls="kvkNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse text-white" id="kvkNavbar">
+        <ul class="navbar-nav ml-auto align-items-lg-center text-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'index' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://forms.gle/ooEVzYV2BceAtkVw6" target="_blank">Bookings Open</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/pay-online">Pay Online</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contactus">Contact Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary text-white px-3 py-1 mt-2 mt-lg-0 ml-lg-3" href="tel:+918077125139">
+              <i class="fa fa-phone"></i> Call
+            </a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-secondary mt-2 mt-lg-0 ml-lg-3" data-toggle="modal" data-target="#cityPopup">
+              <i class="fa fa-map-marker"></i> Nagpur
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- MODAL -->
+<div class="modal fade" id="cityPopup" tabindex="-1" role="dialog" aria-labelledby="cityPopupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select City</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="/static/assets/city-nagpur.jpg" alt="Nagpur" />
+                <h6 class="city-option">Nagpur</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PAGE CONTENT -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <section class="newsletter">
+        <h4>Newsletter</h4>
+        <p>Subscribe for the latest offers and updates.</p>
+        <form action="#">
+            <input type="text" placeholder="Your email" required />
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+    <div class="footer-row">
+        <div class="footer-col">
+            <h4>KVK CARS</h4>
+            <ul class="links">
+                <li>Self-driving car rental service providing best-in-class vehicles across multiple cities.</li>
+            </ul>
+            <div class="social-icons">
+                <a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://www.twitter.com" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+                <a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://www.youtube.com" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul class="links">
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Company</h4>
+            <ul class="links">
+                
+
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press</a></li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSehHUy0L35Q_s9kgH3KpmYLf9kvUnUc8mBafRQ2G7rICqQy-g/viewform" target="_blank">Booking Opening Form</a></li>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h4>Contact Us</h4>
+            <ul class="links">
+                <li><i class="fa-solid fa-map-marker-alt"></i> 1025/521 Ekmata Nagar, Trimurti Nagar, Nagpur, Maharashtra 440022</li>
+                <li><i class="fa-solid fa-phone"></i> +91 8077125139</li>
+                <li><i class="fa-solid fa-envelope"></i> info@kvkcars.com</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom text-center py-3">
+        &copy; <a href="https://kvkcars.com/">KVK CARS 2025</a> — All rights reserved.
+    </div>
+</footer>
+
+<!-- WHATSAPP CHAT -->
+<div class="whatsapp-chat" onclick="toggleChat()">💬</div>
+<div class="chat-popup" id="chatPopup" style="display:none;">
+    <a href="https://wa.me/918077125139?text=Hello%20KVK%20Cars" target="_blank">General Inquiry</a>
+    <a href="https://wa.me/918077125139?text=I%20want%20to%20book%20a%20car" target="_blank">Bookings</a>
+    <a href="https://wa.me/918077125139?text=I%20have%20a%20payment%20issue" target="_blank">Payments</a>
+</div>
+
+<!-- Scripts -->
+<script>
+    function toggleChat() {
+        const chatPopup = document.getElementById("chatPopup");
+        chatPopup.style.display = chatPopup.style.display === "block" ? "none" : "block";
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

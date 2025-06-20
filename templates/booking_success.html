@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Booking Successful</title>
+</head>
+<body>
+  <h1>Booking Confirmed!</h1>
+  <p>Car: {{ booking.car.name }}</p>
+  <p>From: {{ booking.start_datetime }}</p>
+  <p>To: {{ booking.end_datetime }}</p>
+
+  <a href="{% url 'browse_cars' %}">Back to browse cars</a>
+</body>
+</html>

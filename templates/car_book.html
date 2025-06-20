@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="booking-container" style="max-width: 600px; margin: auto;">
+  <h1>Book {{ car.name }}</h1>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="form-group">
+      <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}:</label>
+      {{ form.full_name }}
+      {{ form.full_name.errors }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}:</label>
+      {{ form.phone }}
+      {{ form.phone.errors }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.start_datetime.id_for_label }}">Pickup Date & Time:</label>
+      {{ form.start_datetime }}
+      {{ form.start_datetime.errors }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.end_datetime.id_for_label }}">Drop-off Date & Time:</label>
+      {{ form.end_datetime }}
+      {{ form.end_datetime.errors }}
+    </div>
+
+    <div class="form-group">
+      <label for="kmsSelect">Kilometers Plan:</label>
+      <select name="kms" id="kmsSelect" class="form-control" required>
+        <option value="150km" {% if kms == '150km' %}selected{% endif %}>150 km</option>
+        <option value="unlimited" {% if kms == 'unlimited' %}selected{% endif %}>Unlimited</option>
+      </select>
+    </div>
+
+    <input type="hidden" name="kms_hidden" id="kmsHidden" value="{{ kms }}">
+
+    <div class="form-summary" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 6px;">
+      <p><strong>Rental Hours:</strong> <span id="rentalHoursDisplay">{{ hours }}</span> hours</p>
+      <p><strong>Estimated Price:</strong> <strong id="priceDisplay">₹{{ price|floatformat:2 }}</strong></p>
+      <p id="allowedKmsRow" style="display: none;"><strong>Allowed KMs:</strong> <span id="allowedKmsDisplay">150</span> km</p>
+    </div>
+
+    <button type="submit" class="btn btn-success" style="margin-top: 20px; padding: 10px 20px; border-radius: 5px;">
+      Confirm Booking
+    </button>
+  </form>
+
+  <p style="margin-top: 20px;"><a href="{% url 'browse_cars' %}">← Back to browse cars</a></p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const kmsSelect = document.getElementById("kmsSelect");
+    const kmsHidden = document.getElementById("kmsHidden");
+    const priceDisplay = document.getElementById("priceDisplay");
+    const rentalHoursDisplay = document.getElementById("rentalHoursDisplay");
+    const allowedRow = document.getElementById("allowedKmsRow");
+    const allowedVal = document.getElementById("allowedKmsDisplay");
+
+    const startInput = document.getElementById("{{ form.start_datetime.auto_id }}");
+    const endInput = document.getElementById("{{ form.end_datetime.auto_id }}");
+
+    function getDateParts(val) {
+      if (!val) return [null, null];
+      if (val.includes("T")) {
+        return val.split("T");
+      } else {
+        const parts = val.split(" ");
+        return [parts[0], parts[1] || "10:00"];
+      }
+    }
+
+    function updatePrice() {
+      const [startDate, startTime] = getDateParts(startInput.value);
+      const [endDate, endTime] = getDateParts(endInput.value);
+      const kms = kmsSelect.value;
+
+      if (!startDate || !startTime || !endDate || !endTime) return;
+
+      kmsHidden.value = kms;
+
+      const url = `/api/get_dynamic_prices/?car_id={{ car.id }}&start_date=${startDate}&start_time=${startTime}&end_date=${endDate}&end_time=${endTime}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.prices && data.prices[kms]) {
+            priceDisplay.textContent = "₹" + parseFloat(data.prices[kms]).toFixed(2);
+          } else if (data.prices) {
+            priceDisplay.textContent = "₹" + Object.values(data.prices)[0].toFixed(2);
+          } else {
+            priceDisplay.textContent = "₹0.00";
+          }
+
+          const start = new Date(`${startDate} ${startTime}`);
+          const end = new Date(`${endDate} ${endTime}`);
+          const hours = (end - start) / (1000 * 60 * 60);
+          rentalHoursDisplay.textContent = hours.toFixed(2);
+
+          // Show dynamic allowed km only for 150km plan
+          if (kms === '150km' && data.prices.allowed_kms_150 !== undefined) {
+            allowedVal.textContent = data.prices.allowed_kms_150;
+            allowedRow.style.display = 'block';
+          } else {
+            allowedRow.style.display = 'none';
+          }
+        })
+        .catch(err => {
+          console.error("Failed to fetch dynamic price:", err);
+          priceDisplay.textContent = "₹0.00";
+          rentalHoursDisplay.textContent = "0.00";
+          allowedRow.style.display = 'none';
+        });
+    }
+
+    kmsSelect.addEventListener('change', updatePrice);
+    startInput.addEventListener('change', updatePrice);
+    endInput.addEventListener('change', updatePrice);
+
+    updatePrice();  // Initial call on page load
+  });
+</script>
+
+{% endblock %}

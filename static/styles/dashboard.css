@@ -1,0 +1,65 @@
+ body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f7f8fa;
+      color: #333;
+    }
+
+    header {
+      background: #d41515; /* Avis red */
+      padding: 20px;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .welcome {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .dashboard-buttons {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      background-color: #d41515;
+      color: white;
+      border: none;
+      padding: 20px 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      flex: 1 1 180px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn:hover {
+      background-color: #a21010;
+    }
+
+    /* Optional: icon placeholders */
+    .btn svg {
+      fill: white;
+      width: 20px;
+      height: 20px;
+    }
+  

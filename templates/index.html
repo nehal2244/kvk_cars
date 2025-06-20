@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+  <title>KVK Cars</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+  <!-- Owl Carousel -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/styles/index.css" />
+
+ <style>
+  /* === General Smooth Scroll === */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* === COMMENTED: Original body style replaced by mobile-friendly version ===
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e6f0fa;
+    overflow-x: hidden;
+  }
+  === End original body style === */
+
+  /* === Social Icons Section === */
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 20px 0;
+    gap: 10px;
+  }
+
+  .social-icons a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .social-icons a:nth-child(1) { background-color: #3b5998; }
+  .social-icons a:nth-child(2) { background-color: #1da1f2; }
+  .social-icons a:nth-child(3) { background-color: #e4405f; }
+  .social-icons a:nth-child(4) { background-color: #0077b5; }
+  .social-icons a:nth-child(5) { background-color: #ff0000; }
+
+  .social-icons a:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+
+  /* === Carousel Section === */
+  .carousel-section {
+    position: relative;
+    overflow: hidden;
+    padding: 60px 20px;
+    background-color: #28a745;
+  }
+
+  .carousel-background {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .carousel-background .owl-carousel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .carousel-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+
+  .carousel-content-container {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: auto;
+    color: #222;
+    text-align: center;
+    padding: 0 15px;
+  }
+
+  .carousel-content-container h2 {
+    color: #007bff;
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .carousel-content-container h3 {
+    font-size: 22px;
+    color: #222;
+    margin-bottom: 20px;
+  }
+
+  .carousel-content-container p {
+    font-size: 18px;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto 30px auto;
+    word-wrap: break-word;
+  }
+
+  .carousel-content-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .carousel-content-container ul li {
+    font-size: 16px;
+    color: #333;
+    word-wrap: break-word;
+  }
+
+  .carousel-content-container ul li::before {
+    content: "✅ ";
+    color: #28a745;
+  }
+
+  .carousel-content-container a.call-now {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 20px auto 0 auto;
+    width: 90%;
+    max-width: 300px;
+  }
+
+  /* === Features Section === */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    color: whitesmoke;
+    margin-top: 40px;
+    background: rgba(0,0,0,0.4);
+    padding: 10px;
+    border-radius: 6px;
+  }
+
+  .features-grid h4 {
+    color: #ffc107;
+    margin-bottom: 8px;
+  }
+
+  /* === Bottom Text Section === */
+  .bottom-text {
+    text-align: center;
+    margin-top: 40px;
+    color: whitesmoke;
+  }
+
+  .bottom-text h3 {
+    color: #ffc107;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  /* === Responsive (Tablet) === */
+  @media (max-width: 768px) {
+    .carousel-section {
+      padding: 40px 10px;
+    }
+    .carousel-content-container h2 {
+      font-size: 24px;
+    }
+    .carousel-content-container h3 {
+      font-size: 18px;
+    }
+    .carousel-content-container p,
+    .carousel-content-container ul li {
+      font-size: 16px;
+    }
+    .social-icons a {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
+  }
+
+  /* === Responsive (Mobile) === */
+  @media (max-width: 480px) {
+    .carousel-content-container h2 {
+      font-size: 20px;
+    }
+    .carousel-content-container h3 {
+      font-size: 16px;
+    }
+    .carousel-content-container p,
+    .carousel-content-container ul li {
+      font-size: 14px;
+    }
+    .carousel-content-container ul {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .features-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .social-icons a {
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+    }
+  }
+
+  /* === Mobile Friendly: Carousel Form Fixes === */
+  @media (max-width: 768px) {
+    .carousel-form-wrapper {
+      position: relative !important;
+      padding-top: 70px;
+    }
+
+    .self-drive-form-overlay {
+      top: auto !important;
+      left: 0 !important;
+      transform: none !important;
+      margin: 20px auto;
+      width: 95% !important;
+      padding: 20px !important;
+      position: relative !important;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .rn-header .row {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .rn-header .menu-links {
+      margin-top: 10px;
+    }
+  }
+
+  /* === Resets & Root Style === */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* === Final Applied Body + Background Gradient === */
+  body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: black;
+    background: linear-gradient(to bottom, #1E2A38 40%, #F4F4F6 100%);
+  }
+
+  /* === Header Section (Responsive) === */
+  .row.align-items-center {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--dark);
+  }
+
+  .brand-logo img {
+    height: 60px;
+    width: auto;
+  }
+
+  .tagline {
+    color: #ffc107;
+    margin-left: 10px;
+    font-weight: 600;
+  }
+
+  .menu-links {
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .menu-links a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    transition: background 0.3s;
+    border-radius: 5px;
+  }
+
+  .menu-links a:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-call {
+    background: var(--success);
+    color: white !important;
+    font-weight: bold;
+
+  }
+
+  /* === Header Responsive (Mobile) === */
+  @media (max-width: 768px) {
+    .row.align-items-center {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .tagline {
+      margin: 10px 0;
+    }
+
+    .menu-links {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .menu-links a {
+      width: 100%;
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #444;
+    }
+  }
+
+  @media (max-width: 768px) {
+  .btn-call {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+}
+@media (max-width: 768px) {
+  .menu-links a {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+  }
+
+  .menu-links .btn-call {
+    text-align: center;
+    margin-top: 10px;
+    background-color: #28a745 !important;
+    border: none;
+  }
+}
+
+/* heading color  */
+.yellow-heading {
+  color: #ffc107;
+}
+
+
+</style>
+
+
+</head>
+<body>
+
+<div class="row align-items-center">
+  <div class="col-auto pr-0">
+    <a class="brand-logo" href="/">
+      <img src="/static/img/logo.png" alt="KVK Car Logo">
+    </a>
+  </div>
+  
+  <div class="col-auto tagline">KVK CARS !! Kahin bhi kabhi bhi !!</div>
+  
+  <div class="col menu-links">
+    <a href="/">Home</a>
+    <a href="/about">About Us</a>
+    <a href="https://forms.gle/ooEVzYV2BceAtkVw6">Bookings Open</a>
+    <a href="/pay-online">Pay Online</a>
+    <a href="/contactus">Contact Us</a>
+    <a class="btn-call" href="tel:+918077125139" style="background-color: #28a745;">Call</a>
+  </div>
+</div>
+
+
+<!-- Image Slideshow -->
+ <div class="carousel-form-wrapper position-relative" style="
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;">
+  <!-- Owl Carousel Images -->
+  <div class="owl-carousel owl-theme">
+    <div class="item"><img src="../static/img/1.webp" alt="Slide 1" style="width: 100%; height: auto;"></div>
+    <div class="item"><img src="../static/img/OWL3.webp" alt="Slide 2" style="width: 100%; height: auto;"></div>
+    <div class="item"><img src="../static/img/OWL2.webp" alt="Slide 3" style="width: 100%; height: auto;"></div>
+  </div>
+
+  <!-- Self Drive Car Rental Form OVERLAY -->
+  <div class="self-drive-form-overlay" style="
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    border-radius: 10px;
+    z-index: 10;
+  ">
+
+    <form action="/browse_cars" method="get" class="advance-search-query" id="carBookingForm">
+      <h2 class="text-center font-weight-bold my-4">Explore Cars. Drive Yourself.</h2>
+
+  <hr />
+  <div class="regular-search">
+    <div class="d-flex flex-wrap" style="gap:10px;">
+
+      <!-- Pickup date -->
+      <div class="flex-fill">
+        <label for="start_date">Pickup date</label>
+        <input
+          type="date"
+          id="start_date"
+          name="start_date"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Pickup time (12-hour with Flatpickr) -->
+      <div class="flex-fill">
+        <label for="start_time">Pickup time</label>
+        <input
+          type="text"
+          id="start_time"
+          name="start_time"
+          placeholder="hh:mm AM/PM"
+          class="form-control"
+        />
+      </div>
+
+      <div class="flex-break"></div>
+
+      <!-- Drop-off date -->
+      <div class="flex-fill">
+        <label for="end_date">Drop-off date</label>
+        <input
+          type="date"
+          id="end_date"
+          name="end_date"
+          class="form-control"
+        />
+      </div>
+
+      <!-- Drop-off time (12-hour with Flatpickr) -->
+      <div class="flex-fill">
+        <label for="end_time">Drop-off time</label>
+        <input
+          type="text"
+          id="end_time"
+          name="end_time"
+          placeholder="hh:mm AM/PM"
+          class="form-control"
+        />
+      </div>
+
+    </div>
+
+    <div id="error-message" class="text-danger mt-2" style="display:none;"></div>
+  </div>
+
+  <div class="mt-3">
+    <button type="submit" class="btn btn-warning btn-block font-weight-bold" style="margin-top: 13px;">
+      Find Car
+    </button>
+  </div>
+</form>
+
+
+  </div>
+</div>
+<section class="carousel-section" style="background-color:#1E2A38; padding: 60px 20px; font-family: Arial, sans-serif;">
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 1200px; margin: auto;">
+
+    <!-- Left Block -->
+    <div style="flex: 1 1 500px; background: url('/static/img/whitebg.jpg') center/cover no-repeat; padding: 40px 25px; border-radius: 8px; color: #000;">
+      <h2 id="rental-price-heading" class="yellow-heading">🚘 Get Rental Cars at the Best Price</h2>
+      <h2 id="trip-heading" class="yellow-heading">Enjoy Your Trip Without Worry!</h2>
+      <p>
+        Why pay more when you can ride in comfort for less?<br>
+        At <strong>KVK CARS</strong>, we make travel <strong>affordable, stress-free, and fun</strong>.
+      </p>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>✅ Budget-friendly rental rates</li>
+        <li>✅ No hidden charges</li>
+        <li>✅ Clean, reliable, and ready-to-go vehicles</li>
+        <li>✅ Perfect for family trips, solo getaways, or business travel</li>
+      </ul>
+      <p style="font-style: italic; margin-top: 20px; color: #ffc107;">
+  <strong>Your journey, your car — at the price you’ll love.</strong>
+</p>
+      
+      <h3 id="travel-far-heading" class="yellow-heading" style="margin-top: 25px;">🌍 Plan Big. Travel Far.</h3>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>🚙 From Swift to Fortuner – full lineup available</li>
+        <li>🪑 Spacious and comfy for families</li>
+        <li>🧳 Large boot space for luggage</li>
+        <li>📆 Advance booking = guaranteed ride</li>
+      </ul>
+      <p style="font-style: italic; color: #ffc107;">
+  <strong>“KVK CARS — More Than Just a Rental. It’s Your Travel Partner.”</strong>
+</p>
+
+
+         </div>
+
+    <!-- Right Block -->
+    <div style="flex: 1 1 500px; background: url('/static/img/whitebg.jpg') center/cover no-repeat; padding: 40px 25px; border-radius: 8px; color: #000;">
+
+      <h2 id="nagpur-heading" class="yellow-heading" style="margin-top: 25px;">📍 KVK CARS – Proudly Nagpur-Based</h2>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>✅ 100% Self-Drive Rentals in Nagpur</li>
+        <li>✅ Covers entire city + nearby areas</li>
+        <li>✅ Airport pickup/drop available</li>
+        <li>✅ Trusted by locals and travelers alike</li>
+      </ul>
+      <p style="font-style: italic; color: #ffc107;">
+  <strong>“Nagpur ka apna trusted car rental – KVK CARS!”</strong>
+</p>
+
+       <h3 id="self-drive-heading" class="yellow-heading" style="margin-top: 25px;">🛻 Self-Drive Freedom – No Driver, No Delay!</h3>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>✅ 100% private, no drivers involved</li>
+        <li>✅ Explore on your schedule — not theirs</li>
+        <li>✅ No extra driver charges</li>
+        <li>✅ Full privacy and control</li>
+      </ul>
+<p style="font-style: italic; color: #ffc107;">
+  <strong>“Drive your way, not the driver’s way.”</strong>
+</p>
+
+    </div>
+
+  </div>
+</section>
+
+
+    <!-- Second content block -->
+    <section style="background-color: #e6f0fa; padding: 40px 20px; margin-top: 60px; border-radius: 8px;">
+
+    <!-- Second content block -->
+    <section style="background: url('/static/img/car bg1.jpeg') center/cover no-repeat; padding: 40px 20px; margin-top: 60px; border-radius: 8px;">
+
+      <h2 style="text-align: center; font-size: 32px; color: #ffc107; margin-bottom: 20px;">
+        ❤️ Customer Satisfaction is Our First Priority
+      </h2>
+      <p style="text-align: center; font-size: 18px; color: #007bff; max-width: 800px; margin: 0 auto 30px;">
+        At <strong>KVK CARS</strong>, we believe every journey begins with trust. That’s why we focus on delivering a rental experience that’s smooth, reliable, and completely customer-focused.
+      </p>
+
+      <div class="features-grid">
+        <div>
+          <h4>🚗 Well-Maintained Fleet</h4>
+          <p>Each car — from compact hatchbacks to MUVs like Ertiga — is serviced, sanitized, and ready to go.</p>
+        </div>
+        <div>
+          <h4>📅 Flexible Rental Plans</h4>
+          <p>Choose from daily, weekly, or long-term rentals tailored to your travel needs.</p>
+        </div>
+        <div>
+          <h4>💵 Transparent Pricing</h4>
+          <p>No hidden costs. Insurance, taxes, and pollution fees are included in the final quote.</p>
+        </div>
+        <div>
+          <h4>🚚 Doorstep Delivery</h4>
+          <p>We deliver your vehicle to your home, office, or even the airport — making things easier for you.</p>
+        </div>
+        <div>
+          <h4>📞 24/7 Support</h4>
+          <p>Our friendly team is always just a call away for booking help or on-road assistance.</p>
+        </div>
+        <div>
+          <h4>💛 Real People. Real Care.</h4>
+          <p>We're a passionate team that genuinely cares about making your trip stress-free and joyful.</p>
+        </div>
+        
+      </div>
+
+      <div class="bottom-text">
+        <h3>KVK CARS – Kahin Bhi, Kabhi Bhi!</h3>
+        <p>Experience travel like never before with a car rental service that puts <strong>you</strong> first.</p>
+        <a href="tel:+918077125139" class="call-now" style="margin-top: 10px;">📞 Call Now: 8077125139</a>
+      </div>
+    </section>
+
+  </div>
+</section>
+
+
+<!-- City Selection Modal -->
+<div class="modal fade" id="cityPopup">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select City</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <img src="/static/assets/city-nagpur.jpg" alt="Nagpur">
+                        <h6 class="city-option">Nagpur</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <section class="newsletter">
+        <h4>Newsletter</h4>
+        <p>Subscribe for the latest offers and updates.</p>
+        <form action="#">
+            <input type="text" placeholder="Your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+    <div class="footer-row">
+        <div class="footer-col">
+            <h4>KVK CARS</h4>
+            <ul class="links">
+                <li>Self-driving car rental service providing best-in-class vehicles across multiple cities.</li>
+            </ul>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/profile.php?id=61577281343278" target="_blank">
+  <i class="fa-brands fa-facebook"></i>
+</a>
+<a href="https://x.com/Kavish123178" target="_blank">
+  <i class="fa-brands fa-twitter"></i>
+</a>
+               <a href="https://www.instagram.com/kvkcars24/" target="_blank">
+  <i class="fa-brands fa-instagram"></i>
+</a>
+<a href="https://www.linkedin.com/in/kavish-cars-63b63936a/" target="_blank">
+  <i class="fa-brands fa-linkedin"></i>
+</a>
+
+               <a href="https://www.youtube.com/channel/UCaXoN-CptDKTCotkFlMYgjA" target="_blank">
+  <i class="fa-brands fa-youtube"></i>
+</a>
+</div>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul class="links">
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Company</h4>
+            <ul class="links">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Careers</a></li>
+    
+</li>
+                <li><a href="#">Press</a></li>
+                <LI>            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSehHUy0L35Q_s9kgH3KpmYLf9kvUnUc8mBafRQ2G7rICqQy-g/viewform" target="_blank" style="
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4285F4;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: sans-serif;
+">
+    booking opening form
+</a></LI>
+            </ul>
+        </div>
+        <div class="footer-contact">
+            <h4>Contact Us</h4>
+            <ul class="links">
+                <li><i class="fa-solid fa-map-marker-alt"></i> 1025/521 Ekmata Nagar, <li>Trimurti Nagar,Nagpur</li>Maharashtra 440022</li>
+                <li> </li>
+                <li><i class="fa-solid fa-phone"></i> +91 8077125139</li>
+                <li><i class="fa-solid fa-envelope"></i> info@kvkcars.com</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+      Copyright, <a href="https://kvkcars.com/"> KVK CARS 2025</a>-- All rights reserved.
+     </div>
+</footer>
+
+<div class="whatsapp-chat" onclick="toggleChat()">
+    💬
+</div>
+
+<div class="chat-popup" id="chatPopup">
+    <a href="https://wa.me/918077125139?text=Hello%20KVK%20Cars">General Inquiry</a>
+    <a href="https://wa.me/918077125139?text=I%20want%20to%20book%20a%20car">Bookings</a>
+    <a href="https://wa.me/918077125139?text=I%20have%20a%20payment%20issue">Payments</a>
+</div>
+
+<script>
+    function toggleChat() {
+        var chatPopup = document.getElementById("chatPopup");
+        if (chatPopup.style.display === "none" || chatPopup.style.display === "") {
+            chatPopup.style.display = "block";
+        } else {
+            chatPopup.style.display = "none";
+        }
+    }
+</script>
+
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    $(document).ready(function(){
+        $(".owl-carousel").owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: false,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 2500, // 1 seconds
+            autoplayHoverPause: true,
+            items: 1
+        });
+    });
+// {% comment %} find car logic {% endcomment %} 
+
+window.addEventListener('DOMContentLoaded', () => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // Declare endPicker first so we can reference it inside start_date onChange
+  const endPicker = flatpickr("#end_date", {
+    dateFormat: "Y-m-d",
+    minDate: today,
+    disable: [
+      date => date < today
+    ]
+  });
+
+  flatpickr("#start_date", {
+    dateFormat: "Y-m-d",
+    minDate: today,
+    disable: [
+      date => date < today
+    ],
+    onChange: function(selectedDates) {
+      if (selectedDates.length) {
+        // Set minDate for end date picker to the selected start date
+        endPicker.set('minDate', selectedDates[0]);
+      }
+    }
+  });
+
+  // Flatpickr for time fields
+  flatpickr("#start_time", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "h:i K",
+    time_24hr: false
+  });
+
+  flatpickr("#end_time", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "h:i K",
+    time_24hr: false
+  });
+});
+
+// Unified form submit validation
+document.getElementById('carBookingForm').addEventListener('submit', function (e) {
+  const startDateStr = document.getElementById('start_date').value.trim();
+  const endDateStr = document.getElementById('end_date').value.trim();
+  const startTimeStr = document.getElementById('start_time').value.trim();
+  const endTimeStr = document.getElementById('end_time').value.trim();
+  const errorMessage = document.getElementById('error-message');
+
+  errorMessage.style.display = 'none';
+  errorMessage.textContent = '';
+
+  if (!startDateStr || !endDateStr || !startTimeStr || !endTimeStr) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Please enter pickup and drop-off dates and times.';
+    return;
+  }
+
+  const toDateTime = (dateStr, timeStr) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    let [hourStr, minutePart] = timeStr.split(':');
+    let minute = parseInt(minutePart);
+    let ampm = timeStr.slice(-2).toUpperCase();
+
+    let hour = parseInt(hourStr);
+    if (ampm === 'PM' && hour < 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
+
+    return new Date(year, month - 1, day, hour, minute);
+  };
+
+  const pickupDateTime = toDateTime(startDateStr, startTimeStr);
+  const dropoffDateTime = toDateTime(endDateStr, endTimeStr);
+  const now = new Date();
+
+  // Normalize seconds and milliseconds
+  now.setSeconds(0, 0);
+  pickupDateTime.setSeconds(0, 0);
+  dropoffDateTime.setSeconds(0, 0);
+
+  if (pickupDateTime.getTime() < now.getTime()) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Pickup date/time cannot be in the past.';
+    return;
+  }
+
+  // Enforce dropoff to be at least 1 hour after pickup
+  const minDropoffTime = new Date(pickupDateTime.getTime() + 60 * 60 * 1000);
+  if (dropoffDateTime.getTime() < minDropoffTime.getTime()) {
+    e.preventDefault();
+    errorMessage.style.display = 'block';
+    errorMessage.textContent = 'Drop-off time must be at least 1 hour after pickup time.';
+    return;
+  }
+});
+
+
+
+</script>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</body>
+</html>

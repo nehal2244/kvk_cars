@@ -1,0 +1,193 @@
+[1mdiff --cc car_rental/models.py[m
+[1mindex ef71282,773b249..0000000[m
+[1m--- a/car_rental/models.py[m
+[1m+++ b/car_rental/models.py[m
+[36m@@@ -76,6 -74,13 +76,16 @@@[m [mclass Booking(models.Model)[m
+      start_datetime = models.DateTimeField()[m
+      end_datetime = models.DateTimeField()[m
+  [m
+[32m++<<<<<<< HEAD[m
+[32m++=======[m
+[32m+     user_email = models.EmailField()[m
+[32m+     is_approved = models.BooleanField(default=False)[m
+[32m+    [m
+[32m+     aadhar_card = models.FileField(upload_to='documents/aadhar/', null=True, blank=True)[m
+[32m+     pan_card = models.FileField(upload_to='documents/pan/', null=True, blank=True)[m
+[32m+     driving_license = models.FileField(upload_to='documents/license/', null=True, blank=True)[m
+[32m+ [m
+[32m++>>>>>>> 35d2999 (Initial commit)[m
+      def __str__(self):[m
+          return f"{self.car.name} from {self.start_datetime} to {self.end_datetime}"[m
+  [m
+[1mdiff --cc car_rental/views.py[m
+[1mindex 0875a56,558979b..0000000[m
+[1m--- a/car_rental/views.py[m
+[1m+++ b/car_rental/views.py[m
+[36m@@@ -156,37 -156,54 +156,86 @@@[m [mdef payment_success(request)[m
+  def about(request):[m
+      return render(request, "about.html")[m
+  [m
+[32m++<<<<<<< HEAD[m
+[32m +def car_book(request, pk):[m
+[32m +    car = get_object_or_404(Car, pk=pk)[m
+[32m +[m
+[32m +    if request.method == 'POST':[m
+[32m +        form = BookingForm(request.POST)[m
+[32m +        booking = form.instance[m
+[32m +        booking.car = car[m
+[32m +[m
+[32m +        if form.is_valid():[m
+[32m +            start = form.cleaned_data['start_datetime'][m
+[32m +            end = form.cleaned_data['end_datetime'][m
+[32m +[m
+[32m +            # Only make aware if datetime is naive[m
+[32m +            if is_naive(start):[m
+[32m +                start = make_aware(start)[m
+[32m +            if is_naive(end):[m
+[32m +                end = make_aware(end)[m
+[32m +[m
+[32m +            booking.start_datetime = start[m
+[32m +            booking.end_datetime = end[m
+[32m +            booking.save()[m
+[32m +[m
+[32m +            return redirect('booking_success', booking_id=booking.id)[m
+[32m +    else:[m
+[32m +        form = BookingForm()[m
+[32m++=======[m
+[32m+ [m
+[32m+ [m
+[32m+ def car_book(request, car_id):[m
+[32m+     car = get_object_or_404(Car, pk=car_id)[m
+[32m+ [m
+[32m+     if request.method == 'POST':[m
+[32m+         full_name = request.POST.get('full_name')[m
+[32m+         email = request.POST.get('email')[m
+[32m+         phone = request.POST.get('phone')[m
+[32m+         start_raw = request.POST.get('start_date')[m
+[32m+         end_raw = request.POST.get('end_date')[m
+[32m+ [m
+[32m+         if all([full_name, email, phone, start_raw, end_raw]):[m
+[32m+             start = make_aware(datetime.fromisoformat(start_raw))[m
+[32m+             end = make_aware(datetime.fromisoformat(end_raw))[m
+[32m+ [m
+[32m+             booking = Booking.objects.create([m
+[32m+                 car=car,[m
+[32m+                 start_datetime=start,[m
+[32m+                 end_datetime=end,[m
+[32m+                 is_approved=False,[m
+[32m+                 user_email=email[m
+[32m+             )[m
+[32m+ [m
+[32m+             # Send email to user that booking is pending approval[m
+[32m+             send_mail([m
+[32m+                 'Your Booking is Pending Approval',[m
+[32m+                 f"Dear {full_name},\n\nThank you for your booking request for {car.name}. Your booking is currently pending approval. You will be notified once approved.",[m
+[32m+                 settings.DEFAULT_FROM_EMAIL,[m
+[32m+                 [email],[m
+[32m+                 fail_silently=True,[m
+[32m+             )[m
+[32m+ [m
+[32m+             # Redirect to a "pending" page with booking ID to track status[m
+[32m+             return redirect('booking_success', booking_id=booking.id)[m
+[32m+ [m
+[32m+     return render(request, 'car_book.html', {'car': car})[m
+[32m+ [m
+[32m++>>>>>>> 35d2999 (Initial commit)[m
+  [m
+[32m +    return render(request, 'car_book.html', {'car': car, 'form': form})[m
+  def booking_success(request, booking_id):[m
+      booking = get_object_or_404(Booking, id=booking_id)[m
+[31m-     return render(request, 'booking_success.html', {'booking': booking})[m
+[32m++<<<<<<< HEAD[m
+[32m++=======[m
+  [m
+[32m+     if not booking.is_approved:[m
+[32m+         # Show pending page while booking not approved[m
+[32m+         return render(request, 'booking_pending.html', {'car': booking.car})[m
+[32m+ [m
+[32m+     # Once approved, show success page[m
+[32m++>>>>>>> 35d2999 (Initial commit)[m
+[32m+     return render(request, 'booking_success.html', {'booking': booking})[m
+  [m
+  # views.py[m
+  from django.http import JsonResponse[m
+[36m@@@ -224,3 -241,19 +273,22 @@@[m [mdef get_dynamic_prices(request)[m
+  [m
+  def contactus(request):[m
+      return render(request, "contactus.html")[m
+[32m++<<<<<<< HEAD[m
+[32m++=======[m
+[32m+ [m
+[32m+ def approve_booking(request, booking_id):[m
+[32m+     booking = get_object_or_404(Booking, pk=booking_id)[m
+[32m+     booking.is_approved = True[m
+[32m+     booking.save()[m
+[32m+ [m
+[32m+     # Send email to user on approval[m
+[32m+     send_mail([m
+[32m+         'Your Booking Has Been Approved',[m
+[32m+         f"Dear Customer,\n\nYour booking for {booking.car.name} from {booking.start_datetime} to {booking.end_datetime} has been approved. Thank you!",[m
+[32m+         settings.DEFAULT_FROM_EMAIL,[m
+[32m+         [booking.user_email],[m
+[32m+         fail_silently=True,[m
+[32m+     )[m
+[32m+ [m
+[32m+     return render(request, 'booking_approved.html', {'booking': booking})[m
+[32m++>>>>>>> 35d2999 (Initial commit)[m
+[1mdiff --cc templates/car_book.html[m
+[1mindex 328cc56,853df15..0000000[m
+[1m--- a/templates/car_book.html[m
+[1m+++ b/templates/car_book.html[m
+[36m@@@ -1,27 -1,30 +1,49 @@@[m
+[31m -{% extends "base.html" %}[m
+[31m -[m
+[31m -{% block content %}[m
+[31m -<div style="max-width: 400px; margin: 2rem auto; background:#222; padding: 2rem; color: white; border-radius: 8px;">[m
+[31m -  <h2>Book {{ car.name }}</h2>[m
+[32m +{% load static %}[m
+[32m +<!DOCTYPE html>[m
+[32m +<html lang="en">[m
+[32m +<head>[m
+[32m +  <meta charset="UTF-8" />[m
+[32m +  <title>Book {{ car.name }} - KVK Cars</title>[m
+[32m +  <link rel="stylesheet" href="{% static 'styles/browse_cars.css' %}" />[m
+[32m +  <link rel="stylesheet" href="{% static 'styles/car_book.css' %}" />[m
+[32m +</head>[m
+[32m +<body>[m
+[32m +  <h1>Book {{ car.name }}</h1>[m
+  [m
+    <form method="post">[m
+[32m++<<<<<<< HEAD[m
+[32m +    {% csrf_token %}[m
+[32m +    {{ form.as_p }}[m
+[32m +    <button type="submit">Confirm Booking</button>[m
+[32m +  </form>[m
+[32m++=======[m
+[32m+   {% csrf_token %}[m
+[32m+ [m
+[32m+   <label for="full_name">Full Name:</label><br>[m
+[32m+   <input type="text" id="full_name" name="full_name" required><br><br>[m
+[32m+ [m
+[32m+   <label for="email">Email:</label><br>[m
+[32m+   <input type="email" id="email" name="email" required><br><br>[m
+[32m+ [m
+[32m+   <label for="phone">Phone Number:</label><br>[m
+[32m+   <input type="text" id="phone" name="phone" required><br><br>[m
+[32m+ [m
+[32m+   <label for="start_date">Start Date & Time:</label><br>[m
+[32m+   <input type="datetime-local" id="start_date" name="start_date" required><br><br>[m
+[32m+ [m
+[32m+   <label for="end_date">End Date & Time:</label><br>[m
+[32m+   <input type="datetime-local" id="end_date" name="end_date" required><br><br>[m
+[32m+ [m
+[32m+   <button type="submit" style="padding:10px 20px;">Confirm Booking</button>[m
+[32m+ </form>[m
+[32m++>>>>>>> 35d2999 (Initial commit)[m
+[32m +[m
+[32m +  <a href="{% url 'browse_cars' %}">Back to browse cars</a>[m
+  [m
+[31m -  <a href="{% url 'browse_cars' %}" style="color:#ffc107; display:block; margin-top: 20px;">Back to Browse Cars</a>[m
+[31m -</div>[m
+[31m -{% endblock %}[m
+[32m +  {% if form.non_field_errors %}[m
+[32m

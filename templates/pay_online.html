@@ -1,0 +1,116 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pay Online - KVK Cars</title>
+     <link rel="stylesheet" href="theme-vars.css">
+    <link rel="stylesheet" href="{% static 'styles/pay_online.css' %}">
+   
+</head>
+<body>
+  
+    <!-- banner  -->
+     <div id="banner-area" class="banner-area">
+  <div class="container">
+    <div class="banner-heading">
+      <h1 class="banner-title">Pay Online</h1>
+      <ol class="breadcrumb">
+<li><a href="{% url 'index' %}">Home</a></li>
+
+        <li>Pay Online</li>
+      </ol>
+    </div>
+  </div>
+</div>
+<!-- content of info  -->
+ <section class="payment-wrapper">
+  <div class="section-heading">
+    <h1>Payment Options</h1>
+    <span class="animate-border center"></span>
+  </div>
+
+  <div class="payment-section">
+    <div class="payment-column">
+      <div class="payment-heading">
+        <h2><small>Pay by Bank Transfer</small><br>NEFT / RTGS</h2>
+        <span class="animate-border center"></span>
+      </div>
+      <p>
+        <strong>Account Name:</strong> KVKAVISH CARS Pvt. Ltd.<br>
+        <strong>Bank Name:</strong> AXIS BANK<br>
+        <strong>Account Number:</strong> 00000000<br>
+        <strong>IFS Code:</strong> 0000000<br>
+        <strong>Branch:</strong> SWALAMBI NAGAR,Nagpur
+      </p>
+    </div>
+
+    <div class="payment-column">
+      <div class="payment-heading">
+        <h2><small>Pay using any UPI App</small><br>Pay via UPI</h2>
+        <span class="animate-border center"></span>
+      </div>
+      <p>
+        <strong>VPA:</strong> 7895004477<br>
+        <strong>Google Pay (Business)</strong><br>
+        <strong>UPI:</strong> 7895004477@okbizaxis<br>
+        <strong>Number:</strong> 7895004477
+      </p>
+    </div>
+  </div>
+</section>
+<div class="form-section">
+  <h1>Pay Online</h1>
+  <p>Fill out the form below to make your payment quickly and securely.</p>
+
+  <div class="form-qr-wrapper">
+    <form method="post" novalidate class="payment-form">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="{{ form.name.id_for_label }}">Name</label>
+        {{ form.name }}
+        {% if form.name.errors %}
+          <div class="error">{{ form.name.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        {{ form.email }}
+        {% if form.email.errors %}
+          <div class="error">{{ form.email.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.amount.id_for_label }}">Amount (Rs)</label>
+        {{ form.amount }}
+        {% if form.amount.errors %}
+          <div class="error">{{ form.amount.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.payment_method.id_for_label }}">Payment Method</label>
+        {{ form.payment_method }}
+        {% if form.payment_method.errors %}
+          <div class="error">{{ form.payment_method.errors }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn">Pay Now</button>
+    </form>
+
+    <div class="qr-box">
+      <h3>Or scan the QR code to pay</h3>
+      <img src="/static/img/QR.jpeg" alt="Payment QR Code" class="qr-image" />
+    </div>
+  </div>
+</div>
+
+    </div>
+</body>
+</html>
