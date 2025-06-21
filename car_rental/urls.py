@@ -5,7 +5,11 @@ from django.conf.urls.static import static
 from car_rental import views
 
 urlpatterns = [
+<<<<<<< HEAD
     path('admin/', admin.site.urls),
+=======
+    
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
     path('', views.index, name='index'),
     path('browse_cars/', views.browse_cars, name='browse_cars'),
     path('car/<int:pk>/', views.car_detail, name='car_detail'),

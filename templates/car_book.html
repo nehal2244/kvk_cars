@@ -42,7 +42,13 @@
     <div class="form-group">
       <label for="kmsSelect">Kilometers Plan:</label>
       <select name="kms" id="kmsSelect" class="form-control" required>
+<<<<<<< HEAD
         <option value="150km" {% if kms == '150km' %}selected{% endif %}>150 km</option>
+=======
+        <option value="100km" {% if kms == '100km' %}selected{% endif %}>100 km</option>
+        <option value="200km" {% if kms == '200km' %}selected{% endif %}>200 km</option>
+        <option value="300km" {% if kms == '300km' %}selected{% endif %}>300 km</option>
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         <option value="unlimited" {% if kms == 'unlimited' %}selected{% endif %}>Unlimited</option>
       </select>
     </div>
@@ -51,8 +57,13 @@
 
     <div class="form-summary" style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 6px;">
       <p><strong>Rental Hours:</strong> <span id="rentalHoursDisplay">{{ hours }}</span> hours</p>
+<<<<<<< HEAD
       <p><strong>Estimated Price:</strong> <strong id="priceDisplay">₹{{ price|floatformat:2 }}</strong></p>
       <p id="allowedKmsRow" style="display: none;"><strong>Allowed KMs:</strong> <span id="allowedKmsDisplay">150</span> km</p>
+=======
+
+      <p><strong>Estimated Price:</strong> <strong id="priceDisplay">₹{{ price|floatformat:2 }}</strong></p>
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
     </div>
 
     <button type="submit" class="btn btn-success" style="margin-top: 20px; padding: 10px 20px; border-radius: 5px;">
@@ -69,8 +80,11 @@
     const kmsHidden = document.getElementById("kmsHidden");
     const priceDisplay = document.getElementById("priceDisplay");
     const rentalHoursDisplay = document.getElementById("rentalHoursDisplay");
+<<<<<<< HEAD
     const allowedRow = document.getElementById("allowedKmsRow");
     const allowedVal = document.getElementById("allowedKmsDisplay");
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 
     const startInput = document.getElementById("{{ form.start_datetime.auto_id }}");
     const endInput = document.getElementById("{{ form.end_datetime.auto_id }}");
@@ -107,6 +121,7 @@
             priceDisplay.textContent = "₹0.00";
           }
 
+<<<<<<< HEAD
           const start = new Date(`${startDate} ${startTime}`);
           const end = new Date(`${endDate} ${endTime}`);
           const hours = (end - start) / (1000 * 60 * 60);
@@ -119,12 +134,22 @@
           } else {
             allowedRow.style.display = 'none';
           }
+=======
+          // 🔥 Update rental hours (calculate from start and end)
+          const start = new Date(`${startDate} ${startTime}`);
+          const end = new Date(`${endDate} ${endTime}`);
+          const hours = (end - start) / (1000 * 60 * 60); // Convert ms to hours
+          rentalHoursDisplay.textContent = hours.toFixed(2);
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         })
         .catch(err => {
           console.error("Failed to fetch dynamic price:", err);
           priceDisplay.textContent = "₹0.00";
           rentalHoursDisplay.textContent = "0.00";
+<<<<<<< HEAD
           allowedRow.style.display = 'none';
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         });
     }
 
@@ -132,7 +157,11 @@
     startInput.addEventListener('change', updatePrice);
     endInput.addEventListener('change', updatePrice);
 
+<<<<<<< HEAD
     updatePrice();  // Initial call on page load
+=======
+    updatePrice(); // Trigger initially
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
   });
 </script>
 

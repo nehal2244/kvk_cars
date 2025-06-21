@@ -10,8 +10,11 @@ from decimal import Decimal
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils import timezone
+<<<<<<< HEAD
 import uuid
 
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 # ...
 timezone.now()
 
@@ -20,6 +23,10 @@ timezone.now()
 def index(request):
     return render(request, 'index.html')
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 def browse_cars(request):
     cars = Car.objects.all()
     error = None
@@ -52,12 +59,21 @@ def browse_cars(request):
 
                 rental_hours = (end_datetime - start_datetime).total_seconds() / 3600
                 rental_hours_decimal = Decimal(str(rental_hours))
+<<<<<<< HEAD
                 extra_hours = max(Decimal('0'), rental_hours_decimal - Decimal('12'))
 
                 for car in cars:
                     car.dynamic_price_150km = float(car.calculate_price(rental_hours_decimal, '150km'))
                     car.dynamic_price_unlimited = float(car.calculate_price(rental_hours_decimal, 'unlimited'))
                     car.allowed_kms_150 = int(150 + extra_hours * car.extra_km_per_hour_150km)
+=======
+
+                for car in cars:
+                    car.dynamic_price_100km = float(car.calculate_price(rental_hours_decimal, '100km'))
+                    car.dynamic_price_200km = float(car.calculate_price(rental_hours_decimal, '200km'))
+                    car.dynamic_price_300km = float(car.calculate_price(rental_hours_decimal, '300km'))
+                    car.dynamic_price_unlimited = float(car.calculate_price(rental_hours_decimal, 'unlimited'))
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 
         except ValueError:
             error = "Invalid date or time format."
@@ -87,6 +103,7 @@ def browse_cars(request):
             end_datetime = make_aware(datetime.strptime(f"{end_date} {end_time}", "%Y-%m-%d %I:%M %p"))
             rental_hours = (end_datetime - start_datetime).total_seconds() / 3600
             rental_hours_decimal = Decimal(str(rental_hours))
+<<<<<<< HEAD
             extra_hours = max(Decimal('0'), rental_hours_decimal - Decimal('12'))
 
             for car in cars:
@@ -99,6 +116,18 @@ def browse_cars(request):
 
         except Exception:
             pass
+=======
+
+            for car in cars:
+                calculated_prices[car.id] = {
+                    '100km': round(float(car.calculate_price(rental_hours_decimal, '100km')), 2),
+                    '200km': round(float(car.calculate_price(rental_hours_decimal, '200km')), 2),
+                    '300km': round(float(car.calculate_price(rental_hours_decimal, '300km')), 2),
+                    'unlimited': round(float(car.calculate_price(rental_hours_decimal, 'unlimited')), 2),
+                }
+        except Exception:
+            pass  # Optionally log exceptions
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 
     context = {
         'cars': cars,
@@ -116,7 +145,10 @@ def browse_cars(request):
     return render(request, 'browse_cars.html', context)
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 def car_detail(request, pk):
     car = get_object_or_404(Car, pk=pk)
     return render(request, 'car_detail.html', {'car': car})
@@ -164,12 +196,22 @@ def car_book(request, pk):
     except Exception:
         price = 0.0
 
+<<<<<<< HEAD
     price_150 = price_unlimited = 0.0
     try:
         price_150 = round(car.calculate_price(hours_float, '150km'), 2)
         price_unlimited = round(car.calculate_price(hours_float, 'unlimited'), 2)
     except Exception:
         pass
+=======
+    try:
+        price_100 = round(car.calculate_price(hours_float, '100km'), 2)
+        price_200 = round(car.calculate_price(hours_float, '200km'), 2)
+        price_300 = round(car.calculate_price(hours_float, '300km'), 2)
+        price_unlimited = round(car.calculate_price(hours_float, 'unlimited'), 2)
+    except Exception:
+        price_100 = price_200 = price_300 = price_unlimited = 0.0
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 
     initial_data = {}
     if start_datetime:
@@ -194,6 +236,7 @@ def car_book(request, pk):
             elif data['start_datetime'] < timezone.now():
                 form.add_error('start_datetime', 'Start datetime cannot be in the past.')
             else:
+<<<<<<< HEAD
                 approval_token = str(uuid.uuid4())
 
                 # ✅ Save booking info in session instead of database
@@ -218,6 +261,25 @@ def car_book(request, pk):
                 else:
                     allowed_kms = "Unlimited"
 
+=======
+                booking = Booking.objects.create(
+                    car=car,
+                    start_datetime=data['start_datetime'],
+                    end_datetime=data['end_datetime'],
+                    user_email=data['email']
+                )
+
+                request.session[f'booking_info_{booking.id}'] = {
+                    'full_name': data['full_name'],
+                    'phone': data['phone'],
+                    'email': data['email']
+                }
+
+                approval_link = request.build_absolute_uri(
+                    reverse('approve_booking', args=[str(booking.approval_token)])
+                )
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
                 message = (
                     f"🚗 Booking Request: {car.name}\n\n"
                     f"Full Name: {data['full_name']}\n"
@@ -226,7 +288,10 @@ def car_book(request, pk):
                     f"Pickup Date & Time: {data['start_datetime'].strftime('%d-%m-%Y %H:%M')}\n"
                     f"Drop-off Date & Time: {data['end_datetime'].strftime('%d-%m-%Y %H:%M')}\n"
                     f"Kilometers Plan: {kms_post}\n"
+<<<<<<< HEAD
                     f"Allowed KMs: {allowed_kms}\n"
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
                     f"Rental Hours: {hours_float_post} hours\n"
                     f"Estimated Price: ₹{price_post:.2f}\n\n"
                     f"✅ Approve here: {approval_link}"
@@ -239,12 +304,19 @@ def car_book(request, pk):
                     recipient_list=[settings.MANAGER_EMAIL],
                     fail_silently=False,
                 )
+<<<<<<< HEAD
 
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
                 return redirect('booking_pending')
     else:
         form = BookingForm(initial=initial_data)
 
+<<<<<<< HEAD
     return render(request, 'car_book.html', {
+=======
+    context = {
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         'car': car,
         'form': form,
         'start_date': start_date,
@@ -254,10 +326,20 @@ def car_book(request, pk):
         'hours': hours_float,
         'kms': kms,
         'price': price,
+<<<<<<< HEAD
         'price_150': price_150,
         'price_unlimited': price_unlimited,
     })
 
+=======
+        'price_100': price_100,
+        'price_200': price_200,
+        'price_300': price_300,
+        'price_unlimited': price_unlimited,
+    }
+
+    return render(request, 'car_book.html', context)
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 
 
 def booking_pending(request):
@@ -265,6 +347,7 @@ def booking_pending(request):
 
 
 def approve_booking(request, token):
+<<<<<<< HEAD
     session_key = f'pending_booking_{token}'
     pending_data = request.session.get(session_key)
 
@@ -316,15 +399,43 @@ def approve_booking(request, token):
         success_link = request.build_absolute_uri(
             reverse('booking_success', args=[booking.id])
         )
+=======
+    booking = get_object_or_404(Booking, approval_token=token)
+
+    if not booking.is_approved:
+        booking.is_approved = True
+
+        session_key = f'booking_info_{booking.id}'
+        extra_info = request.session.get(session_key)
+
+        if extra_info:
+            booking.full_name = extra_info.get('full_name')
+            booking.phone = extra_info.get('phone')
+            booking.user_email = extra_info.get('email')
+            del request.session[session_key]
+
+        booking.save()
+
+        success_link = request.build_absolute_uri(
+            reverse('booking_success', args=[booking.id])
+        )
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         send_mail(
             subject="Your booking is approved!",
             message=(
                 f"Dear {booking.full_name},\n\n"
+<<<<<<< HEAD
                 f"Your booking for {car.name} has been approved.\n"
                 f"Pickup: {start_datetime.strftime('%d-%m-%Y %H:%M')}\n"
                 f"Drop-off: {end_datetime.strftime('%d-%m-%Y %H:%M')}\n"
                 f"Kilometers Plan: {kms_plan}\n"
                 f"Estimated Price: ₹{float(price):.2f}\n\n"
+=======
+                f"Your booking for {booking.car.name} has been approved.\n"
+                f"Pickup: {booking.start_datetime.strftime('%d-%m-%Y %H:%M')}\n"
+                f"Drop-off: {booking.end_datetime.strftime('%d-%m-%Y %H:%M')}\n"
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
                 f"You can view confirmation details here:\n{success_link}"
             ),
             from_email=settings.DEFAULT_FROM_EMAIL,
@@ -332,6 +443,7 @@ def approve_booking(request, token):
             fail_silently=False,
         )
 
+<<<<<<< HEAD
         return render(request, 'booking_approved.html', {'booking': booking})
 
     except Exception as e:
@@ -339,6 +451,9 @@ def approve_booking(request, token):
             'error': f"Error while approving booking: {str(e)}"
         })
 
+=======
+    return render(request, 'booking_approved.html', {'booking': booking})
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 
 
 def booking_success(request, booking_id):
@@ -350,10 +465,17 @@ def booking_success(request, booking_id):
     return render(request, 'booking_success.html', {'booking': booking})
 
 
+<<<<<<< HEAD
 
 def get_dynamic_prices(request):
     def parse_datetime_flexible(date_str, time_str):
         """Tries to parse datetime from 12-hour or 24-hour formats."""
+=======
+def get_dynamic_prices(request):
+    from datetime import datetime
+
+    def parse_datetime_flexible(date_str, time_str):
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         try:
             return make_aware(datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %I:%M %p"))
         except ValueError:
@@ -362,28 +484,40 @@ def get_dynamic_prices(request):
             except ValueError:
                 return None
 
+<<<<<<< HEAD
     # Get request parameters
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
     start_date = request.GET.get('start_date')
     start_time = request.GET.get('start_time')
     end_date = request.GET.get('end_date')
     end_time = request.GET.get('end_time')
     car_id = request.GET.get('car_id')
 
+<<<<<<< HEAD
     # Validate required fields
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
     if not all([start_date, start_time, end_date, end_time, car_id]):
         return JsonResponse({'error': 'Missing data'}, status=400)
 
     try:
+<<<<<<< HEAD
         # Fetch car
         car = Car.objects.get(id=car_id)
 
         # Parse datetime objects
+=======
+        car = Car.objects.get(id=car_id)
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         start_datetime = parse_datetime_flexible(start_date, start_time)
         end_datetime = parse_datetime_flexible(end_date, end_time)
 
         if not start_datetime or not end_datetime:
             return JsonResponse({'error': 'Invalid date/time format'}, status=400)
 
+<<<<<<< HEAD
         # Calculate rental hours
         rental_hours = (end_datetime - start_datetime).total_seconds() / 3600
         rental_hours_decimal = Decimal(str(rental_hours))
@@ -396,6 +530,16 @@ def get_dynamic_prices(request):
             '150km': f"{car.calculate_price(rental_hours_decimal, '150km'):.0f}",
             'unlimited': f"{car.calculate_price(rental_hours_decimal, 'unlimited'):.0f}",
             'allowed_kms_150': allowed_kms_150
+=======
+        rental_hours = (end_datetime - start_datetime).total_seconds() / 3600
+        rental_hours_decimal = Decimal(str(rental_hours))
+
+        prices = {
+            '100km': round(float(car.calculate_price(rental_hours_decimal, '100km')), 2),
+            '200km': round(float(car.calculate_price(rental_hours_decimal, '200km')), 2),
+            '300km': round(float(car.calculate_price(rental_hours_decimal, '300km')), 2),
+            'unlimited': round(float(car.calculate_price(rental_hours_decimal, 'unlimited')), 2),
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         }
 
         return JsonResponse({'prices': prices})

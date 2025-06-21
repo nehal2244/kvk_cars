@@ -9,12 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'styles/browse_cars.css' %}" />
+<<<<<<< HEAD
   <!-- Flatpickr CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <!-- Flatpickr JS -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+=======
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
   <style>
 /* RESET & BASE STYLES */
 *,
@@ -23,7 +26,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+<<<<<<< HEAD
   font-family: 'Open Sans', sans-serif , 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS';
+=======
+  font-family: 'Open Sans', sans-serif;
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 }
 
 html, body {
@@ -168,7 +175,11 @@ header {
 .button-group {
   margin-top: 10px;
   display: flex;
+<<<<<<< HEAD
   gap: 10px;
+=======
+  gap: 40px;
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 }
 
 .btn {
@@ -385,6 +396,10 @@ header {
 
   </style>
 </head>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 <body>
 <!-- banner  -->
 <div id="banner-area" class="banner-area">
@@ -397,7 +412,11 @@ header {
         <li>Find Cars</li>
       </ol>
 
+<<<<<<< HEAD
       <!-- terms and conditions  -->
+=======
+      <!-- terms and condtions  -->
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
       <div class="terms-scroll">
         <p>
           Note: 12-Hour's rental rate is fixed. After 12 hours, extra hours will be charged at an additional hourly rate. Extra kilometers beyond the included limit will be charged as per the rates mentioned below in the car section. Please refer to the car details for exact per-hour and per-kilometer charges. All rentals are subject to terms and conditions. Drive safely!
@@ -412,6 +431,7 @@ header {
             <!-- Pickup date -->
             <div class="flex-fill">
               <label for="start_date">Pickup date</label>
+<<<<<<< HEAD
               <input type="date" id="start_date" name="start_date" class="form-control" />
             </div>
 
@@ -419,6 +439,26 @@ header {
             <div class="flex-fill">
               <label for="start_time">Pickup time</label>
               <input type="text" id="start_time" name="start_time" placeholder="hh:mm AM/PM" class="form-control" />
+=======
+              <input
+                type="date"
+                id="start_date"
+                name="start_date"
+                class="form-control"
+              />
+            </div>
+
+            <!-- Pickup time (12-hour with Flatpickr) -->
+            <div class="flex-fill">
+              <label for="start_time">Pickup time</label>
+              <input
+                type="text"
+                id="start_time"
+                name="start_time"
+                placeholder="hh:mm AM/PM"
+                class="form-control"
+              />
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
             </div>
 
             <div class="flex-break"></div>
@@ -426,6 +466,7 @@ header {
             <!-- Drop-off date -->
             <div class="flex-fill">
               <label for="end_date">Drop-off date</label>
+<<<<<<< HEAD
               <input type="date" id="end_date" name="end_date" class="form-control" />
             </div>
 
@@ -433,6 +474,26 @@ header {
             <div class="flex-fill">
               <label for="end_time">Drop-off time</label>
               <input type="text" id="end_time" name="end_time" placeholder="hh:mm AM/PM" class="form-control" />
+=======
+              <input
+                type="date"
+                id="end_date"
+                name="end_date"
+                class="form-control"
+              />
+            </div>
+
+            <!-- Drop-off time (12-hour with Flatpickr) -->
+            <div class="flex-fill">
+              <label for="end_time">Drop-off time</label>
+              <input
+                type="text"
+                id="end_time"
+                name="end_time"
+                placeholder="hh:mm AM/PM"
+                class="form-control"
+              />
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
             </div>
           </div>
 
@@ -445,6 +506,10 @@ header {
           </button>
         </div>
       </form>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
     </div>
   </div>
 </div>
@@ -476,8 +541,13 @@ header {
 
       <select name="sort">
         <option value="">Sort By</option>
+<<<<<<< HEAD
         <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>150km Price: Low to High</option>
         <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>150km Price: High to Low</option>
+=======
+        <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>100km Price: Low to High</option>
+        <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>100km Price: High to Low</option>
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
       </select>
 
       <!-- Preserve date filters -->
@@ -492,7 +562,11 @@ header {
     <!-- Car Listings -->
     <div class="car-grid">
       {% for car in cars %}
+<<<<<<< HEAD
       <div class="car-card" data-car-id="{{ car.id }}">
+=======
+      <div class="car-card">
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
         {% if car.image_file %}
           <img src="{{ car.image_file.url }}" alt="{{ car.name }}">
         {% elif car.image_url %}
@@ -503,11 +577,16 @@ header {
 
         <div class="car-card-content">
           <h3>{{ car.name }}</h3>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
           <p style="display: inline;text-align: center; white-space: nowrap; margin-left: -18px; font-size: 0.90rem;">
             <span>⚙️ {{ car.get_transmission_display }}</span>
             <span> • ⛽ {{ car.get_fuel_type_display }}</span>
             <span> • 👥 {{ car.seating_capacity }} Persons</span>
           </p>
+<<<<<<< HEAD
           <p style="color: #39FF14; font-weight: bold;">Available</p>
 
           <!-- KM Plans -->
@@ -546,6 +625,58 @@ header {
                         {{ car.unlimited_km_price|floatformat:0 }}
                       {% endif %}
                     {% endwith %}
+=======
+
+          <p style="color: #39FF14; font-weight: bold;">Available</p>
+
+          <!-- 12 hour  -->
+          <ul class="car_plans_section" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; list-style: none; padding: 0;">
+            <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+              <div class="car_plans_inner_section">
+                <h4>
+                  ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+                      {{ calculated_prices|get_item:car.id|get_item:'100km'|floatformat:0 }}
+                    {% else %}
+                      {{ car.price_100km|floatformat:0 }}
+                  {% endif %}
+                </h4>
+                <span>150 KMs</span>
+              </div>
+            </li>
+            <!-- <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+              <div class="car_plans_inner_section">
+                <h4>
+                  ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+                      {{ calculated_prices|get_item:car.id|get_item:'200km'|floatformat:0 }}
+                    {% else %}
+                      {{ car.price_200km|floatformat:0 }}
+                  {% endif %}
+                </h4>
+                <span>200 KMs</span>
+              </div>
+            </li>
+            <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center;">
+              <div class="car_plans_inner_section">
+                <h4>
+                  ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+                      {{ calculated_prices|get_item:car.id|get_item:'300km'|floatformat:0 }}
+                    {% else %}
+                      {{ car.price_300km|floatformat:0 }}
+                  {% endif %}
+                </h4>
+                <span>300 KMs</span>
+              </div>
+            </li> -->
+            <li style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; text-align: center; background-color: #ff4818;">
+              <div class="car_plans_inner_section">
+                <p style="color: white;">
+                  <strong>
+                    ₹{% if calculated_prices and calculated_prices|get_item:car.id %}
+                        {{ calculated_prices|get_item:car.id|get_item:'unlimited'|floatformat:0 }}
+                      {% else %}
+                        {{ car.unlimited_km_price|floatformat:0 }}
+                    {% endif %}
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
                   </strong>
                 </p>
                 <p style="color: white;">Unlimited KMs</p>
@@ -553,6 +684,7 @@ header {
             </li>
           </ul>
 
+<<<<<<< HEAD
           <p class="extra-km-charge"><strong>Extra KM Charge:</strong> ₹{{ car.extra_km_charge }}</p>
 
           <div class="button-group">
@@ -560,6 +692,23 @@ header {
             <a href="{% url 'car_book' car.id %}?start_date={{ start_date }}&start_time={{ start_time }}&end_date={{ end_date }}&end_time={{ end_time }}&kms=150km" class="btn btn-primary">
               Book Now
             </a>
+=======
+          <!-- Extra km charge below the button -->
+          <p class="extra-km-charge">Extra KM Charge: ₹{{ car.extra_km_charge }}</p>
+
+          <div class="button-group">
+            <a href="{% url 'car_detail' car.id %}" class="btn btn-view-details">View Details</a>
+
+            
+<a href="{% url 'car_book' car.id %}?start_date={{ start_date }}&start_time={{ start_time }}&end_date={{ end_date }}&end_time={{ end_time }}&kms=100km"
+   class="btn btn-view-details">
+    Book Now
+</a>
+
+
+
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
           </div>
         </div>
       </div>
@@ -569,7 +718,14 @@ header {
     </div>
   </div>
 
+<<<<<<< HEAD
   <!-- JS Section (Flatpickr & Dynamic KM Update Script) -->
+=======
+  <!-- Flatpickr CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const now = new Date();
@@ -601,6 +757,7 @@ header {
         noCalendar: true,
         dateFormat: "h:i K"
       });
+<<<<<<< HEAD
 
       document.getElementById('carBookingForm').addEventListener('submit', function(e) {
         const start = document.getElementById('start_date').value;
@@ -659,5 +816,11 @@ header {
 </section>
 </body>
 
+=======
+    });
+  </script>
+
+</body>
+>>>>>>> 01293db9c10c8e80aa92d2f98e81b9193520aa89
 </html>
 
