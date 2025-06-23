@@ -23,11 +23,11 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key')
 # DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1')
 
 # ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '69.62.80.9,kvkcars.com,www.kvkcars.com').split(',')
-# DEBUG = False
-# ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com', 'www.kvkcars.com']
+DEBUG = False
+ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com', 'www.kvkcars.com']
 
-DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# DEBUG = True
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # ALLOWED_HOSTS = ['69.62.80.9', 'kvkcars.com', 'www.kvkcars.com']
 
